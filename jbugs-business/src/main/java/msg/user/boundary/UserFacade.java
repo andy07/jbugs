@@ -30,14 +30,13 @@ public class UserFacade {
      *
      * @param user the input User DTO. mandatory
      */
-    @RolesAllowed(Permission.USER_MANAGEMENT)
+    //@RolesAllowed(Permission.USER_MANAGEMENT)
     public void createUser(UserInputDTO user){
          this.userControl.createUser(user);
     }
 
     public List<UserOutputDTO> getAll() {
         return userControl.getAll();
-
     }
 
     public Object authenticateUser(UserInputDTO userInputDTO) {
