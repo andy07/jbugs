@@ -7,5 +7,5 @@ package msg.notifications.entity;
  * @since 19.1.2
  */
 public enum NotificationType {
-    WELCOME_NEW_USER, USER_UPDATED;
+    WELCOME_NEW_USER, USER_UPDATED
 }

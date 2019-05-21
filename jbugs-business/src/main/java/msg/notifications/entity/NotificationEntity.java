@@ -1,16 +1,8 @@
 package msg.notifications.entity;
 
-import edu.msg.ro.persistence.entity.BaseEntity;
-
+import javax.persistence.*;
 import java.util.Date;
 import java.util.Objects;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 /**
  * The Notification Entity.
@@ -20,65 +12,84 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "notifications")
-public class NotificationEntity extends BaseEntity<Long> {
+public class NotificationEntity {
 
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @Column(name = "type", nullable = false)
     @Enumerated(EnumType.STRING)
-    @Column(name = "type")
-
     private NotificationType notificationType;
-    @Column(name ="url")
+
+    @Column(name = "url", nullable = false)
     private String url;
 
-    @Column(name ="message")
+    @Column(name = "message", nullable = false)
     private String message;
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column( name = "date")
+
+    @Column(name = "date", nullable = false)
     private Date date;
 
-    @Column(name = "user_id")
+    @Column(name = "user_id", nullable = false)
     private long userID;
 
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public long getUserID() {
-        return userID;
-    }
-
-    public void setUserID(long userID) {
-        this.userID = userID;
-    }
-
     public NotificationEntity() {
+    }
+
+    public long getId() {
+        return id;
     }
 
     public NotificationType getNotificationType() {
         return notificationType;
     }
 
-    public void setNotificationType(NotificationType notificationType) {
-        this.notificationType = notificationType;
-    }
-
     public String getUrl() {
         return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
     }
 
     public String getMessage() {
         return message;
     }
 
-    public void setMessage(String message) {
+    public Date getDate() {
+        return date;
+    }
+
+    public long getUserID() {
+        return userID;
+    }
+
+    public NotificationEntity setId(long id) {
+        this.id = id;
+        return this;
+    }
+
+    public NotificationEntity setNotificationType(NotificationType notificationType) {
+        this.notificationType = notificationType;
+        return this;
+    }
+
+    public NotificationEntity setUrl(String url) {
+        this.url = url;
+        return this;
+    }
+
+    public NotificationEntity setMessage(String message) {
         this.message = message;
+        return this;
+    }
+
+    public NotificationEntity setDate(Date date) {
+        this.date = date;
+        return this;
+    }
+
+    public NotificationEntity setUserID(long userID) {
+        this.userID = userID;
+        return this;
     }
 
     @Override
