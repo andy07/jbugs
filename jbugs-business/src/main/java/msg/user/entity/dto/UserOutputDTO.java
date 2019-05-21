@@ -20,31 +20,35 @@ public class UserOutputDTO {
         return firstName;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
     public String getLastName() {
         return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getMobileNumber() {
         return mobileNumber;
     }
 
-    public void setMobileNumber(String mobileNumber) {
+    public UserOutputDTO setFirstName(String firstName) {
+        this.firstName = firstName;
+        return this;
+    }
+
+    public UserOutputDTO setLastName(String lastName) {
+        this.lastName = lastName;
+        return this;
+    }
+
+    public UserOutputDTO setEmail(String email) {
+        this.email = email;
+        return this;
+    }
+
+    public UserOutputDTO setMobileNumber(String mobileNumber) {
         this.mobileNumber = mobileNumber;
+        return this;
     }
 }
