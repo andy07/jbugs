@@ -11,11 +11,15 @@ import java.sql.Date;
  * @author msg systems AG; User Name.
  * @since 19.1.2
  */
+@Entity
+@Table(name = "comments")
 public class CommentEntity {
+
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
 
     @Column(name = "date", nullable = false)
     private Date date;
@@ -34,13 +38,10 @@ public class CommentEntity {
     }
 
     public long getId() {
-        System.out.println("Diana");
         return id;
     }
 
     public Date getDate() {
-        System.out.println("vrem conflict!!");
-        System.out.println("Diana");
         return date;
     }
 
