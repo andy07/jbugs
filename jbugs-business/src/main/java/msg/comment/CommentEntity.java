@@ -34,13 +34,10 @@ public class CommentEntity {
     }
 
     public long getId() {
-        System.out.println("Diana");
         return id;
     }
 
     public Date getDate() {
-        System.out.println("vrem conflict!!");
-        System.out.println("Diana");
         return date;
     }
 
