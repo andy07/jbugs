@@ -40,6 +40,7 @@ public class CommentEntity {
 
     public Date getDate() {
         System.out.println("vrem conflict!!");
+        System.out.println("Diana");
         return date;
     }
 
