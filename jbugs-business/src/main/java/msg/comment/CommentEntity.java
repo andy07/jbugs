@@ -12,6 +12,7 @@ import java.sql.Date;
  * @since 19.1.2
  */
 public class CommentEntity {
+
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
