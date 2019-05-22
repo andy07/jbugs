@@ -34,7 +34,6 @@ public class CommentEntity {
     @JoinColumn(name = "bug_id", nullable = false)
     private BugEntity bug;
 
-
     public CommentEntity() {
     }
 
