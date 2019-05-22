@@ -93,6 +93,7 @@ create table comments
         primary key,
     date   date         not null,
     text   varchar(255) not null,
+    username   varchar(255) not null,
     bug_id bigint       not null,
     constraint FK_comments_bug_id
         foreign key (bug_id) references bugs (id)
