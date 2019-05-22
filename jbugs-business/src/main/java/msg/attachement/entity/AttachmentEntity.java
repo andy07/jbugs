@@ -24,7 +24,7 @@ public class AttachmentEntity {
     @JoinColumn(name = "bug_id", nullable = false)
     private BugEntity bug;
 
-    @Column(name = "text", nullable = false)
+    @Column(name ="text", nullable = false)
     private String text;
 
     public AttachmentEntity() {

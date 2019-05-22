@@ -11,7 +11,6 @@ import java.sql.Date;
  * @author msg systems AG; User Name.
  * @since 19.1.2
  */
-
 @Entity
 @Table(name = "comments")
 public class CommentEntity {
@@ -32,7 +31,6 @@ public class CommentEntity {
     @ManyToOne
     @JoinColumn(name = "bug_id", nullable = false)
     private BugEntity bug;
-
 
     public CommentEntity() {
     }
