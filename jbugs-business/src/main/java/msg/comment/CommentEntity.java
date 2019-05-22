@@ -18,6 +18,7 @@ public class CommentEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+
     @Column(name = "date", nullable = false)
     private Date date;
 
