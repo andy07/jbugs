@@ -32,7 +32,7 @@ public class UserResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAll() {
-        System.out.println("hey");
+        System.out.println("heykkkk");
         return Response.ok(facade.getAll()).build();
     }
 
