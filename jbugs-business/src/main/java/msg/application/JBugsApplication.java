@@ -27,7 +27,6 @@ public class JBugsApplication extends Application {
         classes.add(RunTimeExceptionMapper.class);
         classes.add(UserResource.class);
         classes.add(AuthResource.class);
-        System.out.println("test");
         return  classes;
     }
 
