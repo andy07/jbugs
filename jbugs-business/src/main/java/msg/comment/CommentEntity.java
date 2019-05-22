@@ -39,6 +39,7 @@ public class CommentEntity {
     }
 
     public Date getDate() {
+        System.out.println("Diana");
         return date;
     }
 
