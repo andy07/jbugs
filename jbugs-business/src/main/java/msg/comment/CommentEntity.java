@@ -11,6 +11,8 @@ import java.sql.Date;
  * @author msg systems AG; User Name.
  * @since 19.1.2
  */
+@Entity
+@Table(name = "comments")
 public class CommentEntity {
     @Id
     @Column(name = "id")
