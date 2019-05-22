@@ -1,7 +1,7 @@
 package msg.bug.entity;
 
 import msg.attachement.entity.AttachmentEntity;
-import msg.comment.entity.CommentEntity;
+import msg.comment.CommentEntity;
 
 import javax.persistence.*;
 import java.util.HashSet;
