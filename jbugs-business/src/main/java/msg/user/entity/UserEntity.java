@@ -1,21 +1,11 @@
 package msg.user.entity;
 
-import edu.msg.ro.persistence.entity.BaseEntity;
-import edu.msg.ro.persistence.entity.Comment;
-import msg.role.entity.Role;
+import msg.role.entity.RoleEntity;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Objects;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
+import java.util.Set;
 
 /**
  * The User entity.
@@ -25,100 +15,147 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="users")
-@NamedQueries({@NamedQuery(name= UserEntity.USER_FIND_BY_EMAIL,query= "SELECT count(u) from UserEntity u where u.email = :" + UserEntity.EMAIL),
-        @NamedQuery(name= UserEntity.USER_FIND_ALL,query= "SELECT u from UserEntity u"),
-        @NamedQuery(name= UserEntity.GET_USER_BY_EMAIL,query= "SELECT u from UserEntity u where u.email = :" + UserEntity.EMAIL)})
-public class UserEntity extends BaseEntity<Long> {
-    public static final String USER_FIND_BY_EMAIL = "UserEntity.findByEmail";
-    public static final String EMAIL = "email";
+@NamedQueries({
+        @NamedQuery(name = UserEntity.USER_COUNT_BY_EMAIL,
+                query = "SELECT count(u) from UserEntity u where u.email = :" + UserEntity.EMAIL),
+        @NamedQuery(name = UserEntity.USER_FIND_BY_EMAIL,
+                query = "SELECT u from UserEntity u where u.email = :" + UserEntity.EMAIL),
+        @NamedQuery(name = UserEntity.USER_FIND_ALL,
+                query = "select u from UserEntity u")
+})
+public class UserEntity {
     public static final String USER_FIND_ALL = "UserEntity.findAll";
-    public static final String GET_USER_BY_EMAIL = "UserEntity.getUserByEmail";
+    public static final String USER_FIND_BY_EMAIL = "UserEntity.findByEmail";
+    public static final String USER_COUNT_BY_EMAIL = "UserEntity.countByEmail";
+    public static final String EMAIL = "email";
+
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
     @Column(name="first_name",nullable = false)
     private String firstName;
+
     @Column(name="last_name",nullable = false)
     private String lastName;
+
     @Column(name="email",nullable = false)//todo: @Pattern
     private String email;
+
     @Column(name="mobile_number",nullable = false)
     private String mobileNumber;
+
     @Column(name="username",nullable = false)
     private String username;
+
     @Column(name="password",nullable = false)
     private String password;
+
     @Column(name="counter")
     private int counter;
+
+    @Column(name = "status", nullable = false)
+    private boolean status;
+
     @ManyToMany(cascade= CascadeType.PERSIST)
     @JoinTable(name="users_roles",
             joinColumns = @JoinColumn(name="user_id", referencedColumnName = "id",nullable = false),
             inverseJoinColumns = @JoinColumn(name="role_id",referencedColumnName = "id",nullable = false)
     )
-    private List<Role> roles=new ArrayList<>();
+    private Set<RoleEntity> roles = new HashSet<>();
 
-    public UserEntity() { }
+    public UserEntity() {
+    }
+
+    public long getId() {
+        return id;
+    }
 
     public String getFirstName() {
         return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
     }
 
     public String getLastName() {
         return lastName;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
     public String getEmail() {
         return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getMobileNumber() {
         return mobileNumber;
     }
 
-    public void setMobileNumber(String mobileNumber) {
-        this.mobileNumber = mobileNumber;
-    }
-
     public String getUsername() {
         return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public int getCounter() {
         return counter;
     }
 
-    public void setCounter(int counter) {
-        this.counter = counter;
-    }
-
-    public List<Role> getRoles() {
+    public Set<RoleEntity> getRoles() {
         return roles;
     }
 
-    public void setRoles(List<Role> roles) {
+    public boolean isStatus() {
+        return status;
+    }
+
+    public UserEntity setId(long id) {
+        this.id = id;
+        return this;
+    }
+
+    public UserEntity setFirstName(String firstName) {
+        this.firstName = firstName;
+        return this;
+    }
+
+    public UserEntity setLastName(String lastName) {
+        this.lastName = lastName;
+        return this;
+    }
+
+    public UserEntity setEmail(String email) {
+        this.email = email;
+        return this;
+    }
+
+    public UserEntity setMobileNumber(String mobileNumber) {
+        this.mobileNumber = mobileNumber;
+        return this;
+    }
+
+    public UserEntity setUsername(String username) {
+        this.username = username;
+        return this;
+    }
+
+    public UserEntity setPassword(String password) {
+        this.password = password;
+        return this;
+    }
+
+    public UserEntity setCounter(int counter) {
+        this.counter = counter;
+        return this;
+    }
+
+    public UserEntity setRoles(Set<RoleEntity> roles) {
         this.roles = roles;
+        return this;
+    }
+
+    public UserEntity setStatus(boolean status) {
+        this.status = status;
+        return this;
     }
 
     @Override
@@ -140,3 +177,4 @@ public class UserEntity extends BaseEntity<Long> {
         return Objects.hash(firstName, lastName, email, mobileNumber, username, password, counter);
     }
 }
+

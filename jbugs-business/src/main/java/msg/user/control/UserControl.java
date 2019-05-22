@@ -9,12 +9,12 @@ import msg.exeptions.BusinessException;
 import msg.notifications.boundary.NotificationFacade;
 import msg.notifications.boundary.notificationParams.NotificationParamsWelcomeUser;
 import msg.notifications.entity.NotificationType;
-import msg.role.entity.Role;
+import msg.role.entity.RoleEntity;
 import msg.user.MessageCatalog;
-import msg.user.entity.dto.UserInputDTO;
+import msg.user.entity.UserDao;
 import msg.user.entity.UserEntity;
 import msg.user.entity.dto.UserConverter;
-import msg.user.entity.UserDao;
+import msg.user.entity.dto.UserInputDTO;
 import msg.user.entity.dto.UserOutputDTO;
 
 import javax.ejb.EJB;
@@ -104,7 +104,7 @@ public class UserControl {
                     .withClaim("username",userEntity.getUsername())
                     .withArrayClaim("roles",(String []) userEntity.getRoles()
                                                     .stream()
-                                                    .map(Role::getType).toArray(String[]::new))
+                            .map(RoleEntity::getType).toArray(String[]::new))
                                                     .sign(algorithm);
         }else {
             throw new BusinessException(MessageCatalog.USER_WITH_INVALID_CREDENTIALS);

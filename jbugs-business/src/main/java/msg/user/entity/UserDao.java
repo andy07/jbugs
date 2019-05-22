@@ -24,14 +24,14 @@ public class UserDao {
      * @return <code>true</code> if the input email is associated with a user.
      */
     public boolean existsEmail(String email){
-        long count = em.createNamedQuery(UserEntity.USER_FIND_BY_EMAIL, Long.class)
+        long count = em.createNamedQuery(UserEntity.USER_COUNT_BY_EMAIL, Long.class)
                 .setParameter(UserEntity.EMAIL,email)
                 .getSingleResult();
         return (count > 0);
     }
 
     public UserEntity findUserByEmail(String email){
-        UserEntity userEntity=em.createNamedQuery(UserEntity.GET_USER_BY_EMAIL, UserEntity.class)
+        UserEntity userEntity = em.createNamedQuery(UserEntity.USER_FIND_BY_EMAIL, UserEntity.class)
                 .setParameter(UserEntity.EMAIL,email)
                 .getSingleResult();
         return userEntity;

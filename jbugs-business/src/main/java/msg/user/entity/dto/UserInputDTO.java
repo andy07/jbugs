@@ -20,112 +20,60 @@ public class UserInputDTO {
     private int counter;
     private List<String> roles=new ArrayList<>();
 
-    /**
-     * Getter.
-     *
-     * @return firstName
-     */
+    public UserInputDTO() {
+    }
+
     public String getFirstName() {
-        return this.firstName;
+        return firstName;
     }
 
-    /**
-     * Setter.
-     *
-     * @param pFirstName
-     */
-    public void setFirstName(final String pFirstName) {
-
-        this.firstName = pFirstName;
-    }
-
-    /**
-     * Getter.
-     *
-     * @return lastName
-     */
     public String getLastName() {
-        return this.lastName;
+        return lastName;
     }
 
-    /**
-     * Setter.
-     *
-     * @param pLastName
-     */
-    public void setLastName(final String pLastName) {
-        this.lastName = pLastName;
-    }
-
-    /**
-     * Getter.
-     *
-     * @return email
-     */
     public String getEmail() {
-        return this.email;
+        return email;
     }
 
-    /**
-     * Setter.
-     *
-     * @param pEmail
-     */
-    public void setEmail(final String pEmail) {
-        this.email = pEmail;
-    }
-
-    /**
-     * Getter.
-     *
-     * @return mobileNumber
-     */
     public String getMobileNumber() {
-        return this.mobileNumber;
+        return mobileNumber;
     }
 
-    /**
-     * Setter.
-     *
-     * @param pMobileNumber
-     */
-    public void setMobileNumber(final String pMobileNumber) {
-        this.mobileNumber = pMobileNumber;
-    }
-
-    /**
-     * Getter.
-     *
-     * @return counter
-     */
     public int getCounter() {
-        return this.counter;
+        return counter;
     }
 
-    /**
-     * Setter.
-     *
-     * @param pCounter
-     */
-    public void setCounter(final int pCounter) {
-        this.counter = pCounter;
-    }
-
-    /**
-     * Getter.
-     *
-     * @return roles
-     */
     public List<String> getRoles() {
-        return this.roles;
+        return roles;
     }
 
-    /**
-     * Setter.
-     *
-     * @param pRoles
-     */
-    public void setRoles(final List<String> pRoles) {
-        this.roles = pRoles;
+    public UserInputDTO setFirstName(String firstName) {
+        this.firstName = firstName;
+        return this;
+    }
+
+    public UserInputDTO setLastName(String lastName) {
+        this.lastName = lastName;
+        return this;
+    }
+
+    public UserInputDTO setEmail(String email) {
+        this.email = email;
+        return this;
+    }
+
+    public UserInputDTO setMobileNumber(String mobileNumber) {
+        this.mobileNumber = mobileNumber;
+        return this;
+    }
+
+    public UserInputDTO setCounter(int counter) {
+        this.counter = counter;
+        return this;
+    }
+
+    public UserInputDTO setRoles(List<String> roles) {
+        this.roles = roles;
+        return this;
     }
 }

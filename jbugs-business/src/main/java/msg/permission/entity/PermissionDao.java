@@ -1,11 +1,11 @@
-package msg.role.entity;
+package msg.permission.entity;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 /**
- * The DAO for the Permission Entities.
+ * The DAO for the Permissions Entities.
  *
  * @author msg systems AG;
  * @since 19.1.2
@@ -22,13 +22,13 @@ public class PermissionDao {
      * @param p the input entity to be saved.
      * @return the persisted entity.
      */
-    public Permission createPermission(Permission p){
+    public PermissionEntity createPermission(PermissionEntity p) {
         em.persist(p);
         return p;
     }
 
 
-    public void removePermission(Permission p){
+    public void removePermission(PermissionEntity p) {
         em.remove(p);
     }
 }

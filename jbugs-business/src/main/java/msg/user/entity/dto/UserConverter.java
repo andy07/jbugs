@@ -6,10 +6,9 @@ package msg.user.entity.dto;
 import msg.role.control.RoleControl;
 import msg.user.entity.UserEntity;
 
-import java.util.ArrayList;
-import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import java.util.HashSet;
 
 /**
  * Converts different DOs to UserEntity and vice-versa.
@@ -26,22 +25,23 @@ public class UserConverter {
     /**
      * Converts a {@link UserInputDTO} to {@link UserEntity}.
      *
-     * @param userInputDTO the input dto.
+     * @param dto the input dto.
      * @return the output un-managed Entity.
      */
-    public UserEntity convertInputDTOtoEntity(UserInputDTO userInputDTO){
-        final UserEntity u = new UserEntity();
-        u.setFirstName(userInputDTO.getFirstName());
-        u.setLastName(userInputDTO.getLastName());
-        u.setEmail(userInputDTO.getEmail());
-        u.setMobileNumber(userInputDTO.getMobileNumber());
-        u.setRoles(new ArrayList<>());
+    public UserEntity convertInputDTOtoEntity(UserInputDTO dto) {
+        final UserEntity entity = new UserEntity();
+        entity
+                .setFirstName(dto.getFirstName())
+                .setLastName(dto.getLastName())
+                .setEmail(dto.getEmail())
+                .setMobileNumber(dto.getMobileNumber())
+                .setRoles(new HashSet<>());
 
-        if (userInputDTO.getRoles() != null && !userInputDTO.getRoles().isEmpty()){
-            u.getRoles().addAll(
-                    roleControl.getRolesByTypeList(userInputDTO.getRoles()));
+        if (dto.getRoles() != null && !dto.getRoles().isEmpty()) {
+            entity.getRoles().addAll(
+                    roleControl.getRolesByTypeList(dto.getRoles()));
         }
-        return u;
+        return entity;
     }
 
     public UserOutputDTO convertEntityToUserOutputDTO(UserEntity userEntity){

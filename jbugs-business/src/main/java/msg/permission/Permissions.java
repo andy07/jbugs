@@ -1,7 +1,7 @@
 // =================================================================================================
 // Copyright (c) 2017-2020 BMW Group. All rights reserved.
 // =================================================================================================
-package msg.right;
+package msg.permission;
 
 /**
  * All user Permissions.
@@ -9,7 +9,7 @@ package msg.right;
  * @author msg-system ag;  Daniel Donea
  * @since 1.0
  */
-public class Permission {
+public class Permissions {
     // a class with Strings is used as JAAS expects String values
     // can be refactored to enum and PermissionEntity.type will be of this enum
     // but adds additional method calls to role checks
