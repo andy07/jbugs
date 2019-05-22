@@ -64,7 +64,7 @@ public class BugStatusTest {
     }
 
     @Test
-    public void getNextStatusAllowedListNewFail() {
+    public void getNextStatusAllowedListNewNotEquals() {
 
         Set<BugStatus> bugStatusSet= BugStatus.getNextStatusAllowedList(BugStatus.NEW.getStatus());
         Set<BugStatus> bugStatusSetResult = new HashSet<>(Arrays.asList(BugStatus.CLOSED, BugStatus.REJECTED));
@@ -82,7 +82,7 @@ public class BugStatusTest {
     }
 
     @Test
-    public void getNextStatusAllowedListInProgressFail() {
+    public void getNextStatusAllowedListInProgressNotEquals() {
 
         Set<BugStatus> bugStatusSet= BugStatus.getNextStatusAllowedList(BugStatus.IN_PROGRESS.getStatus());
         Set<BugStatus> bugStatusSetResult = new HashSet<>(Arrays.asList(BugStatus.CLOSED, BugStatus.REJECTED));
@@ -100,7 +100,7 @@ public class BugStatusTest {
     }
 
     @Test
-    public void getNextStatusAllowedListInfoNeededFail() {
+    public void getNextStatusAllowedListInfoNeededNotEquals() {
 
         Set<BugStatus> bugStatusSet= BugStatus.getNextStatusAllowedList(BugStatus.INFO_NEEDED.getStatus());
         Set<BugStatus> bugStatusSetResult = new HashSet<>(Arrays.asList(BugStatus.CLOSED, BugStatus.REJECTED));
@@ -113,21 +113,50 @@ public class BugStatusTest {
     public void getNextStatusAllowedListFixed() {
 
         Set<BugStatus> bugStatusSet= BugStatus.getNextStatusAllowedList(BugStatus.FIXED.getStatus());
-        Set<BugStatus> bugStatusSetResult = new HashSet<>(Arrays.asList(BugStatus.IN_PROGRESS, BugStatus.REJECTED));
+        Set<BugStatus> bugStatusSetResult = new HashSet<>(Arrays.asList(BugStatus.IN_PROGRESS, BugStatus.CLOSED));
         Assert.assertEquals(bugStatusSet,bugStatusSetResult);
 
     }
 
     @Test
-    public void getNextStatusAllowedListFixedFail() {
+    public void getNextStatusAllowedListRejected() {
 
-        Set<BugStatus> bugStatusSet= BugStatus.getNextStatusAllowedList(BugStatus.NEW.getStatus());
-        Set<BugStatus> bugStatusSetResult = new HashSet<>(Arrays.asList(BugStatus.CLOSED, BugStatus.REJECTED));
+        Set<BugStatus> bugStatusSet= BugStatus.getNextStatusAllowedList(BugStatus.REJECTED.getStatus());
+        Set<BugStatus> bugStatusSetResult = new HashSet<>(Arrays.asList(BugStatus.CLOSED));
         Assert.assertEquals(bugStatusSet,bugStatusSetResult);
 
     }
 
+
     @Test
-    public void isAllowedStatusFromTo() {
+    public void getNextStatusAllowedListClosed() {
+
+        Set<BugStatus> bugStatusSet= BugStatus.getNextStatusAllowedList(BugStatus.CLOSED.getStatus());
+        Assert.assertNull(bugStatusSet);
+
     }
+
+
+    @Test
+    public void isAllowedStatusFromNEWToIN_PROGRESS() {
+
+        Assert.assertTrue(BugStatus.isAllowedStatusFromTo("NEW","IN_PROGRESS"));
+
+    }
+
+    @Test
+    public void isAllowedStatusFromNEWToREJECTED() {
+
+        Assert.assertTrue(BugStatus.isAllowedStatusFromTo("NEW","REJECTED"));
+
+    }
+
+    @Test
+    public void isAllowedStatusFromNEWToCLOSED() {
+
+        Assert.assertFalse(BugStatus.isAllowedStatusFromTo("NEW", "CLOSED"));
+
+    }
+
+
 }
