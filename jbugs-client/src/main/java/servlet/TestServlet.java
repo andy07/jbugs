@@ -2,7 +2,6 @@ package servlet;
 
 import msg.permission.Permissions;
 
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.HttpConstraint;
 import javax.servlet.annotation.ServletSecurity;
