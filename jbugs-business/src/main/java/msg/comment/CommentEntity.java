@@ -39,7 +39,6 @@ public class CommentEntity {
 
 
 
-
     public CommentEntity() {
     }
 
