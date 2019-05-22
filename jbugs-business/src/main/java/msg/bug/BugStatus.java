@@ -9,7 +9,7 @@ import java.util.*;
  * @since 19.1.2
  */
 public enum BugStatus {
-    NEW("NEW"), IN_PROGRESS("IN PROGRESS"), INFO_NEEDED("INFO NEEDED"), FIXED("FIXED"), REJECTED("REJECTED"), CLOSED("CLOSED");
+    NEW("NEW"), IN_PROGRESS("IN_PROGRESS"), INFO_NEEDED("INFO_NEEDED"), FIXED("FIXED"), REJECTED("REJECTED"), CLOSED("CLOSED");
 
     private final String status;
 
@@ -29,14 +29,14 @@ public enum BugStatus {
         return status;
     }
 
-    public Set<BugStatus> getNextStatusAllowedList(BugStatus bugStatus) {
+    public static Set<BugStatus> getNextStatusAllowedList(String bugStatus) {
 
-        return nextStatusAllowed.get(bugStatus);
+        return nextStatusAllowed.get(BugStatus.valueOf(bugStatus));
 
     }
 
 
-    public boolean isAllowedStatusFromTo(String from, String to) {
+    public static boolean isAllowedStatusFromTo(String from, String to) {
 
         return nextStatusAllowed.get(BugStatus.valueOf(from)).contains(BugStatus.valueOf(to));
 
