@@ -34,7 +34,7 @@ public class CommentEntity {
     }
 
     public long getId() {
-        System.out.println("hello");
+        System.out.println("Diana");
         return id;
     }
 
