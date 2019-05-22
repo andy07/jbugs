@@ -38,6 +38,7 @@ public class CommentEntity {
     }
 
     public Date getDate() {
+        System.out.println("vrem conflict");
         return date;
     }
 
