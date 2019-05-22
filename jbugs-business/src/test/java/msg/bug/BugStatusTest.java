@@ -14,8 +14,47 @@ import static org.junit.Assert.*;
 public class BugStatusTest {
 
     @Test
-    public void getStatus() {
+    public void getStatusNew() {
+
+        BugStatus statusNew = BugStatus.NEW;
+        Assert.assertEquals(statusNew.getStatus(), "NEW");
     }
+
+    @Test
+    public void getStatusInProgress() {
+
+        BugStatus statusInProgress = BugStatus.IN_PROGRESS;
+        Assert.assertEquals(statusInProgress.getStatus(), "IN PROGRESS");
+    }
+
+    @Test
+    public void getStatusInfoNeeded() {
+
+        BugStatus statusInfoNeeded = BugStatus.INFO_NEEDED;
+        Assert.assertEquals(statusInfoNeeded.getStatus(), "INFO NEEDED");
+    }
+
+    @Test
+    public void getStatusFixed() {
+
+        BugStatus statusFixed = BugStatus.FIXED;
+        Assert.assertEquals(statusFixed.getStatus(), "FIXED");
+    }
+
+    @Test
+    public void getStatusRejected() {
+
+        BugStatus statusRejected = BugStatus.REJECTED;
+        Assert.assertEquals(statusRejected.getStatus(), "REJECTED");
+    }
+
+    @Test
+    public void getStatusClosed() {
+
+        BugStatus statusClosed = BugStatus.CLOSED;
+        Assert.assertEquals(statusClosed.getStatus(), "CLOSED");
+    }
+
 
     @Test
     public void getNextStatusAllowedList() {
