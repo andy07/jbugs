@@ -50,6 +50,8 @@ public class UserConverter {
                 .setLastName(userEntity.getLastName());
         userOutputDTO.setEmail(userEntity.getEmail());
         userOutputDTO.setMobileNumber(userEntity.getMobileNumber());
+        userOutputDTO.setStatus(userEntity.isStatus());
+        userOutputDTO.setUsername(userEntity.getUsername());
         return userOutputDTO;
     }
 
