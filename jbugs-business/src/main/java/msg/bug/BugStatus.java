@@ -35,7 +35,6 @@ public enum BugStatus {
 
     }
 
-
     public static boolean isAllowedStatusFromTo(String from, String to) {
 
         return nextStatusAllowed.get(BugStatus.valueOf(from)).contains(BugStatus.valueOf(to));
