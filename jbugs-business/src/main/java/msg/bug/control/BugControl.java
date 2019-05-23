@@ -30,7 +30,7 @@ public class BugControl {
         }).collect(Collectors.toList());
     }
 
-    public Set<BugStatus> getStatusAllowed(String status){
+    public Set<BugStatus> getStatusAllowed(String status) {
         return BugStatus.getNextStatusAllowedList(status);
     }
 }
