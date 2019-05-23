@@ -12,24 +12,10 @@ public class UserOutputDTO {
     private String lastName;
     private String email;
     private String mobileNumber;
+    private boolean status;
+    private String username;
 
     public UserOutputDTO() {
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getMobileNumber() {
-        return mobileNumber;
     }
 
     public UserOutputDTO setFirstName(String firstName) {
@@ -50,5 +36,39 @@ public class UserOutputDTO {
     public UserOutputDTO setMobileNumber(String mobileNumber) {
         this.mobileNumber = mobileNumber;
         return this;
+    }
+
+    public UserOutputDTO setStatus(boolean status) {
+        this.status = status;
+        return this;
+    }
+
+    public UserOutputDTO setUsername(String username) {
+        this.username = username;
+        return this;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getMobileNumber() {
+        return mobileNumber;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public String getUsername() {
+        return username;
     }
 }
