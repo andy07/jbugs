@@ -1,7 +1,7 @@
 package msg.bug.control;
 
 import msg.bug.entity.BugDAO;
-import msg.bug.entity.dto.BugOutputDTO;
+import msg.bug.entity.dto.BugDTO;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -21,9 +21,9 @@ public class BugControl {
     @EJB
     private BugDAO dao;
 
-    public List<BugOutputDTO> getAll() {
+    public List<BugDTO> getAll() {
         return dao.getAll().stream().map(entity -> {
-            return new BugOutputDTO();
+            return new BugDTO();
             // TODO: 5/22/2019 create bug converter and shit
         }).collect(Collectors.toList());
     }

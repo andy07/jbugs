@@ -1,7 +1,7 @@
 package msg.bug.boundary;
 
 import msg.bug.control.BugControl;
-import msg.bug.entity.dto.BugOutputDTO;
+import msg.bug.entity.dto.BugDTO;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -19,7 +19,7 @@ public class BugFacade {
     @EJB
     private BugControl control;
 
-    public List<BugOutputDTO> getAll() {
+    public List<BugDTO> getAll() {
         return control.getAll();
     }
 }
