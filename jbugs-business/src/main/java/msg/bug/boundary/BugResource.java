@@ -1,12 +1,14 @@
 package msg.bug.boundary;
 
+import msg.bug.BugStatus;
+
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.Arrays;
+import java.util.HashSet;
 
 /**
  * @author msg systems AG; Silviu-Mihnea Cucuiet.
@@ -16,7 +18,7 @@ import javax.ws.rs.core.Response;
  */
 
 @Stateless
-@Path("/users")
+@Path("/bugs")
 public class BugResource {
     @EJB
     public BugFacade facade;
@@ -26,4 +28,14 @@ public class BugResource {
     public Response getAll() {
         return Response.ok(facade.getAll()).build();
     }
+
+    @POST
+    @Path("/status")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response getStatusAllowed(BugStatus bugStatus) {
+        return Response.ok(facade.getStatusAllowed(bugStatus.getStatus())).build();
+    }
+
+
 }
