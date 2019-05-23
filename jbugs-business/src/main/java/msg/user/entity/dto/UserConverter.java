@@ -45,9 +45,9 @@ public class UserConverter {
     }
 
     public UserOutputDTO convertEntityToUserOutputDTO(UserEntity userEntity){
-        final UserOutputDTO userOutputDTO = new UserOutputDTO();
-        userOutputDTO.setFirstName(userEntity.getFirstName());
-        userOutputDTO.setLastName(userEntity.getLastName());
+        final UserOutputDTO userOutputDTO = new UserOutputDTO()
+                .setFirstName(userEntity.getFirstName())
+                .setLastName(userEntity.getLastName());
         userOutputDTO.setEmail(userEntity.getEmail());
         userOutputDTO.setMobileNumber(userEntity.getMobileNumber());
         return userOutputDTO;

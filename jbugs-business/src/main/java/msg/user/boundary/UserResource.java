@@ -7,8 +7,6 @@ import javax.ejb.Stateless;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Document me.
@@ -32,7 +30,6 @@ public class UserResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAll() {
-        System.out.println("he");
         return Response.ok(facade.getAll()).build();
     }
 
