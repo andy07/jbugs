@@ -37,11 +37,11 @@ public class BugResource {
         return Response.ok(facade.getStatusAllowed(bugStatus)).build();
     }
 
-    @GET
-    @Path("/status")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getStatusAllowed() {
-        return Response.ok(facade.getStatusAllowed(BugStatus.NEW.getStatus())).build();
-    }
+//    @GET
+//    @Path("/status")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public Response getStatusAllowed() {
+//        return Response.ok(facade.getStatusAllowed(BugStatus.NEW.getStatus())).build();
+//    }
 
 }

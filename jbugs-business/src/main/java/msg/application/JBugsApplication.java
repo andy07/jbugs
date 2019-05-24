@@ -1,6 +1,5 @@
 package msg.application;
 
-import msg.bug.BugStatus;
 import msg.bug.boundary.BugResource;
 import msg.exeptions.BusinessExceptionMapper;
 import msg.exeptions.RunTimeExceptionMapper;
