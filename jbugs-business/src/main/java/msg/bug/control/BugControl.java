@@ -1,11 +1,13 @@
 package msg.bug.control;
 
+import msg.bug.BugStatus;
 import msg.bug.entity.BugDAO;
-import msg.bug.entity.dto.BugOutputDTO;
+import msg.bug.entity.dto.BugDTO;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -21,10 +23,14 @@ public class BugControl {
     @EJB
     private BugDAO dao;
 
-    public List<BugOutputDTO> getAll() {
+    public List<BugDTO> getAll() {
         return dao.getAll().stream().map(entity -> {
-            return new BugOutputDTO();
+            return new BugDTO();
             // TODO: 5/22/2019 create bug converter and shit
         }).collect(Collectors.toList());
+    }
+
+    public Set<BugStatus> getStatusAllowed(String status){
+        return BugStatus.getNextStatusAllowedList(status);
     }
 }

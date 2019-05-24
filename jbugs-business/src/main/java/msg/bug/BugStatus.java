@@ -9,7 +9,7 @@ import java.util.*;
  * @since 19.1.2
  */
 public enum BugStatus {
-    NEW("NEW"), IN_PROGRESS("IN PROGRESS"), INFO_NEEDED("INFO NEEDED"), FIXED("FIXED"), REJECTED("REJECTED"), CLOSED("CLOSED");
+    NEW("NEW"), IN_PROGRESS("IN_PROGRESS"), INFO_NEEDED("INFO_NEEDED"), FIXED("FIXED"), REJECTED("REJECTED"), CLOSED("CLOSED");
 
     private final String status;
 
@@ -29,27 +29,15 @@ public enum BugStatus {
         return status;
     }
 
-    public Set<BugStatus> getNextStatusAllowedList(BugStatus bugStatus) {
-        for (Map.Entry<BugStatus, Set<BugStatus>> entry : nextStatusAllowed.entrySet()) {
-            if (entry.getKey().getStatus().toUpperCase().equals(bugStatus.getStatus().toUpperCase())) {
-                return entry.getValue();
-            }
-        }
-        return null;
+    public static Set<BugStatus> getNextStatusAllowedList(String bugStatus) {
+
+        return nextStatusAllowed.get(BugStatus.valueOf(bugStatus));
+
     }
 
+    public static boolean isAllowedStatusFromTo(String from, String to) {
 
-    public boolean isAllowedStatusFromTo(BugStatus from, BugStatus to) {
-        for (Map.Entry<BugStatus, Set<BugStatus>> entryFrom : nextStatusAllowed.entrySet()) {
-            if (entryFrom.getKey().getStatus().toUpperCase().equals(from.getStatus().toUpperCase())) {
+        return nextStatusAllowed.get(BugStatus.valueOf(from)).contains(BugStatus.valueOf(to));
 
-                for (BugStatus bugStatus : entryFrom.getValue()) {
-                    if (bugStatus.getStatus().toUpperCase().equals(to.getStatus().toUpperCase())) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
     }
 }

@@ -56,6 +56,7 @@ public class BugEntity {
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "bug")
     private Set<CommentEntity> comments = new HashSet<>();
 
+
     public BugEntity() {
     }
 
