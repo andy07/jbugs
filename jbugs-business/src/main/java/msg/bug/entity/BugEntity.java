@@ -4,6 +4,7 @@ import msg.attachement.entity.AttachmentEntity;
 import msg.comment.CommentEntity;
 
 import javax.persistence.*;
+import java.sql.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -33,7 +34,7 @@ public class BugEntity {
     private String version;
 
     @Column(name = "targetDate", nullable = false)
-    private String targetDate;
+    private Date targetDate;
 
     @Column(name = "status", nullable = false)
     private String status;
@@ -76,7 +77,7 @@ public class BugEntity {
         return version;
     }
 
-    public String getTargetDate() {
+    public Date getTargetDate() {
         return targetDate;
     }
 
@@ -128,7 +129,8 @@ public class BugEntity {
         return this;
     }
 
-    public BugEntity setTargetDate(String targetDate) {
+
+    public BugEntity setTargetDate(Date targetDate) {
         this.targetDate = targetDate;
         return this;
     }

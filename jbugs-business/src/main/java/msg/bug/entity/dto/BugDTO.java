@@ -1,5 +1,6 @@
 package msg.bug.entity.dto;
 
+import java.sql.Date;
 import java.util.Optional;
 
 /**
@@ -14,7 +15,7 @@ public class BugDTO {
 
     private String version;
 
-    private String targetDate;
+    private Date targetDate;
 
     private String status;
 
@@ -68,11 +69,11 @@ public class BugDTO {
         return this;
     }
 
-    public String getTargetDate() {
+    public Date getTargetDate() {
         return targetDate;
     }
 
-    public BugDTO setTargetDate(String targetDate) {
+    public BugDTO setTargetDate(Date targetDate) {
         this.targetDate = targetDate;
         return this;
     }
