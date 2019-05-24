@@ -1,5 +1,7 @@
 package msg.application;
 
+import msg.bug.BugStatus;
+import msg.bug.boundary.BugResource;
 import msg.exeptions.BusinessExceptionMapper;
 import msg.exeptions.RunTimeExceptionMapper;
 import msg.user.boundary.AuthResource;
@@ -27,6 +29,7 @@ public class JBugsApplication extends Application {
         classes.add(RunTimeExceptionMapper.class);
         classes.add(UserResource.class);
         classes.add(AuthResource.class);
+        classes.add(BugResource.class);
         return  classes;
     }
 

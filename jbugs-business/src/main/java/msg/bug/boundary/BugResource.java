@@ -32,10 +32,16 @@ public class BugResource {
     @POST
     @Path("/status")
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response getStatusAllowed(BugStatus bugStatus) {
-        return Response.ok(facade.getStatusAllowed(bugStatus.getStatus())).build();
+    @Consumes(MediaType.TEXT_PLAIN)
+    public Response getPostStatusAllowed(String bugStatus) {
+        return Response.ok(facade.getStatusAllowed(bugStatus)).build();
     }
 
+    @GET
+    @Path("/status")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getStatusAllowed() {
+        return Response.ok(facade.getStatusAllowed(BugStatus.NEW.getStatus())).build();
+    }
 
 }
