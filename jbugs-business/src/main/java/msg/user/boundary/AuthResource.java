@@ -1,6 +1,6 @@
 package msg.user.boundary;
 
-import msg.user.entity.dto.UserInputDTO;
+import msg.user.entity.dto.UserDTO;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -25,7 +25,7 @@ public class AuthResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response whatever(UserInputDTO userInputDTO){
+    public Response whatever(UserDTO userInputDTO){
         return Response.ok(userFacade.authenticateUser(userInputDTO)).build();
     }
 }

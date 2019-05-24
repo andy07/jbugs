@@ -37,7 +37,6 @@ public class BugConverter {
 
         if (dto.getDescription().isPresent()) {
             entity.setDescription(dto.getDescription().get());
-
         }
         if (dto.getCreatedBy().isPresent()) {
             entity.setCreatedBy(dto.getCreatedBy().get());
