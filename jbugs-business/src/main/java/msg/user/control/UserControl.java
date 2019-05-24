@@ -14,11 +14,15 @@ import msg.user.MessageCatalog;
 import msg.user.entity.UserDao;
 import msg.user.entity.UserEntity;
 import msg.user.entity.dto.UserConverter;
+import msg.user.entity.dto.UserDTO;
 import msg.user.entity.dto.UserInputDTO;
 import msg.user.entity.dto.UserOutputDTO;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,8 +52,6 @@ public class UserControl {
      * @return the username of the newly created user.
      */
     public String createUser(final UserInputDTO userDTO){
-        ///userDTO=null;
-        //userdao vede em, vede daca am mailu in db
         if (userDao.existsEmail(userDTO.getEmail())){
             throw new BusinessException(MessageCatalog.USER_WITH_SAME_MAIL_EXISTS);
         }
@@ -67,6 +69,11 @@ public class UserControl {
 
         return newUserEntity.getUsername();
     }
+
+//    public UserEntity updateUser(UserInputDTO user) {
+//        UserEntity entity = userConverter.convertInputDTOtoEntity(user);
+//        return userDao.updateUser(entity);
+//    }
 
     /**
      * Creates a unique user name based on the inputs.
@@ -95,7 +102,7 @@ public class UserControl {
                 .collect(Collectors.toList());
     }
 
-    public String authenticateUser(UserInputDTO userInputDTO) {
+    public String authenticateUserByEmail(UserInputDTO userInputDTO) {
         UserEntity userEntity= userDao.findUserByEmail(userInputDTO.getEmail());
         if(userEntity!=null){
             Algorithm algorithm = Algorithm.HMAC256("harambe");
@@ -109,5 +116,46 @@ public class UserControl {
         }else {
             throw new BusinessException(MessageCatalog.USER_WITH_INVALID_CREDENTIALS);
         }
+    }
+
+
+    public UserOutputDTO authenticateUserByUsernameAndPassword(UserDTO userDTO) {
+        UserOutputDTO userOutputDTO=null;
+        UserEntity userEntity= userDao.findByUsername(userDTO.getUsername());
+        if(userEntity != null){
+            if(userEntity.getPassword().equals(userDTO.getPassword())){
+                if(userEntity.getCounter() != 5){
+                    userEntity.setCounter(5);
+                    userDao.createUser(userEntity);
+                }
+                UserConverter userConverter=  new UserConverter();
+                userOutputDTO=userConverter.convertEntityToUserOutputDTO(userEntity);
+            }
+            else {
+                if(userEntity.isStatus()){
+                    int counter=userEntity.getCounter();
+                    userEntity.setCounter(--counter);
+
+                    if(counter == 0){
+                        userEntity.setStatus(false);
+                        userDao.updateUser(userEntity);
+                        throw new BusinessException(MessageCatalog.USER_DEACTIVATED);
+                    }
+                    else {
+                        userDao.updateUser(userEntity);
+                        throw new BusinessException(MessageCatalog.INCORRECT_USERNAME_OR_PASSWORD);
+
+                    }
+
+                }
+                else {
+                    throw new BusinessException(MessageCatalog.USER_DEACTIVATED);
+                }
+            }
+
+        }
+        else
+            throw new BusinessException(MessageCatalog.INCORRECT_USERNAME_OR_PASSWORD);
+        return userOutputDTO;
     }
 }

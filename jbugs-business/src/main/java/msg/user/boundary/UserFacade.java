@@ -4,6 +4,8 @@
 package msg.user.boundary;
 
 import msg.user.control.UserControl;
+import msg.user.entity.UserEntity;
+import msg.user.entity.dto.UserDTO;
 import msg.user.entity.dto.UserInputDTO;
 import msg.user.entity.dto.UserOutputDTO;
 
@@ -33,11 +35,19 @@ public class UserFacade {
          this.userControl.createUser(user);
     }
 
+//    public void updateUser(UserInputDTO user) {
+//        this.userControl.updateUser(user);
+//    }
+
     public List<UserOutputDTO> getAll() {
         return userControl.getAll();
     }
 
+    public UserOutputDTO authenticateUserByUsernameAndPassword(UserDTO userDTO){
+        return userControl.authenticateUserByUsernameAndPassword(userDTO);
+    }
+
     public Object authenticateUser(UserInputDTO userInputDTO) {
-        return userControl.authenticateUser(userInputDTO);
+        return userControl.authenticateUserByEmail(userInputDTO);
     }
 }
