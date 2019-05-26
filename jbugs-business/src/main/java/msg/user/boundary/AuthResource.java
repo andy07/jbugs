@@ -22,6 +22,7 @@ import javax.ws.rs.core.Response;
 public class AuthResource {
     @EJB
     private UserFacade userFacade;
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
