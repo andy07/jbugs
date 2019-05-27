@@ -39,4 +39,8 @@ public class UserFacade {
     public Object authenticateUser(UserDTO userInputDTO) {
         return userControl.authenticateUser(userInputDTO);
     }
+
+    public UserDTO authenticateUserByUsernameAndPassword(UserDTO inputDTO) {
+        return userControl.authenticateUserByUsernameAndPassword(inputDTO);
+    }
 }
