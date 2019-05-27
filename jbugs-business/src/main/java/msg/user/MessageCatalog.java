@@ -18,4 +18,7 @@ public class MessageCatalog {
             = new ExceptionMessage("USER-01", "A user with the same email already exists.");
     public static final ExceptionMessage USER_WITH_INVALID_CREDENTIALS
             = new ExceptionMessage("USER-01", "A user with invalid credential");
+    public static final ExceptionMessage NO_SUCH_ROLE_EXISTS
+            = new ExceptionMessage("ROLE-01", "Role doesn't exists");
+
 }
