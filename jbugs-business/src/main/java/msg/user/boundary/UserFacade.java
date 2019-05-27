@@ -32,6 +32,10 @@ public class UserFacade {
          this.userControl.createUser(user);
     }
 
+    public void updateUser(UserDTO user){
+        this.userControl.updateUser(user);
+    }
+
     public List<UserDTO> getAll() {
         return userControl.getAll();
     }
