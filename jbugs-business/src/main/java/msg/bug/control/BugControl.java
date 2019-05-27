@@ -2,6 +2,8 @@ package msg.bug.control;
 
 import msg.bug.BugStatus;
 import msg.bug.entity.BugDAO;
+import msg.bug.entity.BugEntity;
+import msg.bug.entity.dto.BugConverter;
 import msg.bug.entity.dto.BugDTO;
 
 import javax.ejb.EJB;
@@ -23,14 +25,24 @@ public class BugControl {
     @EJB
     private BugDAO dao;
 
+    @EJB
+    private BugConverter converter;
+
     public List<BugDTO> getAll() {
-        return dao.getAll().stream().map(entity -> {
-            return new BugDTO();
-            // TODO: 5/22/2019 create bug converter and shit
-        }).collect(Collectors.toList());
+        return dao.getAll()
+                .stream()
+                .map(converter::convertEntityToDTO)
+                .collect(Collectors.toList());
     }
 
     public Set<BugStatus> getStatusAllowed(String status) {
         return BugStatus.getNextStatusAllowedList(status);
+    }
+
+
+    public BugDTO save(BugDTO dto) {
+        BugEntity entity = converter.convertDTOToEntity(dto);
+        entity = dao.save(entity);
+        return converter.convertEntityToDTO(entity);
     }
 }
