@@ -6,6 +6,7 @@ import msg.comment.CommentEntity;
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -17,8 +18,12 @@ import java.util.Set;
 
 @Entity
 @Table(name = "bugs")
+@NamedQueries({@NamedQuery(name = BugEntity.BUG_FIND_ALL,
+        query = "select bug from BugEntity bug")
+})
 public class BugEntity {
 
+    public static final String BUG_FIND_ALL = "BugEntity.findAll";
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -168,5 +173,29 @@ public class BugEntity {
     public BugEntity setComments(Set<CommentEntity> comments) {
         this.comments = comments;
         return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BugEntity bugEntity = (BugEntity) o;
+        return id == bugEntity.id &&
+                Objects.equals(title, bugEntity.title) &&
+                Objects.equals(description, bugEntity.description) &&
+                Objects.equals(version, bugEntity.version) &&
+                Objects.equals(targetDate, bugEntity.targetDate) &&
+                Objects.equals(status, bugEntity.status) &&
+                Objects.equals(fixedVersion, bugEntity.fixedVersion) &&
+                Objects.equals(severity, bugEntity.severity) &&
+                Objects.equals(createdBy, bugEntity.createdBy) &&
+                Objects.equals(assignedTo, bugEntity.assignedTo) &&
+                Objects.equals(attachments, bugEntity.attachments) &&
+                Objects.equals(comments, bugEntity.comments);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, description, version, targetDate, status, fixedVersion, severity, createdBy, assignedTo, attachments, comments);
     }
 }
