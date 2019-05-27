@@ -67,6 +67,22 @@ public class UserControl {
         return newUserEntity.getUsername();
     }
 
+    public String updateUser(final UserDTO userDTO){
+        ///userDTO=null;
+        //userdao vede em, vede daca am mailu in db
+//        if (userDao.existsEmail(userDTO.getEmail())){
+//            throw new BusinessException(MessageCatalog.USER_WITH_SAME_MAIL_EXISTS);
+//        }
+
+
+        final UserEntity newUserEntity = userConverter.convertUserDTOtoEntity(userDTO);
+
+        userDao.updateUser(newUserEntity);
+
+        return newUserEntity.getUsername();
+    }
+
+
     /**
      * Creates a unique user name based on the inputs.
      *

@@ -27,6 +27,13 @@ public class UserResource {
         return Response.ok().build();
     }
 
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateUser(UserDTO inputDTO){
+        facade.updateUser(inputDTO);
+        return Response.ok().build();
+    }
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAll() {
