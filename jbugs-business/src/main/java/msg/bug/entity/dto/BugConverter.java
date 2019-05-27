@@ -25,25 +25,28 @@ public class BugConverter {
      * @return the output un-managed Entity.
      */
     public BugEntity convertDTOToEntity(BugDTO dto) {
-        final BugEntity entity = new BugEntity();
-        entity
-                .setAssignedTo(dto.getAssignedTo())
+        return new BugEntity()
                 .setTitle(dto.getTitle())
                 .setVersion(dto.getVersion())
                 .setTargetDate(dto.getTargetDate())
                 .setStatus(dto.getStatus())
                 .setFixedVersion(dto.getFixedVersion())
-                .setSeverity(dto.getSeverity());
+                .setSeverity(dto.getSeverity())
+                .setAssignedTo(dto.getAssignedTo())
+                .setDescription(dto.getDescription())
+                .setCreatedBy(dto.getCreatedBy());
+    }
 
-        if (dto.getDescription().isPresent()) {
-            entity.setDescription(dto.getDescription().get());
-
-        }
-        if (dto.getCreatedBy().isPresent()) {
-            entity.setCreatedBy(dto.getCreatedBy().get());
-        }
-        return entity;
-
+    public BugDTO convertEntityToDTO(BugEntity entity) {
+        return new BugDTO()
+                .setTitle(entity.getTitle())
+                .setVersion(entity.getVersion())
+                .setTargetDate(entity.getTargetDate())
+                .setStatus(entity.getStatus())
+                .setFixedVersion(entity.getFixedVersion())
+                .setSeverity(entity.getSeverity())
+                .setAssignedTo(entity.getAssignedTo())
+                .setDescription(entity.getDescription());
     }
 
     public BugDTO convertEntityToDTO(BugEntity entity) {

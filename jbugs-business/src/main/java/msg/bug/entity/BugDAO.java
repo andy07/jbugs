@@ -21,4 +21,9 @@ public class BugDAO {
     public List<BugEntity> getAll() {
         return em.createNamedQuery(BugEntity.BUG_FIND_ALL, BugEntity.class).getResultList();
     }
+
+    public BugEntity save(BugEntity entity) {
+        em.persist(entity);
+        return entity;
+    }
 }

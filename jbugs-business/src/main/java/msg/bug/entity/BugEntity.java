@@ -18,9 +18,10 @@ import java.util.Set;
 
 @Entity
 @Table(name = "bugs")
-@NamedQueries({@NamedQuery(name = BugEntity.BUG_FIND_ALL,
-        query = "select bug from BugEntity bug")
-})
+@NamedQueries(
+        @NamedQuery(name = BugEntity.BUG_FIND_ALL,
+                query = "select bug from BugEntity bug")
+)
 public class BugEntity {
 
     public static final String BUG_FIND_ALL = "BugEntity.findAll";

@@ -51,8 +51,8 @@ public class BugDTO {
         return this;
     }
 
-    public Optional<String> getDescription() {
-        return description;
+    public String getDescription() {
+        return description.orElse("");
     }
 
     public BugDTO setDescription(String description) {
@@ -60,8 +60,8 @@ public class BugDTO {
         return this;
     }
 
-    public Optional<String> getCreatedBy() {
-        return createdBy;
+    public String getCreatedBy() {
+        return createdBy.orElse("");
     }
 
     public BugDTO setCreatedBy(String createdBy) {
