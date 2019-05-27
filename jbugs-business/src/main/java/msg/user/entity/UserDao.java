@@ -46,6 +46,8 @@ public class UserDao {
                     userEntity=em.createNamedQuery(UserEntity.USER_FIND_BY_USERNAME, UserEntity.class)
                             .setParameter(UserEntity.USERNAME,username)
                             .getSingleResult();
+                    //todo mai multe username-uri la fel
+                    //todo nu exista username-ul respectiv in baza de date
                 }catch (Exception e ){
                     e.printStackTrace();
                 }
