@@ -3,6 +3,9 @@
 // =================================================================================================
 package msg.role.entity;
 
+import msg.exeptions.BusinessException;
+import msg.user.MessageCatalog;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -38,8 +41,9 @@ public class RoleDao {
             roleEntity = em.createNamedQuery(RoleEntity.QUERY_GET_ROLE_BY_TYPE, RoleEntity.class)
                     .setParameter(RoleEntity.INPUT_TYPE_LIST, type).getSingleResult();
 
-        }catch (Exception e){
 
+        }catch (Exception e){
+            e.printStackTrace();
         }
         return roleEntity;
 

@@ -49,9 +49,8 @@ public class UserConverter {
 
 
             for(String roleType: userDTO.getRoles()){
-                RoleEntity roleEntity = null;
+                RoleEntity roleEntity=roleControl.getRoleByType(roleType);
                 if(roleEntity != null){
-                    roleEntity = roleControl.getRoleByType(roleType);
                     roleEntitySet.add(roleEntity);
                 }else{
                     throw new BusinessException(MessageCatalog.NO_SUCH_ROLE_EXISTS);
