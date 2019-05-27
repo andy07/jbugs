@@ -31,4 +31,8 @@ public class RoleControl {
     public List<RoleEntity> getRolesByTypeList(List<String> typeList) {
         return roleDao.getRolesByTypeList(typeList);
     }
+
+    public RoleEntity getRoleByType(String type) {
+        return roleDao.getRoleByType(type);
+    }
 }

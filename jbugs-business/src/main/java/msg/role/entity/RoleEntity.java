@@ -18,12 +18,15 @@ import java.util.Set;
 @NamedQueries({
         @NamedQuery(name = "getPermissions",
                 query = "select r.permissions from RoleEntity r where r.type=:type "),
+        @NamedQuery(name = RoleEntity.QUERY_GET_ROLE_BY_TYPE,
+                query = "select r from RoleEntity r where r.type=:type "),
         @NamedQuery(name = RoleEntity.QUERY_GET_ROLES_BY_TYPE_LIST,
                 query = "select r from RoleEntity r "
                         + "where r.type in :" + RoleEntity.INPUT_TYPE_LIST)})
 public class RoleEntity {
 
     public static final String QUERY_GET_ROLES_BY_TYPE_LIST = "getRolesByTypeList";
+    public static final String QUERY_GET_ROLE_BY_TYPE = "getRoleByType";
     public static final String INPUT_TYPE_LIST = "type";
 
     @Id

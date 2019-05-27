@@ -15,6 +15,7 @@ public class GlobalExceptionHandlingFilter implements ContainerResponseFilter {
 
 
     @Override
-    public void filter(ContainerRequestContext containerRequestContext, ContainerResponseContext containerResponseContext) throws IOException {
+    public void filter(ContainerRequestContext containerRequestContext,
+                       ContainerResponseContext containerResponseContext) throws IOException {
     }
 }

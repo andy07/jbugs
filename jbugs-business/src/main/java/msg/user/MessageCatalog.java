@@ -22,4 +22,7 @@ public class MessageCatalog {
             = new ExceptionMessage("USER-03", "User is deactivated");
     public static final ExceptionMessage INCORRECT_USERNAME_OR_PASSWORD
             = new ExceptionMessage("USER-04", "The username or password is incorrect");
+    public static final ExceptionMessage NO_SUCH_ROLE_EXISTS
+            = new ExceptionMessage("ROLE-01", "Role doesn't exists");
+
 }

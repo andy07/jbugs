@@ -46,13 +46,13 @@ public class UserEntity {
     @Column(name="last_name",nullable = false)
     private String lastName;
 
-    @Column(name="email",nullable = false)//todo: @Pattern
+    @Column(name = "email", unique = true, nullable = false)//todo: @Pattern
     private String email;
 
-    @Column(name="mobile_number",nullable = false)
+    @Column(name = "mobile_number", unique = true, nullable = false)
     private String mobileNumber;
 
-    @Column(name="username",nullable = false)
+    @Column(name = "username", unique = true, nullable = false)
     private String username;
 
     @Column(name="password",nullable = false)
