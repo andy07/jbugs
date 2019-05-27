@@ -41,9 +41,15 @@ public class UserDao {
     }
 
     public UserEntity findByUsername(String username){
-        UserEntity userEntity=em.createNamedQuery(UserEntity.USER_FIND_BY_USERNAME, UserEntity.class)
-                .setParameter(UserEntity.USERNAME,username)
-                .getSingleResult();
+        UserEntity userEntity=null;
+                try{
+                    userEntity=em.createNamedQuery(UserEntity.USER_FIND_BY_USERNAME, UserEntity.class)
+                            .setParameter(UserEntity.USERNAME,username)
+                            .getSingleResult();
+                }catch (Exception e ){
+                    e.printStackTrace();
+                }
+
         return userEntity;
     }
 

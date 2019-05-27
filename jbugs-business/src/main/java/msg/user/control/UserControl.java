@@ -144,7 +144,6 @@ public class UserControl {
                     else {
                         userDao.updateUser(userEntity);
                         throw new BusinessException(MessageCatalog.INCORRECT_USERNAME_OR_PASSWORD);
-
                     }
 
                 }

@@ -28,13 +28,6 @@ public class UserResource {
         return Response.ok().build();
     }
 
-//    @PUT
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    public Response updateUser(UserInputDTO inputDTO){
-//        facade.updateUser(inputDTO);
-//        return Response.ok().build();
-//    }
-
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAll() {
@@ -48,19 +41,4 @@ public class UserResource {
     public Response authenticateUserByUsernameAndPassword(UserDTO userDTO) {
         return Response.ok(facade.authenticateUserByUsernameAndPassword(userDTO)).build();
     }
-
-//    @GET
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Response getAll(){
-//        return Response
-//                .status(200)
-//                .header("Access-Control-Allow-Origin", "*")
-//                .header("Access-Control-Allow-Credentials", "true")
-//                .header("Access-Control-Allow-Headers",
-//                        "origin, content-type, accept, authorization")
-//                .header("Access-Control-Allow-Methods",
-//                        "GET, POST, PUT, DELETE, OPTIONS, HEAD")
-//                .entity(facade.getAll())
-//                .build();
-//    }
 }
