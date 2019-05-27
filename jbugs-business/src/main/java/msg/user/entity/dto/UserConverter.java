@@ -3,8 +3,10 @@
 // =================================================================================================
 package msg.user.entity.dto;
 
+import msg.exeptions.BusinessException;
 import msg.role.control.RoleControl;
 import msg.role.entity.RoleEntity;
+import msg.user.MessageCatalog;
 import msg.user.entity.UserEntity;
 
 import javax.ejb.EJB;
@@ -42,16 +44,22 @@ public class UserConverter {
                 .setPassword(userDTO.getPassword());
 
 
-        Set<RoleEntity>roleEntities = new HashSet<>();
+        Set<RoleEntity> roleEntitySet = new HashSet<>();
 
 
-            for(String string: userDTO.getRoles()){
-                RoleEntity roleEntity = new RoleEntity();
-                roleEntity.setType(string);//todo
-                roleEntities.add(roleEntity);
+
+            for(String roleType: userDTO.getRoles()){
+                RoleEntity roleEntity = null;
+                if(roleEntity != null){
+                    roleEntity = roleControl.getRoleByType(roleType);
+                    roleEntitySet.add(roleEntity);
+                }else{
+                    throw new BusinessException(MessageCatalog.NO_SUCH_ROLE_EXISTS);
+                }
+
             }
 
-            entity.setRoles(roleEntities);
+            entity.setRoles(roleEntitySet);
 
 
 //        entity.getRoles().addAll(
