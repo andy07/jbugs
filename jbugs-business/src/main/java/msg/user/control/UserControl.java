@@ -47,11 +47,6 @@ public class UserControl {
      * @return the username of the newly created user.
      */
     public String createUser(final UserDTO userDTO){
-        ///userDTO=null;
-        //userdao vede em, vede daca am mailu in db
-//        if (userDao.existsEmail(userDTO.getEmail())){
-//            throw new BusinessException(MessageCatalog.USER_WITH_SAME_MAIL_EXISTS);
-//        }
 
         final UserEntity newUserEntity = userConverter.convertUserDTOtoEntity(userDTO);
         newUserEntity.setStatus(true);
@@ -125,4 +120,39 @@ public class UserControl {
             throw new BusinessException(MessageCatalog.USER_WITH_INVALID_CREDENTIALS);
         }
     }
+
+    public UserDTO authenticateUserByUsernameAndPassword(UserDTO userDTO){
+        UserDTO userDTOOutput=null;
+        UserEntity userEntity=null;
+        userEntity=userDao.findByUsername(userDTO.getUsername());
+        if(userEntity!=null){
+            if(userEntity.isStatus()){
+                if(userDTO.getPassword().equals(userEntity.getPassword())){
+                    userEntity.setCounter(5);
+                    userDao.updateUser(userEntity);
+                    userDTOOutput=userConverter.convertEntityToUserDTO(userEntity);
+                }
+                else {
+                    int counter=userEntity.getCounter();
+                    userEntity.setCounter(--counter);
+                    if(counter==0){
+                        userEntity.setStatus(false);
+                        userDao.updateUser(userEntity);
+                        throw new BusinessException(MessageCatalog.USER_DEACTIVATED);
+                    }
+                    else {
+                        userDao.updateUser(userEntity);
+                        throw new BusinessException(MessageCatalog.INCORRECT_USERNAME_OR_PASSWORD);
+                    }
+                }
+
+            }
+            else {
+                throw new BusinessException(MessageCatalog.USER_DEACTIVATED);
+
+            }
+        }
+        return userDTOOutput;
+    }
+
 }

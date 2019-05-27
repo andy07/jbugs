@@ -21,13 +21,19 @@ import java.util.Set;
         @NamedQuery(name = UserEntity.USER_FIND_BY_EMAIL,
                 query = "SELECT u from UserEntity u where u.email = :" + UserEntity.EMAIL),
         @NamedQuery(name = UserEntity.USER_FIND_ALL,
-                query = "select u from UserEntity u")
+                query = "select u from UserEntity u"),
+        @NamedQuery(name = UserEntity.USER_FIND_BY_USERNAME,
+                query = "SELECT u from UserEntity u where u.username = :" + UserEntity.USERNAME)
+
+
 })
 public class UserEntity {
     public static final String USER_FIND_ALL = "UserEntity.findAll";
     public static final String USER_FIND_BY_EMAIL = "UserEntity.findByEmail";
     public static final String USER_COUNT_BY_EMAIL = "UserEntity.countByEmail";
+    public static final String USER_FIND_BY_USERNAME = "UserEntity.findByUsername";
     public static final String EMAIL = "email";
+    public static final String USERNAME = "username";
 
     @Id
     @Column(name = "id")
@@ -158,6 +164,8 @@ public class UserEntity {
         return this;
     }
 
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -175,6 +183,22 @@ public class UserEntity {
     @Override
     public int hashCode() {
         return Objects.hash(firstName, lastName, email, mobileNumber, username, password, counter);
+    }
+
+    @Override
+    public String toString() {
+        return "UserEntity{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", mobileNumber='" + mobileNumber + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", counter=" + counter +
+                ", status=" + status +
+                ", roles=" + roles +
+                '}';
     }
 }
 

@@ -34,6 +34,14 @@ public class UserResource {
         return Response.ok().build();
     }
 
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/login")
+    public Response authenticateUserByUsernameAndPassword(UserDTO inputDTO){
+        return Response.ok(facade.authenticateUserByUsernameAndPassword(inputDTO)).build();
+    }
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAll() {
