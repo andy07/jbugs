@@ -70,11 +70,6 @@ public class UserDao {
         return user;
     }
 
-    public UserEntity updateUser(UserEntity user){
-        em.merge(user);
-        return user;
-    }
-
     public List<UserEntity> getAll() {
         return em.createNamedQuery(UserEntity.USER_FIND_ALL,UserEntity.class).getResultList();
     }
