@@ -22,9 +22,24 @@ public class UserResource {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createUser(UserDTO inputDTO) {
+    public Response createUser(UserDTO inputDTO){
         facade.createUser(inputDTO);
         return Response.ok().build();
+    }
+
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateUser(UserDTO inputDTO){
+        facade.updateUser(inputDTO);
+        return Response.ok().build();
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/login")
+    public Response authenticateUserByUsernameAndPassword(UserDTO inputDTO){
+        return Response.ok(facade.authenticateUserByUsernameAndPassword(inputDTO)).build();
     }
 
     @GET

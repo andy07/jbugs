@@ -15,7 +15,7 @@ import java.util.List;
  * @since 1.0
  */
 @Stateless
-public class RoleDao {
+public class RoleDAO {
 
     @PersistenceContext(unitName="jbugs-persistence")
     private EntityManager em;
@@ -34,14 +34,24 @@ public class RoleDao {
 
     public RoleEntity getRoleByType(String type) {
         RoleEntity roleEntity = null;
-        try {
+        try{
             roleEntity = em.createNamedQuery(RoleEntity.QUERY_GET_ROLE_BY_TYPE, RoleEntity.class)
                     .setParameter(RoleEntity.INPUT_TYPE_LIST, type).getSingleResult();
 
-        } catch (Exception e) {
 
+        }catch (Exception e){
+            e.printStackTrace();
         }
         return roleEntity;
+    }
+
+    public RoleEntity updateRole(RoleEntity roleEntity){
+        em.merge(roleEntity);
+        return roleEntity;
+    }
+
+    public List<RoleEntity> getAll(){
+        return em.createNamedQuery(RoleEntity.ROLE_FIND_ALL,RoleEntity.class).getResultList();
 
     }
 }

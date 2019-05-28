@@ -49,18 +49,18 @@ public class UserConverter {
         Set<RoleEntity> roleEntitySet = new HashSet<>();
 
 
-        for (String roleType : userDTO.getRoles()) {
-            RoleEntity roleEntity = null;
-            if (roleEntity != null) {
-                roleEntity = roleControl.getRoleByType(roleType);
-                roleEntitySet.add(roleEntity);
-            } else {
-                throw new BusinessException(MessageCatalog.NO_SUCH_ROLE_EXISTS);
+
+            for(String roleType: userDTO.getRoles()){
+                RoleEntity roleEntity=roleControl.getRoleByType(roleType);
+                if(roleEntity != null){
+                    roleEntitySet.add(roleEntity);
+                }else{
+                    throw new BusinessException(MessageCatalog.NO_SUCH_ROLE_EXISTS);
+                }
+
             }
 
-        }
-
-        entity.setRoles(roleEntitySet);
+            entity.setRoles(roleEntitySet);
 
 
 //        entity.getRoles().addAll(
@@ -69,20 +69,20 @@ public class UserConverter {
         return entity;
     }
 
-    public UserDTO convertEntityToUserDTO(UserEntity userEntity) {
+    public UserDTO convertEntityToUserDTO(UserEntity userEntity){
 
         final UserDTO userDTO = new UserDTO()
                 .setFirstName(userEntity.getFirstName())
-                .setLastName(userEntity.getLastName());
-        userDTO.setEmail(userEntity.getEmail());
-        userDTO.setMobileNumber(userEntity.getMobileNumber());
-        userDTO.setStatus(userEntity.isStatus());
-        userDTO.setUsername(userEntity.getUsername());
-        userDTO.setPassword(userEntity.getPassword());
+                .setLastName(userEntity.getLastName())
+                .setEmail(userEntity.getEmail())
+                .setMobileNumber(userEntity.getMobileNumber())
+                .setStatus(userEntity.isStatus())
+                .setUsername(userEntity.getUsername())
+                .setPassword(userEntity.getPassword());
 
         List<String> roles = new ArrayList<>();
 
-        for (RoleEntity roleEntity : userEntity.getRoles()) {
+        for(RoleEntity roleEntity: userEntity.getRoles()){
             roles.add(roleEntity.getType());
         }
         userDTO.setRoles(roles);

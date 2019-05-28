@@ -1,8 +1,11 @@
 package msg.user.entity;
 
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -37,6 +40,22 @@ public class UserDao {
         return userEntity;
     }
 
+    public UserEntity findByUsername(String username){
+        UserEntity userEntity=null;
+                try{
+                    userEntity=em.createNamedQuery(UserEntity.USER_FIND_BY_USERNAME, UserEntity.class)
+                            .setParameter(UserEntity.USERNAME,username)
+                            .getSingleResult();
+                    //todo mai multe username-uri la fel
+                    //todo nu exista username-ul respectiv in baza de date
+                }catch (Exception e ){
+                    e.printStackTrace();
+                }
+
+        return userEntity;
+    }
+
+
     /**
      * Persists a user entity.
      *
@@ -45,6 +64,11 @@ public class UserDao {
      */
     public UserEntity createUser(UserEntity user){
         em.persist(user);
+        return user;
+    }
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public UserEntity updateUser(UserEntity user){
+        em.merge(user);
         return user;
     }
 
