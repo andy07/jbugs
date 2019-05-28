@@ -1,5 +1,7 @@
 package msg.permission.entity;
 
+import msg.role.entity.RoleEntity;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -11,7 +13,13 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "permissions")
+@NamedQueries({
+        @NamedQuery(name = PermissionEntity.PERMISSION_FIND_ALL,
+                query = "select u from PermissionEntity u")}
+)
 public class PermissionEntity {
+
+    public static final String PERMISSION_FIND_ALL = "PermissionEntity.findAll";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

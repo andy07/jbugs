@@ -3,6 +3,7 @@ package msg.permission.entity;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.List;
 
 /**
  * The DAO for the Permissions Entities.
@@ -35,4 +36,9 @@ public class PermissionDAO {
     public void removePermission(PermissionEntity p) {
         em.remove(p);
     }
+
+    public List<PermissionEntity> getAll(){
+        return em.createNamedQuery(PermissionEntity.PERMISSION_FIND_ALL,PermissionEntity.class).getResultList();
+    }
+
 }
