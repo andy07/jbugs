@@ -1,5 +1,7 @@
 package msg.permission.entity;
 
+import msg.permission.boundary.PermissionResource;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -39,6 +41,19 @@ public class PermissionDAO {
 
     public List<PermissionEntity> getAll(){
         return em.createNamedQuery(PermissionEntity.PERMISSION_FIND_ALL,PermissionEntity.class).getResultList();
+    }
+
+    public PermissionEntity getPermissionByType(String type) {
+        PermissionEntity permissionEntity = null;
+        try{
+            permissionEntity = em.createNamedQuery(PermissionEntity.QUERY_GET_PERMISSION_BY_TYPE, PermissionEntity.class)
+                    .setParameter(PermissionEntity.INPUT_TYPE_LIST, type).getSingleResult();
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return permissionEntity;
     }
 
 }
