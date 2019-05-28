@@ -31,16 +31,33 @@ public class BugResource {
     @POST
     @Path("/status")
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.TEXT_PLAIN)
-    public Response getAllStatusAllowed(String bugStatus) {
-        return Response.ok(facade.getStatusAllowed(bugStatus)).build();
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response getStatusAllowed(BugStatus bugStatus) {
+        return Response.ok(facade.getStatusAllowed(bugStatus.getStatus())).build();
+    }
+
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response saveBug(BugDTO dto) {
+        dto = facade.save(dto);
+        return Response.ok(dto).build();
+    }
+
+    @PUT
+    @Path("/{title}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateBug(@PathParam("title") String title, BugDTO dto) {
+        dto = facade.update(dto);
+        return Response.ok(dto).build();
     }
 
     @GET
-    @Path("/status")
+    @Path("/{title}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getStatusAllowed() {
-        return Response.ok(facade.getStatusAllowed(BugStatus.NEW.getStatus())).build();
+    public Response getBugByTitle(@PathParam("title") String title) {
+        return Response.ok(facade.getBugByTitle(title)).build();
     }
 
 }
