@@ -18,19 +18,23 @@ import java.util.Set;
 
 @Entity
 @Table(name = "bugs")
-@NamedQueries(
+@NamedQueries({
         @NamedQuery(name = BugEntity.BUG_FIND_ALL,
-                query = "select bug from BugEntity bug")
-)
+                query = "select bug from BugEntity bug"),
+        @NamedQuery(name = BugEntity.BUG_FIND_BY_TITLE,
+                query = "SELECT bug from BugEntity bug where bug.title = :" + BugEntity.TITLE),
+})
 public class BugEntity {
 
     public static final String BUG_FIND_ALL = "BugEntity.findAll";
+    public static final String BUG_FIND_BY_TITLE = "BugEntity.findByTitle";
+    public static final String TITLE = "title";
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "title", nullable = false)
+    @Column(name = "title", nullable = false, unique = true)
     private String title;
 
     @Column(name = "description", nullable = false)

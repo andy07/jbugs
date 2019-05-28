@@ -32,4 +32,12 @@ public class BugFacade {
     public BugDTO save(BugDTO dto) {
         return control.save(dto);
     }
+
+    public BugDTO update(BugDTO dto) {
+        return control.update(dto);
+    }
+
+    public BugDTO getBugByTitle(String title) {
+        return control.getBugByTitle(title);
+    }
 }

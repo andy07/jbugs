@@ -49,17 +49,4 @@ public class BugConverter {
                 .setDescription(entity.getDescription());
     }
 
-    public BugDTO convertEntityToDTO(BugEntity entity) {
-        final BugDTO dto = new BugDTO()
-                .setAssignedTo(entity.getAssignedTo())
-                .setTitle(entity.getTitle())
-                .setVersion(entity.getVersion())
-                .setTargetDate(entity.getTargetDate())
-                .setStatus(entity.getStatus())
-                .setFixedVersion(entity.getFixedVersion())
-                .setSeverity(entity.getSeverity())
-                .setDescription(entity.getDescription())
-                .setCreatedBy(entity.getCreatedBy());
-        return dto;
-    }
 }
