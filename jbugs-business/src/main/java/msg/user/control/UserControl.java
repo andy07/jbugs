@@ -7,15 +7,12 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import msg.exeptions.BusinessException;
 import msg.notifications.boundary.NotificationFacade;
-import msg.notifications.boundary.notificationParams.NotificationParamsWelcomeUser;
-import msg.notifications.entity.NotificationType;
 import msg.role.entity.RoleEntity;
 import msg.user.MessageCatalog;
 import msg.user.entity.UserDao;
 import msg.user.entity.UserEntity;
 import msg.user.entity.dto.UserConverter;
-import msg.user.entity.dto.UserInputDTO;
-import msg.user.entity.dto.UserOutputDTO;
+import msg.user.entity.dto.UserDTO;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -42,28 +39,28 @@ public class UserControl {
 
 
     /**
-     * Creates a userDTO based on the {@link UserInputDTO}.
+     * Creates a userDTO based on the {@link UserDTO}.
      *
      * @param userDTO the input User DTO. mandatory
      * @return the username of the newly created user.
      */
-    public String createUser(final UserInputDTO userDTO){
+    public String createUser(final UserDTO userDTO) {
         ///userDTO=null;
         //userdao vede em, vede daca am mailu in db
-        if (userDao.existsEmail(userDTO.getEmail())){
-            throw new BusinessException(MessageCatalog.USER_WITH_SAME_MAIL_EXISTS);
-        }
+//        if (userDao.existsEmail(userDTO.getEmail())){
+//            throw new BusinessException(MessageCatalog.USER_WITH_SAME_MAIL_EXISTS);
+//        }
 
-        final UserEntity newUserEntity = userConverter.convertInputDTOtoEntity(userDTO);
-
-        newUserEntity.setUsername(this.createUserName(userDTO.getFirstName(), userDTO.getLastName()));
-        newUserEntity.setPassword("DEFAULT_PASSWORD");
+        final UserEntity newUserEntity = userConverter.convertUserDTOtoEntity(userDTO);
+        newUserEntity.setStatus(true);
+        newUserEntity.setCounter(5);
         userDao.createUser(newUserEntity);
 
         final String userFullName = newUserEntity.getFirstName() + " " + newUserEntity.getLastName();
-        this.notificationFacade.createNotification(
-                NotificationType.WELCOME_NEW_USER,
-                new NotificationParamsWelcomeUser(userFullName, newUserEntity.getUsername()));
+
+//        this.notificationFacade.createNotification(
+//                NotificationType.WELCOME_NEW_USER,
+//                new NotificationParamsWelcomeUser(userFullName, newUserEntity.getUsername()));
 
         return newUserEntity.getUsername();
     }
@@ -88,15 +85,15 @@ public class UserControl {
         return builder.toString();
     }
 
-    public List<UserOutputDTO> getAll(){
+    public List<UserDTO> getAll() {
         return userDao.getAll()
                 .stream()
-                .map(userConverter::convertEntityToUserOutputDTO)
+                .map(userConverter::convertEntityToUserDTO)
                 .collect(Collectors.toList());
     }
 
-    public String authenticateUser(UserInputDTO userInputDTO) {
-        UserEntity userEntity= userDao.findUserByEmail(userInputDTO.getEmail());
+    public String authenticateUser(UserDTO userDTO) {
+        UserEntity userEntity = userDao.findUserByEmail(userDTO.getEmail());
         if(userEntity!=null){
             Algorithm algorithm = Algorithm.HMAC256("harambe");
             return JWT.create()

@@ -31,4 +31,17 @@ public class RoleDao {
                 .setParameter(RoleEntity.INPUT_TYPE_LIST, typeList)
                 .getResultList();
     }
+
+    public RoleEntity getRoleByType(String type) {
+        RoleEntity roleEntity = null;
+        try {
+            roleEntity = em.createNamedQuery(RoleEntity.QUERY_GET_ROLE_BY_TYPE, RoleEntity.class)
+                    .setParameter(RoleEntity.INPUT_TYPE_LIST, type).getSingleResult();
+
+        } catch (Exception e) {
+
+        }
+        return roleEntity;
+
+    }
 }

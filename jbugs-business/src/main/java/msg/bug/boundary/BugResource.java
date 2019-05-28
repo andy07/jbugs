@@ -1,14 +1,13 @@
 package msg.bug.boundary;
 
 import msg.bug.BugStatus;
+import msg.bug.entity.dto.BugDTO;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.Arrays;
-import java.util.HashSet;
 
 /**
  * @author msg systems AG; Silviu-Mihnea Cucuiet.
@@ -37,5 +36,11 @@ public class BugResource {
         return Response.ok(facade.getStatusAllowed(bugStatus.getStatus())).build();
     }
 
-
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response saveBug(BugDTO dto) {
+        dto = facade.save(dto);
+        return Response.ok(dto).build();
+    }
 }

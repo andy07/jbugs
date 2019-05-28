@@ -1,6 +1,6 @@
 package msg.user.boundary;
 
-import msg.user.entity.dto.UserInputDTO;
+import msg.user.entity.dto.UserDTO;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -22,7 +22,7 @@ public class UserResource {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createUser(UserInputDTO inputDTO){
+    public Response createUser(UserDTO inputDTO) {
         facade.createUser(inputDTO);
         return Response.ok().build();
     }

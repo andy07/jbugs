@@ -4,8 +4,7 @@
 package msg.user.boundary;
 
 import msg.user.control.UserControl;
-import msg.user.entity.dto.UserInputDTO;
-import msg.user.entity.dto.UserOutputDTO;
+import msg.user.entity.dto.UserDTO;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -24,20 +23,20 @@ public class UserFacade {
     private UserControl userControl;
 
     /**
-     * Creates a user based on the {@link UserInputDTO}.
+     * Creates a user based on the {@link UserDTO}.
      *
      * @param user the input User DTO. mandatory
      */
     //@RolesAllowed(Permissions.USER_MANAGEMENT)
-    public void createUser(UserInputDTO user){
+    public void createUser(UserDTO user) {
          this.userControl.createUser(user);
     }
 
-    public List<UserOutputDTO> getAll() {
+    public List<UserDTO> getAll() {
         return userControl.getAll();
     }
 
-    public Object authenticateUser(UserInputDTO userInputDTO) {
+    public Object authenticateUser(UserDTO userInputDTO) {
         return userControl.authenticateUser(userInputDTO);
     }
 }

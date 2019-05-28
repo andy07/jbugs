@@ -3,17 +3,13 @@
 // =================================================================================================
 package msg.user.control;
 
-import msg.exeptions.BusinessException;
 import msg.notifications.boundary.NotificationFacade;
 import msg.user.entity.UserDao;
 import msg.user.entity.dto.UserConverter;
-import msg.user.entity.dto.UserInputDTO;
 import org.junit.Before;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.internal.util.reflection.FieldSetter;
 import org.mockito.junit.MockitoJUnitRunner;
 
@@ -51,7 +47,7 @@ public class UserControlTestV2 {
         }
     }
 
-    @Test
+    /*@Test
     public void testCreateUserWithSuccess(){
         UserInputDTO user = createTestInputDTO();
 
@@ -93,6 +89,6 @@ public class UserControlTestV2 {
         user.setMobileNumber("0700000000");
         user.setCounter(0);
         return user;
-    }
+    }*/
 
 }

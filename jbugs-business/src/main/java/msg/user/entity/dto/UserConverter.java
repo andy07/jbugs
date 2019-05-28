@@ -3,12 +3,18 @@
 // =================================================================================================
 package msg.user.entity.dto;
 
+import msg.exeptions.BusinessException;
 import msg.role.control.RoleControl;
+import msg.role.entity.RoleEntity;
+import msg.user.MessageCatalog;
 import msg.user.entity.UserEntity;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Converts different DOs to UserEntity and vice-versa.
@@ -23,36 +29,64 @@ public class UserConverter {
     private RoleControl roleControl;
 
     /**
-     * Converts a {@link UserInputDTO} to {@link UserEntity}.
+     * Converts a {@link UserDTO} to {@link UserEntity}.
      *
-     * @param dto the input dto.
+     * @param userDTO the input dto.
      * @return the output un-managed Entity.
      */
-    public UserEntity convertInputDTOtoEntity(UserInputDTO dto) {
+    public UserEntity convertUserDTOtoEntity(UserDTO userDTO) {
         final UserEntity entity = new UserEntity();
-        entity
-                .setFirstName(dto.getFirstName())
-                .setLastName(dto.getLastName())
-                .setEmail(dto.getEmail())
-                .setMobileNumber(dto.getMobileNumber())
-                .setRoles(new HashSet<>());
 
-        if (dto.getRoles() != null && !dto.getRoles().isEmpty()) {
-            entity.getRoles().addAll(
-                    roleControl.getRolesByTypeList(dto.getRoles()));
+        entity.setFirstName(userDTO.getFirstName())
+                .setLastName(userDTO.getLastName())
+                .setEmail(userDTO.getEmail())
+                .setMobileNumber(userDTO.getMobileNumber())
+                .setStatus(userDTO.getStatus())
+                .setUsername(userDTO.getUsername())
+                .setPassword(userDTO.getPassword());
+
+
+        Set<RoleEntity> roleEntitySet = new HashSet<>();
+
+
+        for (String roleType : userDTO.getRoles()) {
+            RoleEntity roleEntity = null;
+            if (roleEntity != null) {
+                roleEntity = roleControl.getRoleByType(roleType);
+                roleEntitySet.add(roleEntity);
+            } else {
+                throw new BusinessException(MessageCatalog.NO_SUCH_ROLE_EXISTS);
+            }
+
         }
+
+        entity.setRoles(roleEntitySet);
+
+
+//        entity.getRoles().addAll(
+//                    roleControl.getRolesByTypeList(userDTO.getRoles()));
+
         return entity;
     }
 
-    public UserOutputDTO convertEntityToUserOutputDTO(UserEntity userEntity){
-        final UserOutputDTO userOutputDTO = new UserOutputDTO()
+    public UserDTO convertEntityToUserDTO(UserEntity userEntity) {
+
+        final UserDTO userDTO = new UserDTO()
                 .setFirstName(userEntity.getFirstName())
                 .setLastName(userEntity.getLastName());
-        userOutputDTO.setEmail(userEntity.getEmail());
-        userOutputDTO.setMobileNumber(userEntity.getMobileNumber());
-        userOutputDTO.setStatus(userEntity.isStatus());
-        userOutputDTO.setUsername(userEntity.getUsername());
-        return userOutputDTO;
+        userDTO.setEmail(userEntity.getEmail());
+        userDTO.setMobileNumber(userEntity.getMobileNumber());
+        userDTO.setStatus(userEntity.isStatus());
+        userDTO.setUsername(userEntity.getUsername());
+        userDTO.setPassword(userEntity.getPassword());
+
+        List<String> roles = new ArrayList<>();
+
+        for (RoleEntity roleEntity : userEntity.getRoles()) {
+            roles.add(roleEntity.getType());
+        }
+        userDTO.setRoles(roles);
+        return userDTO;
     }
 
 }
