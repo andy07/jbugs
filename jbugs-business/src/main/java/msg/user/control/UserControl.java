@@ -151,6 +151,8 @@ public class UserControl {
 
             }
         }
+        else
+            throw new BusinessException(MessageCatalog.INCORRECT_USERNAME_OR_PASSWORD);
         return userDTOOutput;
     }
 
