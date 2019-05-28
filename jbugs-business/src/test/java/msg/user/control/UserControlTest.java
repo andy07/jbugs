@@ -3,20 +3,13 @@
 // =================================================================================================
 package msg.user.control;
 
-import msg.exeptions.BusinessException;
 import msg.notifications.boundary.NotificationFacade;
-import msg.notifications.entity.NotificationType;
 import msg.user.entity.UserDao;
 import msg.user.entity.dto.UserConverter;
-import msg.user.entity.dto.UserDTO;
-import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 /**

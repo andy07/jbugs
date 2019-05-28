@@ -11,8 +11,10 @@ import msg.user.entity.UserEntity;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.management.relation.Role;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Converts different DOs to UserEntity and vice-versa.
@@ -71,12 +73,12 @@ public class UserConverter {
 
         final UserDTO userDTO = new UserDTO()
                 .setFirstName(userEntity.getFirstName())
-                .setLastName(userEntity.getLastName());
-        userDTO.setEmail(userEntity.getEmail());
-        userDTO.setMobileNumber(userEntity.getMobileNumber());
-        userDTO.setStatus(userEntity.isStatus());
-        userDTO.setUsername(userEntity.getUsername());
-        userDTO.setPassword(userEntity.getPassword());
+                .setLastName(userEntity.getLastName())
+                .setEmail(userEntity.getEmail())
+                .setMobileNumber(userEntity.getMobileNumber())
+                .setStatus(userEntity.isStatus())
+                .setUsername(userEntity.getUsername())
+                .setPassword(userEntity.getPassword());
 
         List<String> roles = new ArrayList<>();
 

@@ -7,8 +7,6 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import msg.exeptions.BusinessException;
 import msg.notifications.boundary.NotificationFacade;
-import msg.notifications.boundary.notificationParams.NotificationParamsWelcomeUser;
-import msg.notifications.entity.NotificationType;
 import msg.role.entity.RoleEntity;
 import msg.user.MessageCatalog;
 import msg.user.entity.UserDao;

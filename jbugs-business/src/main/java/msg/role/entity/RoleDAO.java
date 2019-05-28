@@ -3,9 +3,6 @@
 // =================================================================================================
 package msg.role.entity;
 
-import msg.exeptions.BusinessException;
-import msg.user.MessageCatalog;
-
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
