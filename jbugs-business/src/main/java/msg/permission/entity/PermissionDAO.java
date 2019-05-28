@@ -11,7 +11,7 @@ import javax.persistence.PersistenceContext;
  * @since 19.1.2
  */
 @Stateless
-public class PermissionDao {
+public class PermissionDAO {
 
     @PersistenceContext(unitName="jbugs-persistence")
     private EntityManager em;
@@ -27,6 +27,10 @@ public class PermissionDao {
         return p;
     }
 
+    public PermissionEntity updatePermission(PermissionEntity p){
+        em.merge(p);
+        return p;
+    }
 
     public void removePermission(PermissionEntity p) {
         em.remove(p);
