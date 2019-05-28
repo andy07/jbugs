@@ -1,6 +1,7 @@
 package msg.permission.control;
 
 import msg.permission.entity.PermissionDAO;
+import msg.permission.entity.PermissionEntity;
 import msg.permission.entity.dto.PermissionConverter;
 import msg.permission.entity.dto.PermissionDTO;
 
@@ -33,4 +34,8 @@ public class PermissionControl {
                 .collect(Collectors.toList());
     }
 
+
+    public PermissionEntity getPermissionByType(String type) {
+        return permissionDao.getPermissionByType(type);
+    }
 }
