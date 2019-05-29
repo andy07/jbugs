@@ -1,5 +1,6 @@
 package msg.bug.entity.dto;
 
+import java.sql.Date;
 import java.util.Optional;
 
 /**
@@ -14,7 +15,7 @@ public class BugDTO {
 
     private String version;
 
-    private String targetDate;
+    private Date targetDate;
 
     private String status;
 
@@ -50,8 +51,8 @@ public class BugDTO {
         return this;
     }
 
-    public Optional<String> getDescription() {
-        return description;
+    public String getDescription() {
+        return description.orElse("");
     }
 
     public BugDTO setDescription(String description) {
@@ -59,8 +60,8 @@ public class BugDTO {
         return this;
     }
 
-    public Optional<String> getCreatedBy() {
-        return createdBy;
+    public String getCreatedBy() {
+        return createdBy.orElse("");
     }
 
     public BugDTO setCreatedBy(String createdBy) {
@@ -68,11 +69,11 @@ public class BugDTO {
         return this;
     }
 
-    public String getTargetDate() {
+    public Date getTargetDate() {
         return targetDate;
     }
 
-    public BugDTO setTargetDate(String targetDate) {
+    public BugDTO setTargetDate(Date targetDate) {
         this.targetDate = targetDate;
         return this;
     }

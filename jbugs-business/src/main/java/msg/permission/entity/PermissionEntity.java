@@ -11,7 +11,18 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "permissions")
+@NamedQueries({
+        @NamedQuery(name = PermissionEntity.PERMISSION_FIND_ALL,
+                query = "select u from PermissionEntity u"),
+        @NamedQuery(name = PermissionEntity.QUERY_GET_PERMISSION_BY_TYPE,
+                query = "select r from PermissionEntity r where r.type=:type ")
+}
+)
 public class PermissionEntity {
+
+    public static final String PERMISSION_FIND_ALL = "PermissionEntity.findAll";
+    public static final String QUERY_GET_PERMISSION_BY_TYPE = "PermissionEntity.getPermissionByType";
+    public static final String INPUT_TYPE_LIST = "type";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -3,12 +3,15 @@
 // =================================================================================================
 package msg.role.control;
 
-import msg.role.entity.RoleDao;
+import msg.role.entity.RoleDAO;
 import msg.role.entity.RoleEntity;
+import msg.role.entity.dto.RoleConverter;
+import msg.role.entity.dto.RoleDTO;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Control operations for all the RoleEntity related operations.
@@ -20,7 +23,10 @@ import java.util.List;
 public class RoleControl {
 
     @EJB
-    private RoleDao roleDao;
+    private RoleDAO roleDao;
+
+    @EJB
+    private RoleConverter roleConverter;
 
     /**
      * Given a input list of {@link RoleEntity#getType()}s, returns the corresponding list of RoleEntity Entities.
@@ -30,5 +36,22 @@ public class RoleControl {
      */
     public List<RoleEntity> getRolesByTypeList(List<String> typeList) {
         return roleDao.getRolesByTypeList(typeList);
+    }
+
+    public RoleEntity getRoleByType(String type) {
+        return roleDao.getRoleByType(type);
+    }
+
+    public RoleDTO updateRole(final RoleDTO roleDTO) {
+        RoleEntity bugEntity = roleConverter.convertDTOToEntity(roleDTO);
+        bugEntity=roleDao.updateRole(bugEntity);
+        return roleConverter.convertEntityToDTO(bugEntity);
+    }
+
+    public List<RoleDTO> getAll(){
+        return roleDao.getAll()
+                .stream()
+                .map(roleConverter::convertEntityToDTO)
+                .collect(Collectors.toList());
     }
 }

@@ -16,22 +16,31 @@ import java.util.Set;
 @Entity
 @Table(name = "roles")
 @NamedQueries({
-        @NamedQuery(name = "getPermissions",
+        @NamedQuery(name = RoleEntity.QUERY_GET_PERMISION,
                 query = "select r.permissions from RoleEntity r where r.type=:type "),
+        @NamedQuery(name = RoleEntity.QUERY_GET_ROLE_BY_TYPE,
+                query = "select r from RoleEntity r where r.type=:type "),
         @NamedQuery(name = RoleEntity.QUERY_GET_ROLES_BY_TYPE_LIST,
                 query = "select r from RoleEntity r "
-                        + "where r.type in :" + RoleEntity.INPUT_TYPE_LIST)})
+                        + "where r.type in :" + RoleEntity.INPUT_TYPE_LIST),
+        @NamedQuery(name = RoleEntity.ROLE_FIND_ALL,
+                query = "select u from RoleEntity u")}
+)
 public class RoleEntity {
 
     public static final String QUERY_GET_ROLES_BY_TYPE_LIST = "getRolesByTypeList";
+    public static final String QUERY_GET_ROLE_BY_TYPE = "getRoleByType";
     public static final String INPUT_TYPE_LIST = "type";
+    public static final String QUERY_GET_PERMISION = "getPermissions";
+    public static final String ROLE_FIND_ALL = "RoleEntity.findAll";
+
 
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "type", nullable = false)
+    @Column(name = "type", unique = true, nullable = false)
     private String type;
 
     @ManyToMany(cascade = CascadeType.PERSIST)

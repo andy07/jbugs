@@ -17,5 +17,12 @@ public class MessageCatalog {
     public static final ExceptionMessage USER_WITH_SAME_MAIL_EXISTS
             = new ExceptionMessage("USER-01", "A user with the same email already exists.");
     public static final ExceptionMessage USER_WITH_INVALID_CREDENTIALS
-            = new ExceptionMessage("USER-01", "A user with invalid credential");
+            = new ExceptionMessage("USER-02", "A user with invalid credential");
+    public static final ExceptionMessage USER_DEACTIVATED
+            = new ExceptionMessage("USER-03", "User is deactivated");
+    public static final ExceptionMessage INCORRECT_USERNAME_OR_PASSWORD
+            = new ExceptionMessage("USER-04", "The username or password is incorrect");
+    public static final ExceptionMessage NO_SUCH_ROLE_EXISTS
+            = new ExceptionMessage("ROLE-01", "Role doesn't exists");
+
 }
