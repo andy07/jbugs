@@ -26,4 +26,16 @@ public class BugDAO {
         em.persist(entity);
         return entity;
     }
+
+    public BugEntity update(BugEntity entity) {
+        entity = em.merge(entity);
+        //em.flush();
+        return entity;
+    }
+
+    public BugEntity findBugByTitle(String title) {
+        return em.createNamedQuery(BugEntity.BUG_FIND_BY_TITLE, BugEntity.class)
+                .setParameter(BugEntity.TITLE, title)
+                .getSingleResult();
+    }
 }
