@@ -39,4 +39,12 @@ public class RoleResource {
     }
 
 
+    @POST
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/type")
+    public Response getRoleByType(String type){
+        return Response.ok(roleFacade.getRoleByType(type)).build();
+    }
+
 }

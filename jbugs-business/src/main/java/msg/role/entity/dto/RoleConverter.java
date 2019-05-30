@@ -24,13 +24,17 @@ public class RoleConverter {
     @EJB
     private PermissionConverter permissionConverter;
 
+    @EJB
+    private RoleControl roleControl;
+
     public RoleEntity convertDTOToEntity(RoleDTO roleDTO){
 
+
+        RoleEntity roleEntity=roleControl.getRoleByType(roleDTO.getType());
         Set<PermissionEntity> permissions= new HashSet<>();
         roleDTO.getPermissions().forEach(s-> permissions.add(permissionConverter.convertDTOToEntity(s)));
 
-        return new RoleEntity()
-            .setType(roleDTO.getType())
+        return roleEntity
                 .setPermissions(permissions);
     }
 

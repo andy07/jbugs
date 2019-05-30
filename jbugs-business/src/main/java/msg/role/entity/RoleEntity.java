@@ -40,7 +40,7 @@ public class RoleEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "type", nullable = false)
+    @Column(name = "type", unique = true, nullable = false)
     private String type;
 
     @ManyToMany(cascade = CascadeType.PERSIST)

@@ -49,8 +49,27 @@ public class UserControl {
         final UserEntity newUserEntity = userConverter.convertUserDTOtoEntity(userDTO);
         newUserEntity.setStatus(true);
         newUserEntity.setCounter(5);
+        //to do method for create username
+        String username = "";
+
+        if(userDTO.getLastName().length() > 5){
+            username = userDTO.getLastName().substring(0, 5);
+        }
+        else{
+            username = userDTO.getLastName();
+            int letters = userDTO.getLastName().length();
+            username+=userDTO.getFirstName().substring(0, letters - 1);
+        }
+
+        //todo
+        //check if a user in DB has this username
+
+        username+=userDTO.getFirstName().charAt(0);
+        username.toLowerCase();
+
         final String userFullName = newUserEntity.getFirstName() + " " + newUserEntity.getLastName();
-        newUserEntity.setUsername(userFullName);
+
+        newUserEntity.setUsername(username);
         userDao.createUser(newUserEntity);
 
 //        this.notificationFacade.createNotification(

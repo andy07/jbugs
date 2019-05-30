@@ -35,10 +35,9 @@ public class BugResource {
     }
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response saveBug(BugDTO dto) {
-        dto = facade.save(dto);
-        return Response.ok(dto).build();
+    @Consumes(MediaType.TEXT_PLAIN)
+    public Response getAllStatusAllowed(String bugStatus) {
+        return Response.ok(facade.getStatusAllowed(bugStatus)).build();
     }
 
     @PUT
