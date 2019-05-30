@@ -1,6 +1,5 @@
 package msg.bug.boundary;
 
-import msg.bug.BugStatus;
 import msg.bug.entity.dto.BugDTO;
 
 import javax.ejb.EJB;
@@ -28,19 +27,11 @@ public class BugResource {
         return Response.ok(facade.getAll()).build();
     }
 
-    @POST
-    @Path("/status")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response getStatusAllowed(BugStatus bugStatus) {
-        return Response.ok(facade.getStatusAllowed(bugStatus.getStatus())).build();
-    }
-
     @GET
-    @Path("/status")
+    @Path("/status/{status}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getStatusAllowed() {
-        return Response.ok(facade.getStatusAllowed(BugStatus.NEW.getStatus())).build();
+    public Response getStatusAllowed(@PathParam("status") String status) {
+        return Response.ok(facade.getStatusAllowed(status)).build();
     }
     @POST
     @Produces(MediaType.APPLICATION_JSON)
