@@ -52,19 +52,18 @@ public class UserControl {
         //to do method for create username
         String username = "";
 
-        if(userDTO.getLastName().length() > 5){
+        if (userDTO.getLastName().length() > 5) {
             username = userDTO.getLastName().substring(0, 5);
-        }
-        else{
+        } else {
             username = userDTO.getLastName();
             int letters = userDTO.getLastName().length();
-            username+=userDTO.getFirstName().substring(0, letters - 1);
+            username += userDTO.getFirstName().substring(0, letters - 1);
         }
 
         //todo
         //check if a user in DB has this username
 
-        username+=userDTO.getFirstName().charAt(0);
+        username += userDTO.getFirstName().charAt(0);
         username.toLowerCase();
 
         final String userFullName = newUserEntity.getFirstName() + " " + newUserEntity.getLastName();
@@ -87,11 +86,8 @@ public class UserControl {
 //        }
 
         UserEntity newUserEntity = null;
-        UserEntity userEntity = userDao.findByUsername(userDTO.getUsername());
-        if (userEntity != null) {
-            newUserEntity = userConverter.convertUserDTOtoEntity(userDTO);
-            userDao.updateUser(newUserEntity);
-        }
+        newUserEntity = userConverter.convertUserDTOtoEntity(userDTO);
+        userDao.updateUser(newUserEntity);
         return newUserEntity.getUsername();
     }
 
@@ -167,8 +163,7 @@ public class UserControl {
                 throw new BusinessException(MessageCatalog.USER_DEACTIVATED);
 
             }
-        }
-        else
+        } else
             throw new BusinessException(MessageCatalog.INCORRECT_USERNAME_OR_PASSWORD);
         return userDTOOutput;
     }
