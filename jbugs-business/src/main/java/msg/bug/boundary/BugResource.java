@@ -36,6 +36,12 @@ public class BugResource {
         return Response.ok(facade.getStatusAllowed(bugStatus.getStatus())).build();
     }
 
+    @GET
+    @Path("/status")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getStatusAllowed() {
+        return Response.ok(facade.getStatusAllowed(BugStatus.NEW.getStatus())).build();
+    }
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
@@ -52,7 +58,6 @@ public class BugResource {
         dto = facade.update(dto);
         return Response.ok(dto).build();
     }
-
     @GET
     @Path("/{title}")
     @Produces(MediaType.APPLICATION_JSON)
