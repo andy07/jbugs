@@ -58,18 +58,25 @@ public class UserControl {
         else{
             username = userDTO.getLastName();
             int letters = userDTO.getLastName().length();
-            username+=userDTO.getFirstName().substring(0, letters - 1);
+            username+=userDTO.getFirstName();
         }
 
         //todo
-        //check if a user in DB has this username
+        //min 6 caractere
 
-        username+=userDTO.getFirstName().charAt(0);
-        username.toLowerCase();
 
-        final String userFullName = newUserEntity.getFirstName() + " " + newUserEntity.getLastName();
+        List<UserDTO>userEntities = this.getAll();
+        for(UserDTO userEntity: userEntities){
+            if(userEntity.getUsername().equalsIgnoreCase(username)){
+                username += number;
+                System.out.println("1: "+username);
+            }
+        }
 
-        newUserEntity.setUsername(username);
+
+        //final String userFullName = newUserEntity.getFirstName() + " " + newUserEntity.getLastName();
+        System.out.println(username);
+        newUserEntity.setUsername(username.toLowerCase());
         userDao.createUser(newUserEntity);
 
 //        this.notificationFacade.createNotification(
