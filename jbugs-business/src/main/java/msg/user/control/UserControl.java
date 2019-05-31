@@ -5,9 +5,16 @@ package msg.user.control;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.Claim;
 import msg.exeptions.BusinessException;
 import msg.notifications.boundary.NotificationFacade;
+import msg.notifications.boundary.notificationParams.NotificationParamsWelcomeUser;
+import msg.notifications.entity.NotificationType;
+import msg.permission.entity.PermissionEntity;
+import msg.permission.entity.dto.PermissionDTO;
+import msg.role.boundary.RoleFacade;
 import msg.role.entity.RoleEntity;
+import msg.role.entity.dto.RoleDTO;
 import msg.user.MessageCatalog;
 import msg.user.entity.UserDao;
 import msg.user.entity.UserEntity;
@@ -16,8 +23,19 @@ import msg.user.entity.dto.UserDTO;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
+
+
+import javax.crypto.spec.SecretKeySpec;
+import javax.xml.bind.DatatypeConverter;
+import java.security.Key;
+
+import io.jsonwebtoken.*;
+
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.Claims;
+import org.json.simple.JSONArray;
 
 /**
  * Control operations for all the User related operations.
@@ -36,6 +54,63 @@ public class UserControl {
 
     @EJB
     private NotificationFacade notificationFacade;
+
+    @EJB
+    private RoleFacade roleFacade;
+
+    private static String SECRET_KEY = "oeRaYY7Wo24sDqKSX3IM9ASGmdGPmkTd9jo1QTy4b7P9Ze5_9hKolVX8xNrQDcNRfVEdTZNOuOyqEGhXEbdJI-ZQ19k_o9MI0y3eZN2lp9jow55FfXMiINEdt1XR85VipRLSOkT6kSpzs2x-jbLDiz9iFVzkd81YKxMgPA7VfZeQUm4n-mOmnWMaVX30zGFU4L3oPBctYKkl4dYfqYWqRNfrgPJVi5DGFjywgxx0ASEiJHtV72paI3fDR2XwlSkyhhmY-ICjCRmsJN4fX1pdoL8a18-aQrvyu4j0Os6dVPYIoPvvY0SAZtWYKHfM15g7A3HD4cVREf9cUsprCRK93w";
+
+    //Sample method to construct a JWT
+    public String createJWT(UserDTO userDTO) {
+
+        //The JWT signature algorithm we will be using to sign the token
+        SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
+
+        long nowMillis = System.currentTimeMillis();
+        Date now = new Date(nowMillis);
+
+        //We will sign our JWT with our ApiKey secret
+        byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(SECRET_KEY);
+        Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
+
+
+        //Let's set the JWT Claims
+        JwtBuilder builder = Jwts.builder()
+                .setSubject(userDTO.getUsername())
+                .addClaims(convertUserRolesToMap(userDTO.getRoles()))
+                .addClaims(convertUserPerimissionToMap(userDTO.getRoles()))
+                .signWith(signatureAlgorithm, signingKey);
+
+        //Builds the JWT and serializes it to a compact, URL-safe string
+        return builder.compact();
+    }
+
+    private Map<String, Object> convertUserPerimissionToMap(List<String> roles) {
+        Map<String,Object> map= new HashMap<>();
+        Set<String> setOfPermission= new HashSet<>();
+        for(String role: roles){
+            RoleDTO roleDTO=roleFacade.getRoleByType(role);
+            for (PermissionDTO permission:roleDTO.getPermissions()){
+                setOfPermission.add(permission.getType());
+            }
+        }
+        JSONArray jsArrayOfPermissions = new JSONArray();
+        for(String permission: setOfPermission){
+            jsArrayOfPermissions.add(permission);
+        }
+        map.put("permissions",jsArrayOfPermissions);
+        return map;
+    }
+
+    private Map<String,Object> convertUserRolesToMap(List<String> roles){
+        Map<String,Object> map= new HashMap<>();
+        JSONArray jsArrayOfRoles = new JSONArray();
+        for(String role: roles){
+            jsArrayOfRoles.add(role);
+        }
+        map.put("roles",jsArrayOfRoles);
+        return map;
+    }
 
 
     /**
@@ -121,7 +196,7 @@ public class UserControl {
 
 
     public String authenticateUser(UserDTO userDTO) {
-        UserEntity userEntity = userDao.findUserByEmail(userDTO.getEmail());
+        UserEntity userEntity = userDao.findByUsername(userDTO.getUsername());
         if (userEntity != null) {
             Algorithm algorithm = Algorithm.HMAC256("harambe");
             return JWT.create()
@@ -145,7 +220,7 @@ public class UserControl {
                 if (userDTO.getPassword().equals(userEntity.getPassword())) {
                     userEntity.setCounter(5);
                     userDao.updateUser(userEntity);
-                    userDTOOutput = userConverter.convertEntityToUserDTO(userEntity);
+                    return  userConverter.convertEntityToUserDTO(userEntity);
                 } else {
                     int counter = userEntity.getCounter();
                     userEntity.setCounter(--counter);
@@ -163,9 +238,10 @@ public class UserControl {
                 throw new BusinessException(MessageCatalog.USER_DEACTIVATED);
 
             }
-        } else
+        }
+        else
             throw new BusinessException(MessageCatalog.INCORRECT_USERNAME_OR_PASSWORD);
-        return userDTOOutput;
     }
+
 
 }

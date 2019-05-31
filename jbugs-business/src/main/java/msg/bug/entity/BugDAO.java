@@ -31,6 +31,7 @@ public class BugDAO {
         BugEntity current = findBugByTitle(entity.getTitle());
         entity.setId(current.getId());
         entity = em.merge(entity);
+        //em.flush();
         return entity;
     }
 
