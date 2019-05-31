@@ -3,6 +3,7 @@
 // =================================================================================================
 package msg.user.boundary;
 
+import msg.filters.AuthorizationFilter;
 import msg.user.control.UserControl;
 import msg.user.entity.dto.UserDTO;
 
@@ -40,11 +41,13 @@ public class UserFacade {
         return userControl.getAll();
     }
 
-    public Object authenticateUser(UserDTO userInputDTO) {
-        return userControl.authenticateUser(userInputDTO);
-    }
 
-    public UserDTO authenticateUserByUsernameAndPassword(UserDTO inputDTO) {
-        return userControl.authenticateUserByUsernameAndPassword(inputDTO);
+
+    public Message authenticateUserByUsernameAndPassword(UserDTO inputDTO) {
+        UserDTO userDTO = userControl.authenticateUserByUsernameAndPassword(inputDTO);
+        Message message = new Message();
+        message.setToken(userControl.createJWT(userDTO));
+
+        return message;
     }
 }

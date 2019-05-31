@@ -4,10 +4,7 @@ import msg.user.entity.dto.UserDTO;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -23,10 +20,11 @@ public class AuthResource {
     @EJB
     private UserFacade userFacade;
 
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response whatever(UserDTO userInputDTO){
-        return Response.ok(userFacade.authenticateUser(userInputDTO)).build();
+    public Response whatever(UserDTO userDTO){
+        return Response.ok(userFacade.authenticateUserByUsernameAndPassword(userDTO)).build();
     }
 }

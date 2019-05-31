@@ -1,6 +1,7 @@
 package msg.role.boundary;
 
 import msg.role.control.RoleControl;
+import msg.role.entity.RoleEntity;
 import msg.role.entity.dto.RoleDTO;
 
 import javax.ejb.EJB;
@@ -25,5 +26,9 @@ public class RoleFacade {
 
     public List<RoleDTO> getAll(){
         return roleControl.getAll();
+    }
+
+    public RoleEntity getRoleByType(String type){
+       return roleControl.getRoleByType(type);
     }
 }
