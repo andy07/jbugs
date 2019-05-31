@@ -13,6 +13,7 @@ import msg.notifications.entity.NotificationType;
 import msg.permission.entity.PermissionEntity;
 import msg.role.boundary.RoleFacade;
 import msg.role.entity.RoleEntity;
+import msg.role.entity.dto.RoleDTO;
 import msg.user.MessageCatalog;
 import msg.user.entity.UserDao;
 import msg.user.entity.UserEntity;
@@ -87,9 +88,9 @@ public class UserControl {
         Map<String,Object> map= new HashMap<>();
         Set<String> setOfPermission= new HashSet<>();
         for(String role: roles){
-            RoleEntity roleEntity=roleFacade.getRoleByType(role);
-            for (PermissionEntity permissionEntity:roleEntity.getPermissions()){
-                setOfPermission.add(permissionEntity.getType());
+            RoleDTO roleDTO=roleFacade.getRoleByType(role);
+            for (String permission:roleDTO.getPermissions()){
+                setOfPermission.add(permission);
             }
         }
         JSONArray jsArrayOfPermissions = new JSONArray();
@@ -122,8 +123,26 @@ public class UserControl {
         final UserEntity newUserEntity = userConverter.convertUserDTOtoEntity(userDTO);
         newUserEntity.setStatus(true);
         newUserEntity.setCounter(5);
+        //to do method for create username
+        String username = "";
+
+        if (userDTO.getLastName().length() > 5) {
+            username = userDTO.getLastName().substring(0, 5);
+        } else {
+            username = userDTO.getLastName();
+            int letters = userDTO.getLastName().length();
+            username += userDTO.getFirstName().substring(0, letters - 1);
+        }
+
+        //todo
+        //check if a user in DB has this username
+
+        username += userDTO.getFirstName().charAt(0);
+        username.toLowerCase();
+
         final String userFullName = newUserEntity.getFirstName() + " " + newUserEntity.getLastName();
-        newUserEntity.setUsername(userFullName);
+
+        newUserEntity.setUsername(username);
         userDao.createUser(newUserEntity);
 
 //        this.notificationFacade.createNotification(
@@ -141,11 +160,8 @@ public class UserControl {
 //        }
 
         UserEntity newUserEntity = null;
-        UserEntity userEntity = userDao.findByUsername(userDTO.getUsername());
-        if (userEntity != null) {
-            newUserEntity = userConverter.convertUserDTOtoEntity(userDTO);
-            userDao.updateUser(newUserEntity);
-        }
+        newUserEntity = userConverter.convertUserDTOtoEntity(userDTO);
+        userDao.updateUser(newUserEntity);
         return newUserEntity.getUsername();
     }
 
@@ -195,6 +211,7 @@ public class UserControl {
     }
 
     public UserDTO authenticateUserByUsernameAndPassword(UserDTO userDTO) {
+        UserDTO userDTOOutput = null;
         UserEntity userEntity = null;
         userEntity = userDao.findByUsername(userDTO.getUsername());
         if (userEntity != null) {

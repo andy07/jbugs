@@ -26,10 +26,18 @@ public class BugFacade {
     }
 
     public Set<BugStatus> getStatusAllowed(String status) {
-        return control.getStatusAllowed(status);
+        return BugStatus.getNextStatusAllowedList(status);
     }
 
     public BugDTO save(BugDTO dto) {
         return control.save(dto);
+    }
+
+    public BugDTO update(BugDTO dto) {
+        return control.update(dto);
+    }
+
+    public BugDTO getBugByTitle(String title) {
+        return control.getBugByTitle(title);
     }
 }

@@ -46,7 +46,8 @@ public class BugConverter {
                 .setFixedVersion(entity.getFixedVersion())
                 .setSeverity(entity.getSeverity())
                 .setAssignedTo(entity.getAssignedTo())
-                .setDescription(entity.getDescription());
+                .setDescription(entity.getDescription())
+                .setCreatedBy(entity.getCreatedBy());
     }
 
 }

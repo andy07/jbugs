@@ -19,9 +19,8 @@ public class PermissionConverter {
     private PermissionControl permissionControl;
 
     public PermissionEntity convertDTOToEntity(PermissionDTO permissionDTO){
-        return new PermissionEntity()
-                .setType(permissionDTO.getType())
-                .setDescription(permissionDTO.getDescription());
+
+        return permissionControl.getPermissionByType(permissionDTO.getType());
     }
 
     public PermissionDTO convertEntityToDTO(PermissionEntity permissionEntity){

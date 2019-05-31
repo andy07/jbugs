@@ -1,6 +1,5 @@
 package msg.bug.boundary;
 
-import msg.bug.BugStatus;
 import msg.bug.entity.dto.BugDTO;
 
 import javax.ejb.EJB;
@@ -28,19 +27,32 @@ public class BugResource {
         return Response.ok(facade.getAll()).build();
     }
 
-    @POST
-    @Path("/status")
+    @GET
+    @Path("/status/{status}")
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response getStatusAllowed(BugStatus bugStatus) {
-        return Response.ok(facade.getStatusAllowed(bugStatus.getStatus())).build();
+    public Response getStatusAllowed(@PathParam("status") String status) {
+        return Response.ok(facade.getStatusAllowed(status)).build();
+    }
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.TEXT_PLAIN)
+    public Response getAllStatusAllowed(String bugStatus) {
+        return Response.ok(facade.getStatusAllowed(bugStatus)).build();
     }
 
-    @POST
+    @PUT
+    @Path("/{title}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response saveBug(BugDTO dto) {
-        dto = facade.save(dto);
+    public Response updateBug(@PathParam("title") String title, BugDTO dto) {
+        dto = facade.update(dto);
         return Response.ok(dto).build();
     }
+    @GET
+    @Path("/{title}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getBugByTitle(@PathParam("title") String title) {
+        return Response.ok(facade.getBugByTitle(title)).build();
+    }
+
 }

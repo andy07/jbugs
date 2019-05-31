@@ -61,7 +61,7 @@ create table bugs
     fixed_version varchar(255) not null,
     severity      varchar(255) not null,
     status        varchar(255) not null,
-    targetDate    varchar(255) not null,
+    targetDate    date         not null,
     title         varchar(255) not null,
     version       varchar(255) not null
 );

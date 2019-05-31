@@ -23,8 +23,6 @@ public class RoleResource {
     @EJB
     public RoleFacade roleFacade;
 
-    @EJB
-    public RoleDAO roleDAO;
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
@@ -37,10 +35,16 @@ public class RoleResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAll(){
-        //
         return Response.ok(roleFacade.getAll()).build();
-        //return Response.ok(roleDAO.getAll()).build();
     }
 
+
+    @POST
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/type")
+    public Response getRoleByType(String type){
+        return Response.ok(roleFacade.getRoleByType(type)).build();
+    }
 
 }

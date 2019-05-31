@@ -38,14 +38,18 @@ public class RoleControl {
         return roleDao.getRolesByTypeList(typeList);
     }
 
+    public RoleDTO getRoleByTypeDTO(String type) {
+        return roleConverter.convertEntityToDTO(roleDao.getRoleByType(type));
+    }
+
     public RoleEntity getRoleByType(String type) {
         return roleDao.getRoleByType(type);
     }
 
     public RoleDTO updateRole(final RoleDTO roleDTO) {
-        RoleEntity bugEntity = roleConverter.convertDTOToEntity(roleDTO);
-        bugEntity=roleDao.updateRole(bugEntity);
-        return roleConverter.convertEntityToDTO(bugEntity);
+        RoleEntity roleEntity = roleConverter.convertDTOToEntity(roleDTO);
+        roleEntity=roleDao.updateRole(roleEntity);
+        return roleConverter.convertEntityToDTO(roleEntity);
     }
 
     public List<RoleDTO> getAll(){

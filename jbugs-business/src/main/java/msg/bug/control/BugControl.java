@@ -45,4 +45,15 @@ public class BugControl {
         entity = dao.save(entity);
         return converter.convertEntityToDTO(entity);
     }
+
+    public BugDTO update(BugDTO dto) {
+        BugEntity entity = converter.convertDTOToEntity(dto);
+        entity = dao.update(entity);
+        return converter.convertEntityToDTO(entity);
+    }
+
+    public BugDTO getBugByTitle(String title) {
+        BugEntity entity = dao.findBugByTitle(title);
+        return converter.convertEntityToDTO(entity);
+    }
 }

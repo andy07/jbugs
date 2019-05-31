@@ -4,6 +4,7 @@ import msg.bug.boundary.BugResource;
 import msg.exeptions.BusinessExceptionMapper;
 //import msg.exeptions.RunTimeExceptionMapper;
 import msg.exeptions.RunTimeExceptionMapper;
+import msg.permission.boundary.PermissionResource;
 import msg.filters.AuthorizationFilter;
 import msg.role.boundary.RoleResource;
 import msg.user.boundary.AuthResource;
@@ -34,6 +35,7 @@ public class JBugsApplication extends Application {
         classes.add(AuthResource.class);
         classes.add(BugResource.class);
         classes.add(RoleResource.class);
+        classes.add(PermissionResource.class);
         classes.add(AuthorizationFilter.class);
         return  classes;
     }
