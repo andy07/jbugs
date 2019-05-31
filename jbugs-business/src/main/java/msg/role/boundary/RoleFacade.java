@@ -26,4 +26,8 @@ public class RoleFacade {
     public List<RoleDTO> getAll(){
         return roleControl.getAll();
     }
+
+    public RoleDTO getRoleByType(String type){
+        return roleControl.getRoleByTypeDTO(type);
+    }
 }
