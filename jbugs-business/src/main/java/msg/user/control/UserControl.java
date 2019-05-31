@@ -11,6 +11,7 @@ import msg.notifications.boundary.NotificationFacade;
 import msg.notifications.boundary.notificationParams.NotificationParamsWelcomeUser;
 import msg.notifications.entity.NotificationType;
 import msg.permission.entity.PermissionEntity;
+import msg.permission.entity.dto.PermissionDTO;
 import msg.role.boundary.RoleFacade;
 import msg.role.entity.RoleEntity;
 import msg.role.entity.dto.RoleDTO;
@@ -89,8 +90,8 @@ public class UserControl {
         Set<String> setOfPermission= new HashSet<>();
         for(String role: roles){
             RoleDTO roleDTO=roleFacade.getRoleByType(role);
-            for (String permission:roleDTO.getPermissions()){
-                setOfPermission.add(permission);
+            for (PermissionDTO permission:roleDTO.getPermissions()){
+                setOfPermission.add(permission.getType());
             }
         }
         JSONArray jsArrayOfPermissions = new JSONArray();
