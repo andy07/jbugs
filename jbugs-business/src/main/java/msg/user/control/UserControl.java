@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
 
 
 import javax.crypto.spec.SecretKeySpec;
+import javax.management.relation.Role;
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
 
@@ -244,4 +245,12 @@ public class UserControl {
     }
 
 
+    public Set<String> findUserByUsername(String username) {
+        Set<String> userRoleString = new HashSet<>();
+        Set<RoleEntity> roles=userDao.findByUsername(username).getRoles();
+        for (RoleEntity role : roles) {
+            userRoleString.add(role.getType());
+        }
+        return userRoleString;
+    }
 }
