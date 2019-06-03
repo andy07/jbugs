@@ -10,6 +10,9 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import msg.exeptions.BusinessException;
 import msg.notifications.boundary.NotificationFacade;
+import msg.notifications.boundary.notificationParams.NotificationParamsWelcomeUser;
+import msg.notifications.entity.NotificationType;
+import msg.permission.entity.PermissionEntity;
 import msg.permission.entity.dto.PermissionDTO;
 import msg.role.boundary.RoleFacade;
 import msg.role.entity.RoleEntity;
@@ -24,10 +27,21 @@ import org.json.simple.JSONArray;
 import javax.crypto.spec.SecretKeySpec;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.xml.bind.DatatypeConverter;
-import java.security.Key;
+import java.security.Permission;
 import java.util.*;
 import java.util.stream.Collectors;
+
+
+import javax.crypto.spec.SecretKeySpec;
+import javax.management.relation.Role;
+import javax.xml.bind.DatatypeConverter;
+import java.security.Key;
+
+import io.jsonwebtoken.*;
+
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.Claims;
+import org.json.simple.JSONArray;
 
 /**
  * Control operations for all the User related operations.
@@ -268,4 +282,17 @@ public class UserControl {
     }
 
 
+    public Set<String> findUserPermissionsByUsername(String username) {
+        Set<String> userPermissions = new HashSet<>();
+        Set<RoleEntity> roles=userDao.findByUsername(username).getRoles();
+
+        for (RoleEntity role : roles) {
+            Set<PermissionEntity> permission= role.getPermissions();
+            for (PermissionEntity permissionEntity : permission) {
+                userPermissions.add(permissionEntity.getType());
+            }
+
+        }
+        return userPermissions;
+    }
 }

@@ -1,5 +1,6 @@
 package msg.user.boundary;
 
+import msg.filters.StarkPermissions;
 import msg.user.entity.dto.UserDTO;
 
 import javax.ejb.EJB;
@@ -44,6 +45,7 @@ public class UserResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @StarkPermissions(permission = {StarkPermissions.Permission.BUG_CLOSE, StarkPermissions.Permission.USER_MANAGEMENT})
     public Response getAll() {
         return Response.ok(facade.getAll()).build();
     }
