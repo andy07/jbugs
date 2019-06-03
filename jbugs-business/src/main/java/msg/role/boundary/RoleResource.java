@@ -1,7 +1,6 @@
 package msg.role.boundary;
 
 import msg.filters.StarkPermissions;
-import msg.role.entity.RoleDAO;
 import msg.role.entity.dto.RoleDTO;
 
 import javax.ejb.EJB;
@@ -35,7 +34,7 @@ public class RoleResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @StarkPermissions(permission = StarkPermissions.Permission.PERMISSION_MANAGEMENT)
+    @StarkPermissions(permissions = StarkPermissions.Permission.PERMISSION_MANAGEMENT)
     public Response getAll(){
         return Response.ok(roleFacade.getAll()).build();
     }

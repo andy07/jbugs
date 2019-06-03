@@ -24,7 +24,7 @@ public class BugResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @StarkPermissions(permission = StarkPermissions.Permission.BUG_MANAGEMENT)
+    @StarkPermissions(permissions = StarkPermissions.Permission.BUG_MANAGEMENT)
     public Response getAll() {
         return Response.ok(facade.getAll()).build();
     }
