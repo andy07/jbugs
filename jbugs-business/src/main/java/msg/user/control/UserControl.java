@@ -114,18 +114,6 @@ public class UserControl {
         return map;
     }
 
-    private  String createUsername(String lastName, String firstName) {
-        String username = "";
-        if (lastName.length() > 5) {
-            username += lastName.substring(0, 5) + firstName.charAt(0);
-        } else {
-            username += lastName;
-            int letters = lastName.length();
-            username += firstName.substring(0, 6 - letters);
-            System.out.println(6 - letters);
-        }
-        return username.toLowerCase();
-    }
 
     private boolean validateUserInput(UserDTO userDTO){
 
@@ -133,7 +121,7 @@ public class UserControl {
                 || userDTO.getFirstName().isEmpty() || userDTO.getEmail().isEmpty()
                 || userDTO.getMobileNumber().isEmpty() || userDTO.getPassword().isEmpty())
             return false;
-        if(!userDTO.getFirstName().matches("^[A-Z][a-z]+$"))
+        if(!userDTO.getFirstName().matches("^[A-Z][a-z ]+([A-Z][a-z]+)?$"))
             return false;
         if(!userDTO.getLastName().matches("^[A-Z][a-z]+$"))
             return false;
@@ -143,6 +131,35 @@ public class UserControl {
             return false;
 
         return true;
+    }
+
+    private  String createUsername(String lastName, String firstName) {
+        String username = "";
+        if (lastName.length() > 5) {
+            username += lastName.substring(0, 5) + firstName.charAt(0);
+        } else {
+            username += lastName;
+            int letters = lastName.length();
+            if(!firstName.contains(" ")) {
+                if (firstName.length() > 6 - letters) {
+                    username += firstName.substring(0, 6 - letters);
+                } else {
+                    username += firstName;
+                }
+            }
+            else{
+                String[] splited = firstName.split("\\s+");
+                if (splited[0].length() > (6 - letters)) {
+                    username += splited[0].substring(0, 6 - letters);
+                } else {
+                    username += splited[0]+splited[1].charAt(0);
+                }
+
+            }
+
+            System.out.println(6 - letters);
+        }
+        return username.toLowerCase();
     }
 
 
@@ -169,8 +186,23 @@ public class UserControl {
         List<UserDTO>userEntities = this.getAll();
         for(UserDTO userEntity: userEntities){
             if(userEntity.getUsername().equalsIgnoreCase(username)){
-                if(userDTO.getFirstName().length() > number) {
-                    username += userDTO.getFirstName().substring(1, ++number);
+                if(!userDTO.getFirstName().contains(" ")) {
+                    if (userDTO.getFirstName().length() > (number + 1)) {
+                        username += userDTO.getFirstName().substring(1, ++number);
+                    } else {
+                        username += userDTO.getFirstName().charAt(0);
+                    }
+                }
+                else{
+                    String[] splited = userDTO.getFirstName().split("\\s+");
+                    if (splited[0].length() > (number + 1)) {
+                        username += splited[0].substring(1, ++number) + splited[1].charAt(0);
+                    } else {
+                        username += splited[0].charAt(0) ;
+                        username += splited[1].charAt(0) ;
+
+                    }
+
                 }
             }
         }
