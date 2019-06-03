@@ -23,6 +23,7 @@ public class UserResource {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
+    @StarkPermissions(permission = {StarkPermissions.Permission.USER_MANAGEMENT})
     public Response createUser(UserDTO inputDTO){
         facade.createUser(inputDTO);
         return Response.ok().build();
@@ -30,6 +31,7 @@ public class UserResource {
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
+    @StarkPermissions(permission = {StarkPermissions.Permission.USER_MANAGEMENT})
     public Response updateUser(UserDTO inputDTO){
         facade.updateUser(inputDTO);
         return Response.ok().build();

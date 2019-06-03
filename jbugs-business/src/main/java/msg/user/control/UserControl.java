@@ -22,9 +22,7 @@ import msg.user.entity.UserDao;
 import msg.user.entity.UserEntity;
 import msg.user.entity.dto.UserConverter;
 import msg.user.entity.dto.UserDTO;
-import org.json.simple.JSONArray;
 
-import javax.crypto.spec.SecretKeySpec;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.security.Permission;
@@ -156,7 +154,6 @@ public class UserControl {
      * @param userDTO the input User DTO. mandatory
      * @return the username of the newly created user.
      */
-
     public String createUser(final UserDTO userDTO) {
 
         int number = 1;
@@ -179,7 +176,13 @@ public class UserControl {
             }
         }
 
-        //final String userFullName = newUserEntity.getFirstName() + " " + newUserEntity.getLastName();
+        //todo
+        //check if a user in DB has this username
+
+        username += userDTO.getFirstName().charAt(0);
+        username.toLowerCase();
+
+        final String userFullName = newUserEntity.getFirstName() + " " + newUserEntity.getLastName();
 
         newUserEntity.setUsername(username.toLowerCase());
         userDao.createUser(newUserEntity);
