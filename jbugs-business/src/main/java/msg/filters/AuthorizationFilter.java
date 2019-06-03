@@ -60,50 +60,45 @@ public class AuthorizationFilter implements ContainerRequestFilter {
     @Override
     public void filter(ContainerRequestContext containerRequestContext) throws IOException {
         String authorizationValue = containerRequestContext.getHeaderString(AUTHENTICATION_HEADER);
-        UriInfo info = containerRequestContext.getUriInfo();
-        if(info.getPath().equals(LOGIN_PATH)){
+        if (containerRequestContext.getUriInfo().getPath().equals(LOGIN_PATH)) {
             return;
-        }
-        else if(authorizationValue != null && authorizationValue.length()>0 && authorizationValue.startsWith("Bearer"))  {
-                String token = authorizationValue.split(" ")[1];
-                //This line will throw an exception if it is not a signed JWS (as expected)
+        } else if (authorizationValue != null && authorizationValue.length() > 0 && authorizationValue.startsWith("Bearer")) {
+            String token = authorizationValue.split(" ")[1];
+            Claims body = null;
             try {
-                final Jws<Claims> claimsJws = Jwts.parser().setSigningKey(DatatypeConverter.parseBase64Binary(SECRET_KEY))
-                        .parseClaimsJws(token);
-                final String username =  claimsJws.getBody().getSubject();
-                final List<String> userPermissions = (List<String>) claimsJws.getBody().get("permissions");
-                final StarkPermissions.Permission[] annotatedMethodPermissions = resourceInfo.getResourceMethod().getAnnotation(StarkPermissions.class).permission();
-                if(verifyUserRoles(username,userPermissions)&&
-                        verifyPathPermissions(annotatedMethodPermissions, userPermissions)){
-                    System.out.println("works");
-                    return;
+                //This line will throw an exception if it is not a signed JWS (as expected)
+                body = Jwts.parser().setSigningKey(DatatypeConverter.parseBase64Binary(SECRET_KEY))
+                        .parseClaimsJws(token).getBody();
 
-                }else
-                    createResponseForHackers(containerRequestContext);
-
-            }catch (Exception e){
+            } catch (Exception e) {
                 createResponseForHackers(containerRequestContext);
             }
+            final String username = body.getSubject();
+            final List<String> userPermissions = (List<String>) body.get("permissions");
+            final StarkPermissions.Permission[] annotatedMethodPermissions = resourceInfo.getResourceMethod().getAnnotation(StarkPermissions.class).permission();
+            if (!verifyUserRoles(username, userPermissions)) {
+                createResponseForUsers(containerRequestContext);
+            }
+            if (!verifyPathPermissions(annotatedMethodPermissions, userPermissions)) {
+                createResponseForHackers(containerRequestContext);
+            }
+            return;
 
+        } else {
+            createResponseForUsers(containerRequestContext);
         }
-        else{
-            Response unauthorizedAccess = Response.status(Response.Status.UNAUTHORIZED)
-                    .entity("Go back to Login page").build();
-
-            containerRequestContext.abortWith(unauthorizedAccess);
-        }
-        }
+    }
 
     private boolean verifyPathPermissions(StarkPermissions.Permission[] annotatedMethodPermissions, List<String> userPermissions) {
-        for(StarkPermissions.Permission methodPermission:annotatedMethodPermissions){
+        for (StarkPermissions.Permission methodPermission : annotatedMethodPermissions) {
             boolean existPermission = false;
-            for(String permission:userPermissions){
-                if((methodPermission.toString()).equalsIgnoreCase(permission)){
-                    existPermission=true;
+            for (String permission : userPermissions) {
+                if ((methodPermission.toString()).equalsIgnoreCase(permission)) {
+                    existPermission = true;
                     break;
                 }
             }
-            if(!existPermission){
+            if (!existPermission) {
                 return false;
             }
         }
@@ -111,9 +106,9 @@ public class AuthorizationFilter implements ContainerRequestFilter {
     }
 
     private boolean verifyUserRoles(String username, List<String> permissions) {
-        Set<String> dataBaseSetOfPermission= userFacade.findUserPermissionsByUsername(username);
+        Set<String> dataBaseSetOfPermission = userFacade.findUserPermissionsByUsername(username);
         Set<String> userPermissions = new HashSet<>(permissions);
-        if(dataBaseSetOfPermission.size()!=userPermissions.size()){
+        if (dataBaseSetOfPermission.size() != userPermissions.size()) {
             return false;
         }
         return userPermissions.containsAll(dataBaseSetOfPermission);
@@ -126,8 +121,11 @@ public class AuthorizationFilter implements ContainerRequestFilter {
         containerRequestContext.abortWith(unauthorizedAccess);
     }
 
-
-
-
-
+    private void createResponseForUsers(ContainerRequestContext containerRequestContext) {
+        Response unauthorizedAccess = Response.status(Response.Status.UNAUTHORIZED)
+                .entity("Go back to Login page").build();
+        containerRequestContext.abortWith(unauthorizedAccess);
     }
+
+
+}
