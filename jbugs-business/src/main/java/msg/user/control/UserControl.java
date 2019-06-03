@@ -10,6 +10,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import msg.exeptions.BusinessException;
 import msg.notifications.boundary.NotificationFacade;
+import msg.permission.entity.PermissionEntity;
 import msg.permission.entity.dto.PermissionDTO;
 import msg.role.boundary.RoleFacade;
 import msg.role.entity.RoleEntity;
@@ -19,24 +20,15 @@ import msg.user.entity.UserDao;
 import msg.user.entity.UserEntity;
 import msg.user.entity.dto.UserConverter;
 import msg.user.entity.dto.UserDTO;
-
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
-import java.security.Permission;
-import java.util.*;
-import java.util.stream.Collectors;
-
+import org.json.simple.JSONArray;
 
 import javax.crypto.spec.SecretKeySpec;
-import javax.management.relation.Role;
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
-
-import io.jsonwebtoken.*;
-
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.Claims;
-import org.json.simple.JSONArray;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Control operations for all the User related operations.
