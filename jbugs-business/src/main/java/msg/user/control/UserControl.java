@@ -194,10 +194,25 @@ public class UserControl {
 //            throw new BusinessException(MessageCatalog.USER_WITH_SAME_MAIL_EXISTS);
 //        }
 
+
+        if(!validateUserInput(userDTO)){
+            throw new BusinessException(MessageCatalog.USERNAME_INVALID);
+        }
+
+        if(userDao.existsUsername(userDTO.getUsername())){
+            throw new BusinessException(MessageCatalog.USER_WITH_SAME_USERNAME_EXISTS);
+        }
+
+
         UserEntity newUserEntity = null;
         newUserEntity = userConverter.convertUserDTOtoEntity(userDTO);
         userDao.updateUser(newUserEntity);
         return newUserEntity.getUsername();
+    }
+
+    public UserDTO getUserByUsername(String username){
+        UserEntity userEntity = userDao.findByUsername(username);
+        return userConverter.convertEntityToUserDTO(userEntity);
     }
 
 

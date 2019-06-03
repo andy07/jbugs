@@ -66,11 +66,22 @@ public class UserDao {
         em.persist(user);
         return user;
     }
+
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public UserEntity updateUser(UserEntity user){
-        em.merge(user);
+        UserEntity current = findByUsername(user.getUsername());
+        user.setId(current.getId());
+        user = em.merge(user);
         return user;
     }
+
+    public boolean existsUsername(String username){
+        long count = em.createNamedQuery(UserEntity.USER_COUNT_BY_USERNAME, Long.class)
+                .setParameter(UserEntity.USERNAME,username)
+                .getSingleResult();
+        return (count > 0);
+    }
+
 
     public List<UserEntity> getAll() {
         return em.createNamedQuery(UserEntity.USER_FIND_ALL,UserEntity.class).getResultList();

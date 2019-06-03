@@ -26,5 +26,9 @@ public class MessageCatalog {
             = new ExceptionMessage("ROLE-01", "Role doesn't exists");
     public static final ExceptionMessage INCORRECT_USER_INPUT
             = new ExceptionMessage("USER-01", "Incorrect user input");
+    public static final ExceptionMessage USERNAME_INVALID
+            = new ExceptionMessage("USER-01", "Username invalid");
+    public static final ExceptionMessage USER_WITH_SAME_USERNAME_EXISTS
+            = new ExceptionMessage("USER-01", "A user with the same username already exists.");
 
 }
