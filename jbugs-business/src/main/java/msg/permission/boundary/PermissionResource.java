@@ -1,5 +1,7 @@
 package msg.permission.boundary;
 
+import msg.filters.StarkPermissions;
+
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.GET;
@@ -24,6 +26,7 @@ public class PermissionResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @StarkPermissions(permission = StarkPermissions.Permission.PERMISSION_MANAGEMENT)
     public Response getAll(){
         return Response.ok(permissionFacade.getAll()).build();
     }
