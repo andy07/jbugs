@@ -32,12 +32,14 @@ public class BugResource {
     @GET
     @Path("/status/{status}")
     @Produces(MediaType.APPLICATION_JSON)
+    @StarkPermissions(permission = StarkPermissions.Permission.BUG_MANAGEMENT)
     public Response getStatusAllowed(@PathParam("status") String status) {
         return Response.ok(facade.getStatusAllowed(status)).build();
     }
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.TEXT_PLAIN)
+    @StarkPermissions(permission = StarkPermissions.Permission.BUG_MANAGEMENT)
     public Response getAllStatusAllowed(String bugStatus) {
         return Response.ok(facade.getStatusAllowed(bugStatus)).build();
     }
@@ -46,6 +48,7 @@ public class BugResource {
     @Path("/{title}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
+    @StarkPermissions(permission = StarkPermissions.Permission.BUG_MANAGEMENT)
     public Response updateBug(@PathParam("title") String title, BugDTO dto) {
         dto = facade.update(dto);
         return Response.ok(dto).build();
@@ -53,6 +56,7 @@ public class BugResource {
     @GET
     @Path("/{title}")
     @Produces(MediaType.APPLICATION_JSON)
+    @StarkPermissions(permission = StarkPermissions.Permission.BUG_MANAGEMENT)
     public Response getBugByTitle(@PathParam("title") String title) {
         return Response.ok(facade.getBugByTitle(title)).build();
     }

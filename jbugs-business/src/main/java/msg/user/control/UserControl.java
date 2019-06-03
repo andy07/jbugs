@@ -6,6 +6,7 @@ package msg.user.control;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.Claim;
+import msg.bug.boundary.BugFacade;
 import msg.exeptions.BusinessException;
 import msg.notifications.boundary.NotificationFacade;
 import msg.notifications.boundary.notificationParams.NotificationParamsWelcomeUser;
@@ -59,6 +60,9 @@ public class UserControl {
 
     @EJB
     private RoleFacade roleFacade;
+
+    @EJB
+    private BugFacade bugFacade;
 
     private static String SECRET_KEY = "oeRaYY7Wo24sDqKSX3IM9ASGmdGPmkTd9jo1QTy4b7P9Ze5_9hKolVX8xNrQDcNRfVEdTZNOuOyqEGhXEbdJI-ZQ19k_o9MI0y3eZN2lp9jow55FfXMiINEdt1XR85VipRLSOkT6kSpzs2x-jbLDiz9iFVzkd81YKxMgPA7VfZeQUm4n-mOmnWMaVX30zGFU4L3oPBctYKkl4dYfqYWqRNfrgPJVi5DGFjywgxx0ASEiJHtV72paI3fDR2XwlSkyhhmY-ICjCRmsJN4fX1pdoL8a18-aQrvyu4j0Os6dVPYIoPvvY0SAZtWYKHfM15g7A3HD4cVREf9cUsprCRK93w";
 
@@ -293,15 +297,28 @@ public class UserControl {
     }
 
     public String updateUserStatus(UserDTO inputDTO) {
-        UserEntity userEntity= userDao.findByUsername(inputDTO.getUsername());
+        if(inputDTO.getUsername()== null || inputDTO.getUsername().isEmpty()){
+            throw new BusinessException(MessageCatalog.INCORRECT_USER_INPUT);
+        }
+        UserEntity userEntity=null;
+        if(userDao.findByUsername(inputDTO.getUsername())!=null)
+             userEntity= userDao.findByUsername(inputDTO.getUsername());
+        else
+            throw new BusinessException(MessageCatalog.INCORRECT_USER_INPUT);
         boolean newStatus=inputDTO.getStatus();
         boolean oldStatus=userEntity.isStatus();
-        if(newStatus==oldStatus){
-            if(oldStatus)
-                return "User "+inputDTO.getUsername()+" is already active!";
-            else
-                return "User "+inputDTO.getUsername()+" is already deactivated!";
+        if(!(newStatus==oldStatus)){
+            if(!newStatus && bugFacade.countActiveBugsForUser(userEntity.getUsername())){
+                throw new BusinessException(MessageCatalog.USER_BUGS_OPEN);
+            }
+            userEntity.setStatus(newStatus);
+            userEntity.setCounter(5);
+            userDao.updateUser(userEntity);
+            return "User "+inputDTO.getUsername()+" updated with success!";
         }
-        return "User "+inputDTO.getUsername()+" updated with success!";
+        else
+            throw new BusinessException(MessageCatalog.INCORRECT_USER_INPUT);
     }
+
+
 }

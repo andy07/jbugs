@@ -56,4 +56,8 @@ public class BugControl {
         BugEntity entity = dao.findBugByTitle(title);
         return converter.convertEntityToDTO(entity);
     }
+
+    public boolean countActiveBugsForUser(String username) {
+       return dao.countActiveBugsForUser(username);
+    }
 }

@@ -1,5 +1,8 @@
 package msg.user.entity;
 
+import msg.exeptions.BusinessException;
+import msg.user.MessageCatalog;
+
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -51,7 +54,6 @@ public class UserDao {
                 }catch (Exception e ){
                     e.printStackTrace();
                 }
-
         return userEntity;
     }
 
