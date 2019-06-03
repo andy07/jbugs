@@ -28,6 +28,7 @@ public class RoleResource {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
+    @StarkPermissions(permission = StarkPermissions.Permission.PERMISSION_MANAGEMENT)
     public Response updateRole(RoleDTO roleDTO){
         roleFacade.updateRole(roleDTO);
         return Response.ok().build();
@@ -45,6 +46,7 @@ public class RoleResource {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/type")
+    @StarkPermissions(permission = StarkPermissions.Permission.PERMISSION_MANAGEMENT)
     public Response getRoleByType(String type){
         return Response.ok(roleFacade.getRoleByType(type)).build();
     }
