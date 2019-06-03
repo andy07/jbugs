@@ -24,5 +24,7 @@ public class MessageCatalog {
             = new ExceptionMessage("USER-04", "The username or password is incorrect");
     public static final ExceptionMessage NO_SUCH_ROLE_EXISTS
             = new ExceptionMessage("ROLE-01", "Role doesn't exists");
+    public static final ExceptionMessage INCORRECT_USER_INPUT
+            = new ExceptionMessage("USER-01", "Incorrect user input");
 
 }
