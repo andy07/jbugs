@@ -1,6 +1,7 @@
 package msg.bug.boundary;
 
 import msg.bug.entity.dto.BugDTO;
+import msg.filters.StarkPermissions;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -23,6 +24,7 @@ public class BugResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @StarkPermissions(permission = StarkPermissions.Permission.BUG_MANAGEMENT)
     public Response getAll() {
         return Response.ok(facade.getAll()).build();
     }

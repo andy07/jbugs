@@ -15,7 +15,8 @@
 <!--    </security-constraint>-->
 
     <login-config>
-        <auth-method>BASIC</auth-method>
+        <auth-method>FORM</auth-method>
         <realm-name>securityRealm</realm-name>
+
     </login-config>
 </web-app>

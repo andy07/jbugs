@@ -19,15 +19,24 @@ import msg.user.entity.UserDao;
 import msg.user.entity.UserEntity;
 import msg.user.entity.dto.UserConverter;
 import msg.user.entity.dto.UserDTO;
-import org.json.simple.JSONArray;
 
-import javax.crypto.spec.SecretKeySpec;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.xml.bind.DatatypeConverter;
-import java.security.Key;
+import java.security.Permission;
 import java.util.*;
 import java.util.stream.Collectors;
+
+
+import javax.crypto.spec.SecretKeySpec;
+import javax.management.relation.Role;
+import javax.xml.bind.DatatypeConverter;
+import java.security.Key;
+
+import io.jsonwebtoken.*;
+
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.Claims;
+import org.json.simple.JSONArray;
 
 /**
  * Control operations for all the User related operations.
@@ -104,6 +113,37 @@ public class UserControl {
         return map;
     }
 
+    private  String createUsername(String lastName, String firstName) {
+        String username = "";
+        if (lastName.length() > 5) {
+            username += lastName.substring(0, 5) + firstName.charAt(0);
+        } else {
+            username += lastName;
+            int letters = lastName.length();
+            username += firstName.substring(0, 6 - letters);
+            System.out.println(6 - letters);
+        }
+        return username.toLowerCase();
+    }
+
+    private boolean validateUserInput(UserDTO userDTO){
+
+        if(userDTO.getRoles().isEmpty() || userDTO.getLastName().isEmpty()
+                || userDTO.getFirstName().isEmpty() || userDTO.getEmail().isEmpty()
+                || userDTO.getMobileNumber().isEmpty() || userDTO.getPassword().isEmpty())
+            return false;
+        if(!userDTO.getFirstName().matches("^[A-Z][a-z]+$"))
+            return false;
+        if(!userDTO.getLastName().matches("^[A-Z][a-z]+$"))
+            return false;
+        if(!userDTO.getMobileNumber().matches("[+]4[0|9]{1}[0-9]{9}"))
+            return false;
+        if(!userDTO.getEmail().matches("^[a-z0-9._%+-]+@msggroup.com"))
+            return false;
+
+        return true;
+    }
+
 
     /**
      * Creates a userDTO based on the {@link UserDTO}.
@@ -113,18 +153,24 @@ public class UserControl {
      */
     public String createUser(final UserDTO userDTO) {
 
+        int number = 1;
+
+        if(!validateUserInput(userDTO)){
+            throw new BusinessException(MessageCatalog.INCORRECT_USER_INPUT);
+        }
+
         final UserEntity newUserEntity = userConverter.convertUserDTOtoEntity(userDTO);
         newUserEntity.setStatus(true);
         newUserEntity.setCounter(5);
-        //to do method for create username
-        String username = "";
+        String username = createUsername(userDTO.getLastName(), userDTO.getFirstName());
 
-        if (userDTO.getLastName().length() > 5) {
-            username = userDTO.getLastName().substring(0, 5);
-        } else {
-            username = userDTO.getLastName();
-            int letters = userDTO.getLastName().length();
-            username += userDTO.getFirstName().substring(0, letters - 1);
+        List<UserDTO>userEntities = this.getAll();
+        for(UserDTO userEntity: userEntities){
+            if(userEntity.getUsername().equalsIgnoreCase(username)){
+                if(userDTO.getFirstName().length() > number) {
+                    username += userDTO.getFirstName().substring(1, ++number);
+                }
+            }
         }
 
         //todo
@@ -135,7 +181,7 @@ public class UserControl {
 
         final String userFullName = newUserEntity.getFirstName() + " " + newUserEntity.getLastName();
 
-        newUserEntity.setUsername(username);
+        newUserEntity.setUsername(username.toLowerCase());
         userDao.createUser(newUserEntity);
 
 //        this.notificationFacade.createNotification(
@@ -236,4 +282,17 @@ public class UserControl {
     }
 
 
+    public Set<String> findUserPermissionsByUsername(String username) {
+        Set<String> userPermissions = new HashSet<>();
+        Set<RoleEntity> roles=userDao.findByUsername(username).getRoles();
+
+        for (RoleEntity role : roles) {
+            Set<PermissionEntity> permission= role.getPermissions();
+            for (PermissionEntity permissionEntity : permission) {
+                userPermissions.add(permissionEntity.getType());
+            }
+
+        }
+        return userPermissions;
+    }
 }
