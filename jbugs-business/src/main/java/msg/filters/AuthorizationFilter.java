@@ -52,8 +52,6 @@ public class AuthorizationFilter implements ContainerRequestFilter {
     ResourceInfo resourceInfo;
     @EJB
     UserFacade userFacade;
-    @EJB
-    RoleFacade roleFacade;
 
     private static final String AUTHENTICATION_HEADER = "Authorization";
     private static final String SECRET_KEY = "oeRaYY7Wo24sDqKSX3IM9ASGmdGPmkTd9jo1QTy4b7P9Ze5_9hKolVX8xNrQDcNRfVEdTZNOuOyqEGhXEbdJI-ZQ19k_o9MI0y3eZN2lp9jow55FfXMiINEdt1XR85VipRLSOkT6kSpzs2x-jbLDiz9iFVzkd81YKxMgPA7VfZeQUm4n-mOmnWMaVX30zGFU4L3oPBctYKkl4dYfqYWqRNfrgPJVi5DGFjywgxx0ASEiJHtV72paI3fDR2XwlSkyhhmY-ICjCRmsJN4fX1pdoL8a18-aQrvyu4j0Os6dVPYIoPvvY0SAZtWYKHfM15g7A3HD4cVREf9cUsprCRK93w";
@@ -113,14 +111,7 @@ public class AuthorizationFilter implements ContainerRequestFilter {
     }
 
     private boolean verifyUserRoles(String username, List<String> permissions) {
-        Set<String> userRoles= userFacade.findUserByUsername(username);
-        Set<String> dataBaseSetOfPermission= new HashSet<>();
-        for(String role: userRoles){
-            RoleDTO roleDTO=roleFacade.getRoleByType(role);
-            for (PermissionDTO permission:roleDTO.getPermissions()){
-                dataBaseSetOfPermission.add(permission.getType());
-            }
-        }
+        Set<String> dataBaseSetOfPermission= userFacade.findUserPermissionsByUsername(username);
         Set<String> userPermissions = new HashSet<>(permissions);
         if(dataBaseSetOfPermission.size()!=userPermissions.size()){
             return false;

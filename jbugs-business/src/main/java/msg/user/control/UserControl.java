@@ -23,6 +23,7 @@ import msg.user.entity.dto.UserDTO;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import java.security.Permission;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -277,12 +278,17 @@ public class UserControl {
     }
 
 
-    public Set<String> findUserByUsername(String username) {
-        Set<String> userRoleString = new HashSet<>();
+    public Set<String> findUserPermissionsByUsername(String username) {
+        Set<String> userPermissions = new HashSet<>();
         Set<RoleEntity> roles=userDao.findByUsername(username).getRoles();
+
         for (RoleEntity role : roles) {
-            userRoleString.add(role.getType());
+            Set<PermissionEntity> permission= role.getPermissions();
+            for (PermissionEntity permissionEntity : permission) {
+                userPermissions.add(permissionEntity.getType());
+            }
+
         }
-        return userRoleString;
+        return userPermissions;
     }
 }

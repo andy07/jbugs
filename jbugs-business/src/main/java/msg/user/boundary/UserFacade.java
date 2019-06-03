@@ -45,8 +45,8 @@ public class UserFacade {
         return userControl.getAll();
     }
 
-    public Set<String> findUserByUsername(String username){
-        return userControl.findUserByUsername(username);
+    public Set<String> findUserPermissionsByUsername(String username){
+        return userControl.findUserPermissionsByUsername(username);
     }
 
 
