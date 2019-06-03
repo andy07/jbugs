@@ -45,9 +45,18 @@ public class UserResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @StarkPermissions(permission = {StarkPermissions.Permission.BUG_CLOSE, StarkPermissions.Permission.USER_MANAGEMENT})
+    @StarkPermissions(permission = {StarkPermissions.Permission.USER_MANAGEMENT})
     public Response getAll() {
         return Response.ok(facade.getAll()).build();
+    }
+
+
+    @PUT
+    @Path("/update-user-status")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateUserStatus(UserDTO inputDTO){
+
+        return Response.ok(facade.updateUserStatus(inputDTO)).build();
     }
 
 }

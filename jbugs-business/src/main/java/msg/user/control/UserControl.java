@@ -291,4 +291,17 @@ public class UserControl {
         }
         return userPermissions;
     }
+
+    public String updateUserStatus(UserDTO inputDTO) {
+        UserEntity userEntity= userDao.findByUsername(inputDTO.getUsername());
+        boolean newStatus=inputDTO.getStatus();
+        boolean oldStatus=userEntity.isStatus();
+        if(newStatus==oldStatus){
+            if(oldStatus)
+                return "User "+inputDTO.getUsername()+" is already active!";
+            else
+                return "User "+inputDTO.getUsername()+" is already deactivated!";
+        }
+        return "User "+inputDTO.getUsername()+" updated with success!";
+    }
 }
