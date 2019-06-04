@@ -37,6 +37,14 @@ public class UserResource {
         return Response.ok().build();
     }
 
+    @GET
+    @Path("/{username}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @StarkPermissions(permission = {StarkPermissions.Permission.USER_MANAGEMENT})
+    public Response getUserByUsername(@PathParam("username") String username) {
+        return Response.ok(facade.getUserByUsername(username)).build();
+    }
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)

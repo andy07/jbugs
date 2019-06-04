@@ -41,6 +41,11 @@ public class UserFacade {
     }
 
 
+    public UserDTO getUserByUsername(String username){
+        return userControl.getUserByUsername(username);
+    }
+
+
     public List<UserDTO> getAll() {
         return userControl.getAll();
     }
@@ -48,6 +53,8 @@ public class UserFacade {
     public Set<String> findUserPermissionsByUsername(String username){
         return userControl.findUserPermissionsByUsername(username);
     }
+
+
 
 
 
