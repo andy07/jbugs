@@ -26,7 +26,7 @@ public class PermissionResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @StarkPermissions(permission = StarkPermissions.Permission.PERMISSION_MANAGEMENT)
+    @StarkPermissions(permissions = StarkPermissions.Permission.PERMISSION_MANAGEMENT)
     public Response getAll(){
         return Response.ok(permissionFacade.getAll()).build();
     }
