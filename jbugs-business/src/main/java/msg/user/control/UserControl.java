@@ -5,19 +5,15 @@ package msg.user.control;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.interfaces.Claim;
 import msg.bug.boundary.BugFacade;
 import msg.exeptions.BusinessException;
 import msg.notifications.boundary.NotificationFacade;
-import msg.notifications.boundary.notificationParams.NotificationParamsWelcomeUser;
-import msg.notifications.entity.NotificationType;
 import msg.permission.entity.PermissionEntity;
 import msg.permission.entity.dto.PermissionDTO;
 import msg.role.boundary.RoleFacade;
 import msg.role.entity.RoleEntity;
 import msg.role.entity.dto.RoleDTO;
 import msg.user.MessageCatalog;
-import msg.user.boundary.Message;
 import msg.user.entity.UserDao;
 import msg.user.entity.UserEntity;
 import msg.user.entity.dto.UserConverter;
@@ -25,20 +21,17 @@ import msg.user.entity.dto.UserDTO;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import java.security.Permission;
 import java.util.*;
 import java.util.stream.Collectors;
 
 
 import javax.crypto.spec.SecretKeySpec;
-import javax.management.relation.Role;
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
 
 import io.jsonwebtoken.*;
 
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.Claims;
 import org.json.simple.JSONArray;
 
 /**
@@ -236,8 +229,8 @@ public class UserControl {
             throw new BusinessException(MessageCatalog.USERNAME_INVALID);
         }
 
-        if(userDao.existsUsername(userDTO.getUsername())){
-            throw new BusinessException(MessageCatalog.USER_WITH_SAME_USERNAME_EXISTS);
+        if(!userDao.existsUsername(userDTO.getUsername())){
+            throw new BusinessException(MessageCatalog.USER_WITH_SAME_USERNAME_NOT_EXISTS);
         }
 
 

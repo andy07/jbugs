@@ -28,8 +28,8 @@ public class MessageCatalog {
             = new ExceptionMessage("USER-06", "Incorrect user input");
     public static final ExceptionMessage USERNAME_INVALID
             = new ExceptionMessage("USER-07", "Username invalid");
-    public static final ExceptionMessage USER_WITH_SAME_USERNAME_EXISTS
-            = new ExceptionMessage("USER-08", "A user with the same username already exists.");
+    public static final ExceptionMessage USER_WITH_SAME_USERNAME_NOT_EXISTS
+            = new ExceptionMessage("USER-08", "A user with that username does not exists.");
     public static final ExceptionMessage USER_BUGS_OPEN
             = new ExceptionMessage("USER-09", "User has bugs assigned that are not closed!");
 
