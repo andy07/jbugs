@@ -131,36 +131,44 @@ public class UserControl {
 
         return true;
     }
-
-    private  String createUsername(String lastName, String firstName) {
+    private String createUsername(String lastName, String firstName){
         String username = "";
+
         if (lastName.length() > 5) {
             username += lastName.substring(0, 5) + firstName.charAt(0);
         } else {
             username += lastName;
             int letters = lastName.length();
-            if(!firstName.contains(" ")) {
-                if (firstName.length() > 6 - letters) {
-                    username += firstName.substring(0, 6 - letters);
-                } else {
-                    username += firstName;
-                }
+            if (firstName.length() >= (6 - letters)) {
+                username += firstName.substring(0, 6 - letters);
+            } else {
+                username += firstName;
             }
-            else{
-                String[] splited = firstName.split("\\s+");
-                if (splited[0].length() > (6 - letters)) {
-                    username += splited[0].substring(0, 6 - letters);
-                } else {
-                    username += splited[0]+splited[1].charAt(0);
-                }
-
-            }
-
-            System.out.println(6 - letters);
         }
         return username.toLowerCase();
     }
 
+    private String generateAnotherUsername(String username, ArrayList<String>firstNames){
+        String finalUsername = "";
+        if(!username.contains(firstNames.get(0))){
+            finalUsername = username + firstNames.get(0);
+        }
+        else{
+            finalUsername = username + firstNames.get(0);
+        }
+        return finalUsername;
+    }
+
+    public boolean isUsernameInDB(String username){
+
+        List<UserDTO>userDTOS = this.getAll();
+        for(UserDTO userDTO: userDTOS){
+            if(userDTO.getUsername().equalsIgnoreCase(username)){
+                return false;
+            }
+        }
+        return false;
+    }
 
     /**
      * Creates a userDTO based on the {@link UserDTO}.
@@ -171,7 +179,8 @@ public class UserControl {
 
     public String createUser(final UserDTO userDTO) {
 
-        int number = 1;
+        String username;
+        ArrayList<String>firstNames = new ArrayList<>();
 
         if(!validateUserInput(userDTO)){
             throw new BusinessException(MessageCatalog.INCORRECT_USER_INPUT);
@@ -180,33 +189,21 @@ public class UserControl {
         final UserEntity newUserEntity = userConverter.convertUserDTOtoEntity(userDTO);
         newUserEntity.setStatus(true);
         newUserEntity.setCounter(5);
-        String username = createUsername(userDTO.getLastName(), userDTO.getFirstName());
-
-        List<UserDTO>userEntities = this.getAll();
-        for(UserDTO userEntity: userEntities){
-            if(userEntity.getUsername().equalsIgnoreCase(username)){
-                if(!userDTO.getFirstName().contains(" ")) {
-                    if (userDTO.getFirstName().length() > (number + 1)) {
-                        username += userDTO.getFirstName().substring(1, ++number);
-                    } else {
-                        username += userDTO.getFirstName().charAt(0);
-                    }
-                }
-                else{
-                    String[] splited = userDTO.getFirstName().split("\\s+");
-                    if (splited[0].length() > (number + 1)) {
-                        username += splited[0].substring(1, ++number) + splited[1].charAt(0);
-                    } else {
-                        username += splited[0].charAt(0) ;
-                        username += splited[1].charAt(0) ;
-
-                    }
-
-                }
-            }
+        if(!userDTO.getFirstName().contains(" ")){
+            String[] splited = userDTO.getFirstName().split("\\s+");
+            firstNames.add(splited[0].toLowerCase());
+            firstNames.add(splited[1].toLowerCase());
+        }
+        else{
+            firstNames.add(userDTO.getFirstName());
         }
 
-        //final String userFullName = newUserEntity.getFirstName() + " " + newUserEntity.getLastName();
+        username = createUsername(userDTO.getLastName(), firstNames.get(0));
+
+        if(isUsernameInDB(username)){
+            username = generateAnotherUsername(username, firstNames);
+        }
+
 
         newUserEntity.setUsername(username.toLowerCase());
         userDao.createUser(newUserEntity);
