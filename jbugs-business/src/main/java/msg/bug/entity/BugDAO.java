@@ -40,4 +40,12 @@ public class BugDAO {
                 .setParameter(BugEntity.TITLE, title)
                 .getSingleResult();
     }
+
+    public boolean countActiveBugsForUser(String username) {
+        long count = em.createNamedQuery(BugEntity.COUNT_ACTIVE_BUGS_FOR_USER, Long.class)
+                .setParameter(BugEntity.STATUS, "CLOSED")
+                .setParameter(BugEntity.USER,username)
+                .getSingleResult();
+        return (count > 0);
+    }
 }
