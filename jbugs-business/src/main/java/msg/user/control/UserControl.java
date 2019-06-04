@@ -39,6 +39,7 @@ import io.jsonwebtoken.*;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.Claims;
+import msg.user.mail.Email;
 import org.json.simple.JSONArray;
 
 /**
@@ -177,6 +178,7 @@ public class UserControl {
 
     public String createUser(final UserDTO userDTO) {
 
+
         int number = 1;
 
         if(!validateUserInput(userDTO)){
@@ -298,6 +300,7 @@ public class UserControl {
     }
 
     public UserDTO authenticateUserByUsernameAndPassword(UserDTO userDTO) {
+
         UserDTO userDTOOutput = null;
         UserEntity userEntity = null;
         userEntity = userDao.findByUsername(userDTO.getUsername());
