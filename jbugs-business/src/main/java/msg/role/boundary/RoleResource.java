@@ -51,4 +51,7 @@ public class RoleResource {
         return Response.ok(roleFacade.getRoleByType(type)).build();
     }
 
+
+
+
 }
