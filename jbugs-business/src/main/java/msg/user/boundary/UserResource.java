@@ -40,7 +40,7 @@ public class UserResource {
     @GET
     @Path("/{username}")
     @Produces(MediaType.APPLICATION_JSON)
-    @StarkPermissions(permission = {StarkPermissions.Permission.USER_MANAGEMENT})
+    @StarkPermissions(permissions = {StarkPermissions.Permission.USER_MANAGEMENT})
     public Response getUserByUsername(@PathParam("username") String username) {
         return Response.ok(facade.getUserByUsername(username)).build();
     }
