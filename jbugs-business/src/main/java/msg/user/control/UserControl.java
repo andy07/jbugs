@@ -5,20 +5,16 @@ package msg.user.control;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.interfaces.Claim;
 import msg.bug.boundary.BugFacade;
 import msg.bug.boundary.BugFacade;
 import msg.exeptions.BusinessException;
 import msg.notifications.boundary.NotificationFacade;
-import msg.notifications.boundary.notificationParams.NotificationParamsWelcomeUser;
-import msg.notifications.entity.NotificationType;
 import msg.permission.entity.PermissionEntity;
 import msg.permission.entity.dto.PermissionDTO;
 import msg.role.boundary.RoleFacade;
 import msg.role.entity.RoleEntity;
 import msg.role.entity.dto.RoleDTO;
 import msg.user.MessageCatalog;
-import msg.user.boundary.Message;
 import msg.user.entity.UserDao;
 import msg.user.entity.UserEntity;
 import msg.user.entity.dto.UserConverter;
@@ -26,20 +22,17 @@ import msg.user.entity.dto.UserDTO;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import java.security.Permission;
 import java.util.*;
 import java.util.stream.Collectors;
 
 
 import javax.crypto.spec.SecretKeySpec;
-import javax.management.relation.Role;
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
 
 import io.jsonwebtoken.*;
 
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.Claims;
 import org.json.simple.JSONArray;
 
 /**
@@ -138,36 +131,44 @@ public class UserControl {
 
         return true;
     }
-
-    private  String createUsername(String lastName, String firstName) {
+    private String createUsername(String lastName, String firstName){
         String username = "";
+
         if (lastName.length() > 5) {
             username += lastName.substring(0, 5) + firstName.charAt(0);
         } else {
             username += lastName;
             int letters = lastName.length();
-            if(!firstName.contains(" ")) {
-                if (firstName.length() > 6 - letters) {
-                    username += firstName.substring(0, 6 - letters);
-                } else {
-                    username += firstName;
-                }
+            if (firstName.length() >= (6 - letters)) {
+                username += firstName.substring(0, 6 - letters);
+            } else {
+                username += firstName;
             }
-            else{
-                String[] splited = firstName.split("\\s+");
-                if (splited[0].length() > (6 - letters)) {
-                    username += splited[0].substring(0, 6 - letters);
-                } else {
-                    username += splited[0]+splited[1].charAt(0);
-                }
-
-            }
-
-            System.out.println(6 - letters);
         }
         return username.toLowerCase();
     }
 
+    private String generateAnotherUsername(String username, ArrayList<String>firstNames){
+        String finalUsername = "";
+        if(!username.contains(firstNames.get(0))){
+            finalUsername = username + firstNames.get(0);
+        }
+        else{
+            finalUsername = username + firstNames.get(0);
+        }
+        return finalUsername;
+    }
+
+    public boolean isUsernameInDB(String username){
+
+        List<UserDTO>userDTOS = this.getAll();
+        for(UserDTO userDTO: userDTOS){
+            if(userDTO.getUsername().equalsIgnoreCase(username)){
+                return false;
+            }
+        }
+        return false;
+    }
 
     /**
      * Creates a userDTO based on the {@link UserDTO}.
@@ -178,7 +179,8 @@ public class UserControl {
 
     public String createUser(final UserDTO userDTO) {
 
-        int number = 1;
+        String username;
+        ArrayList<String>firstNames = new ArrayList<>();
 
         if(!validateUserInput(userDTO)){
             throw new BusinessException(MessageCatalog.INCORRECT_USER_INPUT);
@@ -187,33 +189,21 @@ public class UserControl {
         final UserEntity newUserEntity = userConverter.convertUserDTOtoEntity(userDTO);
         newUserEntity.setStatus(true);
         newUserEntity.setCounter(5);
-        String username = createUsername(userDTO.getLastName(), userDTO.getFirstName());
-
-        List<UserDTO>userEntities = this.getAll();
-        for(UserDTO userEntity: userEntities){
-            if(userEntity.getUsername().equalsIgnoreCase(username)){
-                if(!userDTO.getFirstName().contains(" ")) {
-                    if (userDTO.getFirstName().length() > (number + 1)) {
-                        username += userDTO.getFirstName().substring(1, ++number);
-                    } else {
-                        username += userDTO.getFirstName().charAt(0);
-                    }
-                }
-                else{
-                    String[] splited = userDTO.getFirstName().split("\\s+");
-                    if (splited[0].length() > (number + 1)) {
-                        username += splited[0].substring(1, ++number) + splited[1].charAt(0);
-                    } else {
-                        username += splited[0].charAt(0) ;
-                        username += splited[1].charAt(0) ;
-
-                    }
-
-                }
-            }
+        if(!userDTO.getFirstName().contains(" ")){
+            String[] splited = userDTO.getFirstName().split("\\s+");
+            firstNames.add(splited[0].toLowerCase());
+            firstNames.add(splited[1].toLowerCase());
+        }
+        else{
+            firstNames.add(userDTO.getFirstName());
         }
 
-        //final String userFullName = newUserEntity.getFirstName() + " " + newUserEntity.getLastName();
+        username = createUsername(userDTO.getLastName(), firstNames.get(0));
+
+        if(isUsernameInDB(username)){
+            username = generateAnotherUsername(username, firstNames);
+        }
+
 
         newUserEntity.setUsername(username.toLowerCase());
         userDao.createUser(newUserEntity);
@@ -237,8 +227,8 @@ public class UserControl {
             throw new BusinessException(MessageCatalog.USERNAME_INVALID);
         }
 
-        if(userDao.existsUsername(userDTO.getUsername())){
-            throw new BusinessException(MessageCatalog.USER_WITH_SAME_USERNAME_EXISTS);
+        if(!userDao.existsUsername(userDTO.getUsername())){
+            throw new BusinessException(MessageCatalog.USER_WITH_SAME_USERNAME_NOT_EXISTS);
         }
 
 
