@@ -55,11 +55,11 @@ public class UserResource {
 
     @POST
     @Path("/update-user-status")
-    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @StarkPermissions(permission = {StarkPermissions.Permission.USER_MANAGEMENT})
     public Response updateUserStatus(UserDTO inputDTO){
-        return Response.ok(facade.updateUserStatus(inputDTO)).build();
+        facade.updateUserStatus(inputDTO);
+        return Response.ok().build();
     }
 
 }

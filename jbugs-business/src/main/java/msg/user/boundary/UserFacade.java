@@ -59,7 +59,7 @@ public class UserFacade {
         return message;
     }
 
-    public String updateUserStatus(UserDTO inputDTO) {
-        return userControl.updateUserStatus(inputDTO);
+    public void updateUserStatus(UserDTO inputDTO) {
+        userControl.updateUserStatus(inputDTO);
     }
 }

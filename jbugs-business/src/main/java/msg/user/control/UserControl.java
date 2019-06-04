@@ -17,6 +17,7 @@ import msg.role.boundary.RoleFacade;
 import msg.role.entity.RoleEntity;
 import msg.role.entity.dto.RoleDTO;
 import msg.user.MessageCatalog;
+import msg.user.boundary.Message;
 import msg.user.entity.UserDao;
 import msg.user.entity.UserEntity;
 import msg.user.entity.dto.UserConverter;
@@ -296,7 +297,7 @@ public class UserControl {
         return userPermissions;
     }
 
-    public String updateUserStatus(UserDTO inputDTO) {
+    public void updateUserStatus(UserDTO inputDTO) {
         if(inputDTO.getUsername()== null || inputDTO.getUsername().isEmpty()){
             throw new BusinessException(MessageCatalog.INCORRECT_USER_INPUT);
         }
@@ -314,7 +315,6 @@ public class UserControl {
             userEntity.setStatus(newStatus);
             userEntity.setCounter(5);
             userDao.updateUser(userEntity);
-            return "User "+inputDTO.getUsername()+" updated with success!";
         }
         else
             throw new BusinessException(MessageCatalog.INCORRECT_USER_INPUT);
