@@ -1,25 +1,10 @@
 package msg.filters;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.interfaces.Claim;
-import com.auth0.jwt.interfaces.DecodedJWT;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
-import msg.permission.entity.dto.PermissionDTO;
-import msg.role.boundary.RoleFacade;
-import msg.role.control.RoleControl;
-import msg.role.entity.dto.RoleDTO;
 import msg.user.boundary.UserFacade;
-import msg.user.control.UserControl;
-import msg.user.entity.dto.UserDTO;
-import org.json.simple.JSONArray;
-import sun.misc.InvalidJarIndexException;
 
 import javax.annotation.Priority;
-import javax.crypto.SecretKey;
 import javax.ejb.EJB;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
@@ -27,14 +12,9 @@ import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.SecurityContext;
-import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Provider;
 import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.security.Principal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -75,7 +55,7 @@ public class AuthorizationFilter implements ContainerRequestFilter {
             }
             final String username = body.getSubject();
             final List<String> userPermissions = (List<String>) body.get("permissions");
-            final StarkPermissions.Permission[] annotatedMethodPermissions = resourceInfo.getResourceMethod().getAnnotation(StarkPermissions.class).permission();
+            final StarkPermissions.Permission[] annotatedMethodPermissions = resourceInfo.getResourceMethod().getAnnotation(StarkPermissions.class).permissions();
             if (!verifyUserRoles(username, userPermissions)) {
                 createResponseForUsers(containerRequestContext);
             }

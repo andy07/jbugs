@@ -25,6 +25,6 @@ public @interface StarkPermissions {
         PERMISSION_MANAGEMENT
     }
 
-    Permission[] permission();
+    Permission[] permissions();
 
 }
