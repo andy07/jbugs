@@ -23,6 +23,7 @@ public class UserResource {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     @StarkPermissions(permissions = {StarkPermissions.Permission.USER_MANAGEMENT})
     public Response createUser(UserDTO inputDTO){
         facade.createUser(inputDTO);
@@ -30,18 +31,22 @@ public class UserResource {
     }
 
     @PUT
+    @Path("/{username}")
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     @StarkPermissions(permissions = {StarkPermissions.Permission.USER_MANAGEMENT})
-    public Response updateUser(UserDTO inputDTO){
+    public Response updateUser(@PathParam("username") String username,UserDTO inputDTO){
         facade.updateUser(inputDTO);
         return Response.ok().build();
     }
+
 
     @GET
     @Path("/{username}")
     @Produces(MediaType.APPLICATION_JSON)
     @StarkPermissions(permissions = {StarkPermissions.Permission.USER_MANAGEMENT})
     public Response getUserByUsername(@PathParam("username") String username) {
+
         return Response.ok(facade.getUserByUsername(username)).build();
     }
 

@@ -53,6 +53,7 @@ public class BugResource {
         dto = facade.update(dto);
         return Response.ok(dto).build();
     }
+
     @GET
     @Path("/{title}")
     @Produces(MediaType.APPLICATION_JSON)
