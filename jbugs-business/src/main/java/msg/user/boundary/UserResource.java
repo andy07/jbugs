@@ -2,7 +2,6 @@ package msg.user.boundary;
 
 import msg.filters.StarkPermissions;
 import msg.user.entity.dto.UserDTO;
-import msg.user.mail.Email;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
