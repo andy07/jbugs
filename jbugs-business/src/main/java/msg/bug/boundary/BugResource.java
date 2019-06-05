@@ -62,4 +62,12 @@ public class BugResource {
         return Response.ok(facade.getBugByTitle(title)).build();
     }
 
+    @GET
+    @Path("/bug-pdf/{title}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @StarkPermissions(permissions = StarkPermissions.Permission.BUG_CLOSE)
+    public Response getBugByTitleToExportPDF(@PathParam("title") String title) {
+        return Response.ok(facade.getBugByTitle(title)).build();
+    }
+
 }
