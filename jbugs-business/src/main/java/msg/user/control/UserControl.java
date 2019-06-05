@@ -5,7 +5,9 @@ package msg.user.control;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import msg.bug.boundary.BugFacade;
+import io.jsonwebtoken.JwtBuilder;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import msg.bug.boundary.BugFacade;
 import msg.exeptions.BusinessException;
 import msg.notifications.boundary.NotificationFacade;
@@ -19,21 +21,15 @@ import msg.user.entity.UserDao;
 import msg.user.entity.UserEntity;
 import msg.user.entity.dto.UserConverter;
 import msg.user.entity.dto.UserDTO;
-
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
-import java.util.*;
-import java.util.stream.Collectors;
-
+import org.json.simple.JSONArray;
 
 import javax.crypto.spec.SecretKeySpec;
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
-
-import io.jsonwebtoken.*;
-
-import io.jsonwebtoken.Jwts;
-import org.json.simple.JSONArray;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Control operations for all the User related operations.
@@ -271,6 +267,10 @@ public class UserControl {
                 .collect(Collectors.toList());
     }
 
+    public List<String> getUsernames() {
+        return userDao.getUsers();
+
+    }
 
     public String authenticateUser(UserDTO userDTO) {
         UserEntity userEntity = userDao.findByUsername(userDTO.getUsername());

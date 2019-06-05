@@ -65,6 +65,13 @@ public class UserResource {
         return Response.ok(facade.getAll()).build();
     }
 
+    @Path("/usernames/all")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @StarkPermissions(permissions = {StarkPermissions.Permission.USER_MANAGEMENT, StarkPermissions.Permission.BUG_MANAGEMENT})
+    public Response getAllUsernames() {
+        return Response.ok(facade.getUserNames()).build();
+    }
 
     @POST
     @Path("/update-user-status")
