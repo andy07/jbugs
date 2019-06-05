@@ -41,9 +41,13 @@ public class BugControl {
 
 
     public BugDTO save(BugDTO dto) {
-        BugEntity entity = converter.convertDTOToEntity(dto);
+        if (this.validateBugInput(dto) == true) {
+            BugEntity entity = converter.convertDTOToEntity(dto);
         entity = dao.save(entity);
-        return converter.convertEntityToDTO(entity);
+            return converter.convertEntityToDTO(entity);
+        } else {
+            return null;
+        }
     }
 
     public BugDTO update(BugDTO dto) {
@@ -67,14 +71,17 @@ public class BugControl {
                 || bugDTO.getTargetDate().toString().isEmpty() || bugDTO.getFixedVersion().isEmpty()
                 || bugDTO.getAssignedTo().isEmpty() || bugDTO.getSeverity().isEmpty() || bugDTO.getDescription().isEmpty())
             return false;
-        if (!bugDTO.getVersion().matches("^[A-Z][a-z ]+([A-Z][a-z]+)?$"))
+        if (!bugDTO.getVersion().matches(" [0-9a-z\\.]*$"))
             return false;
-        /*if(!(bugDTO.getDescription().length()>255))
+        if (!(bugDTO.getSeverity().equals("HIGH") && bugDTO.getSeverity().equals("LOW")
+                && bugDTO.getSeverity().equals("MEDIUM") && bugDTO.getSeverity().equals("CRITICAL")))
             return false;
-        if(!userDTO.getMobileNumber().matches("[+]4[0|9]{1}[0-9]{9}"))
+        if (!(bugDTO.getStatus().equals("NEW") && bugDTO.getStatus().equals("REJECTED")
+                && bugDTO.getStatus().equals("IN_PROGRESS") && bugDTO.getStatus().equals("INFO_NEEDED"))
+                && bugDTO.getStatus().equals("FIXED") && bugDTO.getStatus().equals("CLOSED"))
             return false;
-        if(!userDTO.getEmail().matches("^[a-z0-9._%+-]+@msggroup.com"))
-            return false;*/
+        if (!(bugDTO.getDescription().length() > 255))
+            return false;
 
         return true;
     }
