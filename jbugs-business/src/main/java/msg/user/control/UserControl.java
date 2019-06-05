@@ -116,7 +116,7 @@ public class UserControl {
                 || userDTO.getFirstName().isEmpty() || userDTO.getEmail().isEmpty()
                 || userDTO.getMobileNumber().isEmpty() || userDTO.getPassword().isEmpty())
             return false;
-        if(!userDTO.getFirstName().matches("^[A-Z][a-z ]+([A-Z][a-z]+)?$"))
+        if(!userDTO.getFirstName().matches("^[A-Z][a-z]+[ ]?([A-Z][a-z]+)?$"))
             return false;
         if(!userDTO.getLastName().matches("^[A-Z][a-z]+$"))
             return false;
@@ -127,6 +127,7 @@ public class UserControl {
 
         return true;
     }
+
     private String createUsername(String lastName, String firstName){
         String username = "";
 
@@ -144,26 +145,76 @@ public class UserControl {
         return username.toLowerCase();
     }
 
-    private String generateAnotherUsername(String username, ArrayList<String>firstNames){
-        String finalUsername = "";
-        if(!username.contains(firstNames.get(0))){
-            finalUsername = username + firstNames.get(0);
-        }
-        else{
-            finalUsername = username + firstNames.get(0);
-        }
-        return finalUsername;
-    }
+    private String generate(String username, int usernameLength, int totalLength, int totalLength2, int firstLength, int firstLength2, ArrayList<String>firstNames) {
+        String finalUsername = username;
 
-    public boolean isUsernameInDB(String username){
-
-        List<UserDTO>userDTOS = this.getAll();
-        for(UserDTO userDTO: userDTOS){
-            if(userDTO.getUsername().equalsIgnoreCase(username)){
-                return false;
+        if (usernameLength < totalLength) {
+            finalUsername += firstNames.get(0).charAt(firstLength); //caz cand avem lastname >=5 si avem inca litere in firstname
+        } else {//nu mai avem litere in firstname
+            if (firstNames.size() == 2) {//punem litere din firstName2
+                if (usernameLength < totalLength2) {
+                    finalUsername += firstNames.get(1).charAt(firstLength2);
+                } else {
+                    finalUsername += firstNames.get(1).charAt(0);
+                }
+            } else {
+                finalUsername += firstNames.get(0).charAt(0);
             }
         }
-        return false;
+        return  finalUsername;
+    }
+
+    private String generateAnotherUsername(int totalUsernamesInDB, List<UserEntity> userEntities, int lastNameLength, ArrayList<String>firstNames){
+        String finalUsername = userEntities.get(totalUsernamesInDB - 1).getUsername();
+        int firstNameLength2 = 0;
+        int firstNameLength = firstNames.get(0).length();
+        int usernameLength = finalUsername.length();
+        if(firstNames.size() == 2){
+            firstNameLength2 = firstNames.get(1).length();
+        }
+
+        if(lastNameLength >= 5) {
+            finalUsername = generate(finalUsername, finalUsername.length(), (5 + firstNameLength), (5 + firstNameLength + firstNameLength2),
+                    totalUsernamesInDB, -(5 + firstNameLength) + finalUsername.length(), firstNames);
+
+
+            /*if (usernameLength < (5 + firstNameLength)) {
+                finalUsername += firstNames.get(0).charAt(-5 + usernameLength); //caz cand avem lastname >=5 si avem inca litere in firstname
+            }
+            else {//nu mai avem litere in firstname
+                if (firstNames.size() == 2) {//punem litere din firstName2
+                    if (usernameLength < (5 + firstNameLength + firstNameLength2)) {
+                        finalUsername += firstNames.get(1).charAt(-(5 + firstNameLength) + usernameLength);
+                    } else {
+                        finalUsername += firstNames.get(1).charAt(0);
+                    }
+                } else {
+                    finalUsername += firstNames.get(0).charAt(0);
+                }
+            }*/
+        }
+
+        else{//avem lastname length < 5;
+
+            finalUsername = generate(finalUsername, usernameLength, (lastNameLength + firstNameLength), (lastNameLength + firstNameLength),
+                    usernameLength - lastNameLength, -(lastNameLength + firstNameLength) + usernameLength, firstNames);
+
+            /*if(usernameLength < (lastNameLength + firstNameLength)){
+                finalUsername+= firstNames.get(0).charAt(usernameLength - lastNameLength);
+            }
+            else{
+                if(firstNames.size() == 2){
+                    if(usernameLength < (lastNameLength + firstNameLength)){
+                        finalUsername+= firstNames.get(1).charAt(-(lastNameLength + firstNameLength) + usernameLength);
+                    }
+                    else{
+                        finalUsername += firstNames.get(1).charAt(0);
+                    }
+                }
+            }*/
+        }
+        return finalUsername;
+
     }
 
     /**
@@ -188,7 +239,10 @@ public class UserControl {
         if(!userDTO.getFirstName().contains(" ")){
             String[] splited = userDTO.getFirstName().split("\\s+");
             firstNames.add(splited[0].toLowerCase());
-            firstNames.add(splited[1].toLowerCase());
+            if(splited.length > 1){
+                firstNames.add(splited[1].toLowerCase());
+            }
+
         }
         else{
             firstNames.add(userDTO.getFirstName());
@@ -196,9 +250,14 @@ public class UserControl {
 
         username = createUsername(userDTO.getLastName(), firstNames.get(0));
 
-        if(isUsernameInDB(username)){
-            username = generateAnotherUsername(username, firstNames);
+        List<UserEntity> userEntities = userDao.findUsernames(username);
+        int usernamesNr = userEntities.size();
+
+        if(usernamesNr > 0 && username.length() >= userEntities.get(0).getUsername().length()){
+            username = generateAnotherUsername(usernamesNr, userEntities, userDTO.getLastName().length(), firstNames);
         }
+
+
 
 
         newUserEntity.setUsername(username.toLowerCase());

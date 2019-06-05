@@ -5,6 +5,8 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import java.util.HashSet;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,6 +81,16 @@ public class UserDao {
                 .setParameter(UserEntity.USERNAME,username)
                 .getSingleResult();
         return (count > 0);
+    }
+
+    public List<UserEntity> findUsernames(String username){
+        //List<UserEntity>userEntities = em.createNamedQuery(UserEntity.FIND_USERNAMES, Long.class)
+        //        .setParameter(UserEntity.USERNAME,username+"%")
+         //       .getResultList();
+
+        TypedQuery<UserEntity> query = em.createQuery("SELECT u from UserEntity u where u.username like :" + UserEntity.USERNAME,UserEntity.class);
+        query.setParameter("username", username+"%");
+        return query.getResultList();
     }
 
 
