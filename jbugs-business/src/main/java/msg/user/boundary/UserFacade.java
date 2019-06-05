@@ -3,14 +3,11 @@
 // =================================================================================================
 package msg.user.boundary;
 
-import msg.filters.AuthorizationFilter;
-import msg.filters.StarkPermissions;
 import msg.user.control.UserControl;
 import msg.user.entity.dto.UserDTO;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.management.relation.Role;
 import java.util.List;
 import java.util.Set;
 
@@ -54,10 +51,6 @@ public class UserFacade {
         return userControl.findUserPermissionsByUsername(username);
     }
 
-
-
-
-
     public Message authenticateUserByUsernameAndPassword(UserDTO inputDTO) {
         UserDTO userDTO = userControl.authenticateUserByUsernameAndPassword(inputDTO);
         Message message = new Message();
@@ -68,5 +61,9 @@ public class UserFacade {
 
     public void updateUserStatus(UserDTO inputDTO) {
         userControl.updateUserStatus(inputDTO);
+    }
+
+    public List<String> getUserNames() {
+        return userControl.getUsernames();
     }
 }

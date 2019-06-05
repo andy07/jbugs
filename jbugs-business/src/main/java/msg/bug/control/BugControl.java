@@ -60,4 +60,22 @@ public class BugControl {
     public boolean countActiveBugsForUser(String username) {
        return dao.countActiveBugsForUser(username);
     }
+
+    private boolean validateBugInput(BugDTO bugDTO) {
+
+        if (bugDTO.getTitle().isEmpty() || bugDTO.getCreatedBy().isEmpty() || bugDTO.getDescription().isEmpty()
+                || bugDTO.getTargetDate().toString().isEmpty() || bugDTO.getFixedVersion().isEmpty()
+                || bugDTO.getAssignedTo().isEmpty() || bugDTO.getSeverity().isEmpty() || bugDTO.getDescription().isEmpty())
+            return false;
+        if (!bugDTO.getVersion().matches("^[A-Z][a-z ]+([A-Z][a-z]+)?$"))
+            return false;
+        /*if(!(bugDTO.getDescription().length()>255))
+            return false;
+        if(!userDTO.getMobileNumber().matches("[+]4[0|9]{1}[0-9]{9}"))
+            return false;
+        if(!userDTO.getEmail().matches("^[a-z0-9._%+-]+@msggroup.com"))
+            return false;*/
+
+        return true;
+    }
 }
