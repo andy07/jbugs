@@ -24,3 +24,6 @@ CHANGE COLUMN `last_name` `last_name` VARCHAR(20) NOT NULL ,
 CHANGE COLUMN `mobile_number` `mobile_number` VARCHAR(20) NOT NULL ,
 CHANGE COLUMN `password` `password` VARCHAR(50) NOT NULL ,
 CHANGE COLUMN `username` `username` VARCHAR(50) NOT NULL ;
+
+ALTER TABLE `msg_training`.`users`
+ADD UNIQUE INDEX `first_name_UNIQUE` (`first_name` ASC);
