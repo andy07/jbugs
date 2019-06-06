@@ -5,6 +5,7 @@ import msg.bug.entity.BugDAO;
 import msg.bug.entity.BugEntity;
 import msg.bug.entity.dto.BugConverter;
 import msg.bug.entity.dto.BugDTO;
+import msg.user.control.UserControl;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -43,7 +44,7 @@ public class BugControl {
     public BugDTO save(BugDTO dto) {
         if (this.validateBugInput(dto) == true) {
             BugEntity entity = converter.convertDTOToEntity(dto);
-        entity = dao.save(entity);
+            entity = dao.save(entity);
             return converter.convertEntityToDTO(entity);
         } else {
             return null;
@@ -62,11 +63,14 @@ public class BugControl {
     }
 
     public boolean countActiveBugsForUser(String username) {
-       return dao.countActiveBugsForUser(username);
+        return dao.countActiveBugsForUser(username);
     }
 
     private boolean validateBugInput(BugDTO bugDTO) {
 
+        UserControl userControl = new UserControl();
+        if (userControl.getUserByUsername(bugDTO.getCreatedBy()) == null)
+            return false;
         if (bugDTO.getTitle().isEmpty() || bugDTO.getCreatedBy().isEmpty() || bugDTO.getDescription().isEmpty()
                 || bugDTO.getTargetDate().toString().isEmpty() || bugDTO.getFixedVersion().isEmpty()
                 || bugDTO.getAssignedTo().isEmpty() || bugDTO.getSeverity().isEmpty() || bugDTO.getDescription().isEmpty())
