@@ -32,7 +32,7 @@ import java.util.Set;
 
 
 })
-public class UserEntity {
+public class UserEntity{
     public static final String USER_FIND_ALL = "UserEntity.findAll";
     public static final String USER_FIND_BY_EMAIL = "UserEntity.findByEmail";
     public static final String USER_COUNT_BY_EMAIL = "UserEntity.countByEmail";
@@ -207,5 +207,6 @@ public class UserEntity {
                 ", roles=" + roles +
                 '}';
     }
+
 }
 
