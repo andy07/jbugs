@@ -24,8 +24,11 @@ import java.util.Set;
                 query = "select u from UserEntity u"),
         @NamedQuery(name = UserEntity.USER_FIND_BY_USERNAME,
                 query = "SELECT u from UserEntity u where u.username = :" + UserEntity.USERNAME),
+        @NamedQuery(name = UserEntity.FIND_USERNAMES,
+                query = "SELECT u from UserEntity u where u.username like :" + UserEntity.USERNAME),
         @NamedQuery(name = UserEntity.USER_COUNT_BY_USERNAME,
                 query = "SELECT count(u) from UserEntity u where u.username = :" + UserEntity.USERNAME),
+
 
 
 })
@@ -35,6 +38,7 @@ public class UserEntity {
     public static final String USER_COUNT_BY_EMAIL = "UserEntity.countByEmail";
     public static final String USER_COUNT_BY_USERNAME = "UserEntity.countByUsername";
     public static final String USER_FIND_BY_USERNAME = "UserEntity.findByUsername";
+    public static final String FIND_USERNAMES = "UserEntity.findUsernames";
     public static final String EMAIL = "email";
     public static final String USERNAME = "username";
 
