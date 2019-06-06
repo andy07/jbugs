@@ -26,4 +26,6 @@ CHANGE COLUMN `password` `password` VARCHAR(50) NOT NULL ,
 CHANGE COLUMN `username` `username` VARCHAR(50) NOT NULL ;
 
 ALTER TABLE `msg_training`.`users`
-ADD UNIQUE INDEX `first_name_UNIQUE` (`first_name` ASC);
+ADD UNIQUE INDEX `username_UNIQUE` (`username` ASC),
+DROP INDEX `first_name_UNIQUE` ;
+
