@@ -5,6 +5,9 @@ import msg.bug.entity.BugEntity;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Document me.
@@ -35,6 +38,18 @@ public class BugConverter {
                 .setAssignedTo(dto.getAssignedTo())
                 .setDescription(dto.getDescription())
                 .setCreatedBy(dto.getCreatedBy());
+    }
+
+    private java.sql.Date convertDTODateToSQLDate(String targetDate) {
+        try {
+            Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(targetDate);
+            java.sql.Date sDate = new java.sql.Date(date.getTime());
+            return sDate;
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return new java.sql.Date(new Date().getTime());
+        }
+
     }
 
     public BugDTO convertEntityToDTO(BugEntity entity) {

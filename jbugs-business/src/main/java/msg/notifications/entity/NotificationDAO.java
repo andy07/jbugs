@@ -11,7 +11,8 @@ import javax.persistence.PersistenceContext;
  * @since 19.1.2
  */
 @Stateless
-public class NotificationDao {
+public class NotificationDAO {
+    
     @PersistenceContext(unitName = "jbugs-persistence")
     private EntityManager em;
 

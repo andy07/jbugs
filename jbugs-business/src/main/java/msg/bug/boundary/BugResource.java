@@ -29,13 +29,25 @@ public class BugResource {
         return Response.ok(facade.getAll()).build();
     }
 
-    @GET
-    @Path("/status/{status}")
+    @POST
     @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     @StarkPermissions(permission = StarkPermissions.Permission.BUG_MANAGEMENT)
-    public Response getStatusAllowed(@PathParam("status") String status) {
-        return Response.ok(facade.getStatusAllowed(status)).build();
+    public Response saveBug(BugDTO dto) {
+        dto = facade.save(dto);
+        return Response.ok(dto).build();
     }
+
+    /*
+    @POST
+    @Path("/{title}/attachments")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @StarkPermissions(permission = StarkPermissions.Permission.BUG_MANAGEMENT)
+    public Response addAttachments(@PathParam("title") String title) {
+        return Response.ok().build();
+    }
+    */
 
     @PUT
     @Path("/{title}")
@@ -46,6 +58,7 @@ public class BugResource {
         dto = facade.update(dto);
         return Response.ok(dto).build();
     }
+
     @GET
     @Path("/{title}")
     @Produces(MediaType.APPLICATION_JSON)

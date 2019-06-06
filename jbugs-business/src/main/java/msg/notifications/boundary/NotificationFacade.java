@@ -1,8 +1,9 @@
 package msg.notifications.boundary;
 
-import msg.notifications.boundary.notificationParams.NotificationParams;
+import msg.bug.entity.dto.BugDTO;
 import msg.notifications.control.NotificationControl;
 import msg.notifications.entity.NotificationType;
+import msg.notifications.entity.dto.NotificationDTO;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -19,13 +20,23 @@ public class NotificationFacade {
     @EJB
     private NotificationControl notificationControl;
 
-    /**
-     * Creates a notification based on the input {@link NotificationType} and {@link NotificationParams}.
-     *
-     * @param notificationType the type of the notification.
-     * @param params the parameters for the notification type.
-     */
-    public void createNotification(final NotificationType notificationType, final NotificationParams params){
-        this.notificationControl.createNotification(notificationType, params);
+
+    public NotificationFacade() {
+    }
+
+    public void createNewBugNotification(String createdBy, String assignedTo, BugDTO dto) {
+        NotificationDTO ndto = new NotificationDTO();
+        ndto
+                .setMessage("A new bug emerges from your defector code!")
+                .setSource(createdBy)
+                .setDestination(assignedTo)
+                .setType(NotificationType.BUG_UPDATED.name());
+        notificationControl.create(ndto);
+    }
+
+    public void createUpdatedBugNotification(String createdBy, String assignedTo, BugDTO dto) {
+    }
+
+    public void createClosedBugNotification(String createdBy, String assignedTo, BugDTO dto) {
     }
 }
