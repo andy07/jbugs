@@ -24,8 +24,9 @@ public class AttachmentEntity {
     @JoinColumn(name = "bug_id", nullable = false)
     private BugEntity bug;
 
-    @Column(name ="text", nullable = false)
-    private String text;
+    @Lob
+    @Column(name = "file", nullable = false)
+    private byte[] file;
 
     public AttachmentEntity() {
     }
@@ -42,8 +43,8 @@ public class AttachmentEntity {
         return bug;
     }
 
-    public String getText() {
-        return text;
+    public byte[] getFile() {
+        return file;
     }
 
     public AttachmentEntity setId(long id) {
@@ -56,8 +57,8 @@ public class AttachmentEntity {
         return this;
     }
 
-    public AttachmentEntity setText(String text) {
-        this.text = text;
+    public AttachmentEntity setFile(byte[] file) {
+        this.file = file;
         return this;
     }
 }

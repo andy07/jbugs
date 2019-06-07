@@ -1,7 +1,8 @@
 package msg.notifications.entity;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Objects;
 
 /**
@@ -12,8 +13,13 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "notifications")
+@NamedQueries(
+        @NamedQuery(name = NotificationEntity.NOTIFICATIONS_FIND_BY_USERNAME,
+                query = "SELECT N from NotificationEntity N where N.username = :username")
+)
 public class NotificationEntity {
 
+    public static final String NOTIFICATIONS_FIND_BY_USERNAME = "notifications.findAllByUsername";
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,17 +29,14 @@ public class NotificationEntity {
     @Enumerated(EnumType.STRING)
     private NotificationType notificationType;
 
-    @Column(name = "url", nullable = false)
-    private String url;
-
     @Column(name = "message", nullable = false)
     private String message;
 
     @Column(name = "date", nullable = false)
-    private Date date;
+    private Date date = Date.valueOf(LocalDate.now());
 
-    @Column(name = "user_id", nullable = false)
-    private long userID;
+    @Column(name = "user_name", nullable = false)
+    private String username;
 
     public NotificationEntity() {
     }
@@ -46,10 +49,6 @@ public class NotificationEntity {
         return notificationType;
     }
 
-    public String getUrl() {
-        return url;
-    }
-
     public String getMessage() {
         return message;
     }
@@ -58,8 +57,8 @@ public class NotificationEntity {
         return date;
     }
 
-    public long getUserID() {
-        return userID;
+    public String getUsername() {
+        return username;
     }
 
     public NotificationEntity setId(long id) {
@@ -69,11 +68,6 @@ public class NotificationEntity {
 
     public NotificationEntity setNotificationType(NotificationType notificationType) {
         this.notificationType = notificationType;
-        return this;
-    }
-
-    public NotificationEntity setUrl(String url) {
-        this.url = url;
         return this;
     }
 
@@ -87,8 +81,8 @@ public class NotificationEntity {
         return this;
     }
 
-    public NotificationEntity setUserID(long userID) {
-        this.userID = userID;
+    public NotificationEntity setUsername(String userID) {
+        this.username = userID;
         return this;
     }
 
@@ -97,13 +91,15 @@ public class NotificationEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         NotificationEntity that = (NotificationEntity) o;
-        return notificationType == that.notificationType &&
-                Objects.equals(url, that.url) &&
-                Objects.equals(message, that.message);
+        return id == that.id &&
+                username.equals(that.username) &&
+                notificationType == that.notificationType &&
+                Objects.equals(message, that.message) &&
+                Objects.equals(date, that.date);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(notificationType, url, message);
+        return Objects.hash(notificationType, message);
     }
 }
