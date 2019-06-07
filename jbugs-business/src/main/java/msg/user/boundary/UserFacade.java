@@ -4,7 +4,9 @@
 package msg.user.boundary;
 
 import msg.user.control.UserControl;
+import msg.user.entity.UserEntity;
 import msg.user.entity.dto.UserDTO;
+import msg.user.token.Message;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -52,11 +54,7 @@ public class UserFacade {
     }
 
     public Message authenticateUserByUsernameAndPassword(UserDTO inputDTO) {
-        UserDTO userDTO = userControl.authenticateUserByUsernameAndPassword(inputDTO);
-        Message message = new Message();
-        message.setToken(userControl.createJWT(userDTO));
-
-        return message;
+        return userControl.createToken(inputDTO);
     }
 
     public void updateUserStatus(UserDTO inputDTO) {
@@ -65,5 +63,9 @@ public class UserFacade {
 
     public List<String> getUserNames() {
         return userControl.getUsernames();
+    }
+
+    public boolean getUserStatus(String username) {
+       return userControl.getUserStatus(username);
     }
 }

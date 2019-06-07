@@ -1,4 +1,4 @@
-package msg.user.boundary;
+package msg.user.token;
 
 /**
  * Document me.

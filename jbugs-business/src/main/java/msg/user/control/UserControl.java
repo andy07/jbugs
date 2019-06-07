@@ -21,6 +21,7 @@ import msg.user.entity.UserDao;
 import msg.user.entity.UserEntity;
 import msg.user.entity.dto.UserConverter;
 import msg.user.entity.dto.UserDTO;
+import msg.user.token.Message;
 import org.json.simple.JSONArray;
 
 import javax.crypto.spec.SecretKeySpec;
@@ -57,37 +58,24 @@ public class UserControl {
 
     private static String SECRET_KEY = "oeRaYY7Wo24sDqKSX3IM9ASGmdGPmkTd9jo1QTy4b7P9Ze5_9hKolVX8xNrQDcNRfVEdTZNOuOyqEGhXEbdJI-ZQ19k_o9MI0y3eZN2lp9jow55FfXMiINEdt1XR85VipRLSOkT6kSpzs2x-jbLDiz9iFVzkd81YKxMgPA7VfZeQUm4n-mOmnWMaVX30zGFU4L3oPBctYKkl4dYfqYWqRNfrgPJVi5DGFjywgxx0ASEiJHtV72paI3fDR2XwlSkyhhmY-ICjCRmsJN4fX1pdoL8a18-aQrvyu4j0Os6dVPYIoPvvY0SAZtWYKHfM15g7A3HD4cVREf9cUsprCRK93w";
 
-    //Sample method to construct a JWT
-    public String createJWT(UserDTO userDTO) {
 
-        //The JWT signature algorithm we will be using to sign the token
+    private String createJWT(UserEntity userEntity) {
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
-
-        long nowMillis = System.currentTimeMillis();
-        Date now = new Date(nowMillis);
-
-        //We will sign our JWT with our ApiKey secret
         byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(SECRET_KEY);
         Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
-
-
-        //Let's set the JWT Claims
         JwtBuilder builder = Jwts.builder()
-                .setSubject(userDTO.getUsername())
-                .addClaims(convertUserRolesToMap(userDTO.getRoles()))
-                .addClaims(convertUserPerimissionToMap(userDTO.getRoles()))
+                .setSubject(userEntity.getUsername())
+                .addClaims(convertUserRolesToMap(userEntity.getRoles()))
+                .addClaims(convertUserPermissionsToMap(userEntity.getRoles()))
                 .signWith(signatureAlgorithm, signingKey);
-
-        //Builds the JWT and serializes it to a compact, URL-safe string
         return builder.compact();
     }
 
-    private Map<String, Object> convertUserPerimissionToMap(List<String> roles) {
+    private Map<String, Object> convertUserPermissionsToMap(Set<RoleEntity> roles) {
         Map<String,Object> map= new HashMap<>();
         Set<String> setOfPermission= new HashSet<>();
-        for(String role: roles){
-            RoleDTO roleDTO=roleFacade.getRoleByType(role);
-            for (PermissionDTO permission:roleDTO.getPermissions()){
+        for(RoleEntity role: roles){
+            for (PermissionEntity permission : role.getPermissions()) {
                 setOfPermission.add(permission.getType());
             }
         }
@@ -99,11 +87,11 @@ public class UserControl {
         return map;
     }
 
-    private Map<String,Object> convertUserRolesToMap(List<String> roles){
+    private Map<String,Object> convertUserRolesToMap(Set<RoleEntity> roles){
         Map<String,Object> map= new HashMap<>();
         JSONArray jsArrayOfRoles = new JSONArray();
-        for(String role: roles){
-            jsArrayOfRoles.add(role);
+        for(RoleEntity role: roles){
+            jsArrayOfRoles.add(role.getType());
         }
         map.put("roles",jsArrayOfRoles);
         return map;
@@ -331,52 +319,41 @@ public class UserControl {
 
     }
 
-    public String authenticateUser(UserDTO userDTO) {
-        UserEntity userEntity = userDao.findByUsername(userDTO.getUsername());
-        if (userEntity != null) {
-            Algorithm algorithm = Algorithm.HMAC256("harambe");
-            return JWT.create()
-                    .withIssuer("auth0")
-                    .withClaim("username", userEntity.getUsername())
-                    .withArrayClaim("roles", (String[]) userEntity.getRoles()
-                            .stream()
-                            .map(RoleEntity::getType).toArray(String[]::new))
-                    .sign(algorithm);
-        } else {
-            throw new BusinessException(MessageCatalog.USER_WITH_INVALID_CREDENTIALS);
-        }
+    public Message createToken(UserDTO inputDTO) {
+        Message message = new Message();
+        message.setToken(createJWT(authenticateUserByUsernameAndPassword(inputDTO)));
+        return message;
     }
 
-    public UserDTO authenticateUserByUsernameAndPassword(UserDTO userDTO) {
-        UserDTO userDTOOutput = null;
-        UserEntity userEntity = null;
-        userEntity = userDao.findByUsername(userDTO.getUsername());
+    private UserEntity authenticateUserByUsernameAndPassword(UserDTO userDTO) {
+        UserEntity userEntity = userDao.findByUsername(userDTO.getUsername());
         if (userEntity != null) {
             if (userEntity.isStatus()) {
                 if (userDTO.getPassword().equals(userEntity.getPassword())) {
                     userEntity.setCounter(5);
                     userDao.updateUser(userEntity);
-                    return  userConverter.convertEntityToUserDTO(userEntity);
-                } else {
-                    int counter = userEntity.getCounter();
-                    userEntity.setCounter(--counter);
-                    if (counter == 0) {
-                        userEntity.setStatus(false);
-                        userDao.updateUser(userEntity);
-                        throw new BusinessException(MessageCatalog.USER_DEACTIVATED);
-                    } else {
-                        userDao.updateUser(userEntity);
-                        throw new BusinessException(MessageCatalog.INCORRECT_USERNAME_OR_PASSWORD);
-                    }
+                    return  userEntity;
                 }
-
-            } else {
+                updateUserWithWrongUsernameAndPassword(userEntity);
+            } else
                 throw new BusinessException(MessageCatalog.USER_DEACTIVATED);
-
-            }
         }
         else
             throw new BusinessException(MessageCatalog.INCORRECT_USERNAME_OR_PASSWORD);
+        return userEntity;
+    }
+
+    private UserEntity updateUserWithWrongUsernameAndPassword(UserEntity userEntity) {
+        int counter = userEntity.getCounter();
+        userEntity.setCounter(--counter);
+        if (counter == 0) {
+            userEntity.setStatus(false);
+            userDao.updateUser(userEntity);
+            throw new BusinessException(MessageCatalog.USER_DEACTIVATED);
+        } else {
+            userDao.updateUser(userEntity);
+            throw new BusinessException(MessageCatalog.INCORRECT_USERNAME_OR_PASSWORD);
+        }
     }
 
 
@@ -398,10 +375,8 @@ public class UserControl {
         if(inputDTO.getUsername()== null || inputDTO.getUsername().isEmpty()){
             throw new BusinessException(MessageCatalog.INCORRECT_USER_INPUT);
         }
-        UserEntity userEntity=null;
-        if(userDao.findByUsername(inputDTO.getUsername())!=null)
-             userEntity= userDao.findByUsername(inputDTO.getUsername());
-        else
+        UserEntity userEntity=userDao.findByUsername(inputDTO.getUsername());
+        if(userEntity==null)
             throw new BusinessException(MessageCatalog.INCORRECT_USER_INPUT);
         boolean newStatus=inputDTO.getStatus();
         boolean oldStatus=userEntity.isStatus();
@@ -415,6 +390,11 @@ public class UserControl {
         }
         else
             throw new BusinessException(MessageCatalog.INCORRECT_USER_INPUT);
+    }
+
+
+    public boolean getUserStatus(String username) {
+        return userDao.findByUsername(username).isStatus();
     }
 
 
