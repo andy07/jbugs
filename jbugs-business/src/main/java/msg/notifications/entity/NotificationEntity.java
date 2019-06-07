@@ -13,8 +13,13 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "notifications")
+@NamedQueries(
+        @NamedQuery(name = NotificationEntity.NOTIFICATIONS_FIND_BY_USERNAME,
+                query = "SELECT n from NotificationEntity n where n.username = :username")
+)
 public class NotificationEntity {
 
+    public static final String NOTIFICATIONS_FIND_BY_USERNAME = "notifications.findAllByUsername";
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -11,6 +11,8 @@ import msg.notifications.entity.dto.NotificationDTO;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Control operations for all the Notification related operations.
@@ -45,7 +47,7 @@ public class NotificationControl {
     private void send(NotificationDTO dto) {
         try (Connection connection = factory.newConnection();
              Channel channel = connection.createChannel()) {
-            channel.exchangeDeclare(EXCHANGE_NAME, "topic");
+            channel.exchangeDeclare(EXCHANGE_NAME, "topic", true);
 
             String message = dto.getMessage();
             byte[] body = message.getBytes(StandardCharsets.UTF_8);
@@ -56,4 +58,10 @@ public class NotificationControl {
         }
     }
 
+    public List<NotificationDTO> getNotifications(String username) {
+        return notificationDao.getNotifications(username)
+                .stream()
+                .map(converter::convertEntityToDTO)
+                .collect(Collectors.toList());
+    }
 }

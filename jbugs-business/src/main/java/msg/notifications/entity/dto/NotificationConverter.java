@@ -15,9 +15,8 @@ import java.sql.Date;
 @Stateless
 public class NotificationConverter {
 
-    public NotificationDTO convertEntityToDTO(NotificationEntity entity, String source) {
+    public NotificationDTO convertEntityToDTO(NotificationEntity entity) {
         return new NotificationDTO()
-                .setSource(source)
                 .setDestination(entity.getUsername())
                 .setType(entity.getNotificationType().name())
                 .setMessage(entity.getMessage());

@@ -5,7 +5,6 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -73,7 +72,6 @@ public class UserDao {
     }
 
     public List<UserEntity> getAll() {
-        return em.createNamedQuery(UserEntity.USER_FIND_ALL,UserEntity.class).getResultList();
+        return em.createNamedQuery(UserEntity.USER_FIND_ALL, UserEntity.class).getResultList();
     }
-
 }

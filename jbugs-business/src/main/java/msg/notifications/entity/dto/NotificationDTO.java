@@ -7,16 +7,11 @@ package msg.notifications.entity.dto;
  * time 4:45 PM
  */
 public class NotificationDTO {
-    private String source;
     private String destination;
     private String message;
     private String type;
 
     public NotificationDTO() {
-    }
-
-    public String getSource() {
-        return source;
     }
 
     public String getDestination() {
@@ -29,11 +24,6 @@ public class NotificationDTO {
 
     public String getType() {
         return type;
-    }
-
-    public NotificationDTO setSource(String source) {
-        this.source = source;
-        return this;
     }
 
     public NotificationDTO setDestination(String destination) {

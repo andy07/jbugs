@@ -3,14 +3,11 @@
 // =================================================================================================
 package msg.user.boundary;
 
-import msg.filters.AuthorizationFilter;
-import msg.filters.StarkPermissions;
 import msg.user.control.UserControl;
 import msg.user.entity.dto.UserDTO;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.management.relation.Role;
 import java.util.List;
 import java.util.Set;
 
