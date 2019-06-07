@@ -36,15 +36,7 @@ public class BugResource {
     public Response getStatusAllowed(@PathParam("status") String status) {
         return Response.ok(facade.getStatusAllowed(status)).build();
     }
-
-    @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.TEXT_PLAIN)
-    @StarkPermissions(permissions = StarkPermissions.Permission.BUG_MANAGEMENT)
-    public Response getAllStatusAllowed(String bugStatus) {
-        return Response.ok(facade.getStatusAllowed(bugStatus)).build();
-    }
-
+    
     @GET
     @Path("/status/no/{status}")
     @Produces(MediaType.TEXT_PLAIN)
