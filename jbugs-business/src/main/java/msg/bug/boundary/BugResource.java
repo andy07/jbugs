@@ -37,13 +37,6 @@ public class BugResource {
         return Response.ok(facade.getStatusAllowed(status)).build();
     }
 
-    @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.TEXT_PLAIN)
-    @StarkPermissions(permissions = StarkPermissions.Permission.BUG_MANAGEMENT)
-    public Response getAllStatusAllowed(String bugStatus) {
-        return Response.ok(facade.getStatusAllowed(bugStatus)).build();
-    }
 
     @GET
     @Path("/status/no/{status}")
@@ -80,6 +73,7 @@ public class BugResource {
         dto = facade.save(dto);
         return Response.ok(dto).build();
     }
+
     @GET
     @Path("/bug-pdf/{title}")
     @Produces(MediaType.APPLICATION_JSON)

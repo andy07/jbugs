@@ -81,8 +81,6 @@ public class BugControl {
     }
 
     private boolean validateBugInput(BugDTO bugDTO) {
-
-        UserControl userControl = new UserControl();
         if (true)
             return true;
         if (bugDTO.getTitle().isEmpty() || bugDTO.getCreatedBy().isEmpty() || bugDTO.getDescription().isEmpty()
