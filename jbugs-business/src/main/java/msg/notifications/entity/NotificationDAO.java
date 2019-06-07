@@ -13,7 +13,7 @@ import java.util.List;
  */
 @Stateless
 public class NotificationDAO {
-    
+
     @PersistenceContext(unitName = "jbugs-persistence")
     private EntityManager em;
 
