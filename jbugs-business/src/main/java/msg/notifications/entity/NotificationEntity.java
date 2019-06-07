@@ -15,7 +15,7 @@ import java.util.Objects;
 @Table(name = "notifications")
 @NamedQueries(
         @NamedQuery(name = NotificationEntity.NOTIFICATIONS_FIND_BY_USERNAME,
-                query = "SELECT n from NotificationEntity n where n.username = :username")
+                query = "SELECT N from NotificationEntity N where N.username = :username")
 )
 public class NotificationEntity {
 
