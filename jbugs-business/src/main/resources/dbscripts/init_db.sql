@@ -97,3 +97,12 @@ create table comments
     constraint FK_comments_bug_id
         foreign key (bug_id) references bugs (id)
 );
+create table notifications
+(
+    id        bigint auto_increment
+        primary key,
+    date      date         not null,
+    message   varchar(255) not null,
+    type      varchar(255) not null,
+    user_name varchar(255) not null
+);
