@@ -32,7 +32,7 @@ public class BugControl {
 
     @EJB
     private NotificationFacade notificationFacade;
-    
+
     @EJB
     private UserControl userControl;
 
