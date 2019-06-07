@@ -80,7 +80,7 @@ create table attachments
 (
     id     bigint auto_increment
         primary key,
-    text   varchar(255) not null,
+    file   varchar(255) not null,
     bug_id bigint       not null,
     constraint FK_attachments_bug_id
         foreign key (bug_id) references bugs (id)
