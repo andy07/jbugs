@@ -52,4 +52,8 @@ public class BugFacade {
     public boolean countActiveBugsForUser(String username){
         return control.countActiveBugsForUser(username);
     }
+
+    public BugDTO getBugByTitle(String title) {
+        return control.getBugByTitle(title);
+    }
 }
