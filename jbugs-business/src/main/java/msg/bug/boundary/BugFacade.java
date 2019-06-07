@@ -39,14 +39,21 @@ public class BugFacade {
     }
 
     public BugDTO update(BugDTO dto) {
+        System.out.println(dto);
         return control.update(dto);
+    }
+
+    /*public BugDTO getBugByTitle(String title) {
+        return control.getBugByTitle(title);
+    }*/
+    public BugDTO getBugById(long id) {
+        return control.getBugById(id);
+    }
+    public boolean countActiveBugsForUser(String username){
+        return control.countActiveBugsForUser(username);
     }
 
     public BugDTO getBugByTitle(String title) {
         return control.getBugByTitle(title);
-    }
-
-    public boolean countActiveBugsForUser(String username){
-        return control.countActiveBugsForUser(username);
     }
 }

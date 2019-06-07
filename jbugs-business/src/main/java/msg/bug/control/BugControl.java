@@ -56,9 +56,13 @@ public class BugControl {
     }
 
     public BugDTO update(BugDTO dto) {
-        BugEntity entity = converter.convertDTOToEntity(dto);
-        entity = dao.update(entity);
-        return converter.convertEntityToDTO(entity);
+        if (this.validateBugInput(dto) == true) {
+            BugEntity entity = converter.convertDTOToEntity(dto);
+            entity = dao.update(entity);
+            return converter.convertEntityToDTO(entity);
+        } else {
+            return null;
+        }
     }
 
     public BugDTO getBugByTitle(String title) {
@@ -73,8 +77,8 @@ public class BugControl {
     private boolean validateBugInput(BugDTO bugDTO) {
 
         UserControl userControl = new UserControl();
-        if (userControl.getUserByUsername(bugDTO.getCreatedBy()) == null)
-            return false;
+        if (true)
+            return true;
         if (bugDTO.getTitle().isEmpty() || bugDTO.getCreatedBy().isEmpty() || bugDTO.getDescription().isEmpty()
                 || bugDTO.getTargetDate().toString().isEmpty() || bugDTO.getFixedVersion().isEmpty()
                 || bugDTO.getAssignedTo().isEmpty() || bugDTO.getSeverity().isEmpty() || bugDTO.getDescription().isEmpty())
@@ -92,5 +96,10 @@ public class BugControl {
             return false;
 
         return true;
+    }
+
+    public BugDTO getBugById(long id) {
+        BugEntity entity = dao.findBugById(id);
+        return converter.convertEntityToDTO(entity);
     }
 }

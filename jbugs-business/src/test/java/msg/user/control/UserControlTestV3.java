@@ -4,23 +4,17 @@ import msg.permission.entity.PermissionEntity;
 import msg.role.entity.RoleEntity;
 import msg.user.entity.UserDao;
 import msg.user.entity.UserEntity;
-import msg.user.entity.dto.UserConverter;
 import msg.user.entity.dto.UserDTO;
 import msg.user.token.Message;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.internal.util.reflection.FieldSetter;
 
-import javax.ejb.EJB;
-
 import java.util.HashSet;
 import java.util.Set;
-
-import static org.mockito.Mockito.mock;
 
 /**
  * Document me.
@@ -38,7 +32,7 @@ public class UserControlTestV3 {
     public void setUp() {
 
         userControl = new UserControl();
-        userDao=Mockito.mock(UserDao.class);
+        userDao = Mockito.mock(UserDao.class);  //il ia de bun
         try {
             FieldSetter.setField(userControl,
                     UserControl.class.getDeclaredField("userDao"),
