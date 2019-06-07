@@ -33,9 +33,6 @@ public class BugControl {
     @EJB
     private NotificationFacade notificationFacade;
 
-    @EJB
-    private UserControl userControl;
-
     public List<BugDTO> getAll() {
         return dao.getAll()
                 .stream()
@@ -53,7 +50,7 @@ public class BugControl {
 
 
     public BugDTO save(BugDTO dto) {
-        if (this.validateBugInput(dto)) {
+        if (this.validateBugInput(dto) == true) {
             BugEntity entity = converter.convertDTOToEntity(dto);
             entity = dao.save(entity);
             notificationFacade.createNewBugNotification(dto.getCreatedBy(), dto.getAssignedTo(), dto);
@@ -64,10 +61,14 @@ public class BugControl {
     }
 
     public BugDTO update(BugDTO dto) {
-        BugEntity entity = converter.convertDTOToEntity(dto);
-        entity = dao.update(entity);
-        notificationFacade.createUpdatedBugNotification(dto.getCreatedBy(), dto.getAssignedTo(), dto);
-        return converter.convertEntityToDTO(entity);
+        if (this.validateBugInput(dto) == true) {
+            BugEntity entity = converter.convertDTOToEntity(dto);
+            entity = dao.update(entity);
+            notificationFacade.createUpdatedBugNotification(dto.getCreatedBy(), dto.getAssignedTo(), dto);
+            return converter.convertEntityToDTO(entity);
+        } else {
+            return null;
+        }
     }
 
     public BugDTO getBugByTitle(String title) {
@@ -80,10 +81,10 @@ public class BugControl {
     }
 
     private boolean validateBugInput(BugDTO bugDTO) {
+
+        UserControl userControl = new UserControl();
         if (true)
             return true;
-        if (userControl.getUserByUsername(bugDTO.getCreatedBy()) == null)
-            return false;
         if (bugDTO.getTitle().isEmpty() || bugDTO.getCreatedBy().isEmpty() || bugDTO.getDescription().isEmpty()
                 || bugDTO.getTargetDate().toString().isEmpty() || bugDTO.getFixedVersion().isEmpty()
                 || bugDTO.getAssignedTo().isEmpty() || bugDTO.getSeverity().isEmpty() || bugDTO.getDescription().isEmpty())
