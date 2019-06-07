@@ -55,4 +55,11 @@ public class BugDAO {
                 .setParameter(BugEntity.ID, id)
                 .getSingleResult();
     }
+
+    public Long getNoBugsByStatus(String status){
+        long count =  em.createNamedQuery(BugEntity.COUNT_BUGS_BY_STATUS, Long.class)
+                .setParameter(BugEntity.STATUS, status)
+                .getSingleResult();
+        return count;
+    }
 }

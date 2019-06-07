@@ -29,6 +29,11 @@ public class BugFacade {
         return BugStatus.getNextStatusAllowedList(status);
     }
 
+    public String getNoBugsByStatus(String status){
+        return String.valueOf(control.getNoBugsByStatus(status));
+    }
+
+
     public BugDTO save(BugDTO dto) {
         return control.save(dto);
     }

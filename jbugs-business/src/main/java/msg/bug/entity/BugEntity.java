@@ -26,13 +26,16 @@ import java.util.Set;
         @NamedQuery(name = BugEntity.BUG_FIND_BY_ID,
                 query = "SELECT bug from BugEntity bug where bug.id = :" + BugEntity.ID),
         @NamedQuery(name = BugEntity.COUNT_ACTIVE_BUGS_FOR_USER,
-                query = "SELECT count(bug) from BugEntity bug where bug.status <> :" + BugEntity.STATUS + " and bug.assignedTo = :"+BugEntity.USER)
+                query = "SELECT count(bug) from BugEntity bug where bug.status <> :" + BugEntity.STATUS + " and bug.assignedTo = :"+BugEntity.USER),
+        @NamedQuery(name = BugEntity.COUNT_BUGS_BY_STATUS,
+                query = "SELECT count(bug) from BugEntity bug where bug.status = :" + BugEntity.STATUS )
 })
 public class BugEntity {
 
     public static final String BUG_FIND_ALL = "BugEntity.findAll";
     public static final String BUG_FIND_BY_TITLE = "BugEntity.findByTitle";
     public static final String COUNT_ACTIVE_BUGS_FOR_USER = "BugEntity.countActiveBugsForUser";
+    public static final String COUNT_BUGS_BY_STATUS = "BugEntity.countBugsByStatus";
     public static final String TITLE = "title";
     public static final String STATUS = "status";
     public static final String USER = "user";
