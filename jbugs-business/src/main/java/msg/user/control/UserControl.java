@@ -48,12 +48,6 @@ public class UserControl {
     private UserConverter userConverter;
 
     @EJB
-    private NotificationFacade notificationFacade;
-
-    @EJB
-    private RoleFacade roleFacade;
-
-    @EJB
     private BugFacade bugFacade;
 
     private static String SECRET_KEY = "oeRaYY7Wo24sDqKSX3IM9ASGmdGPmkTd9jo1QTy4b7P9Ze5_9hKolVX8xNrQDcNRfVEdTZNOuOyqEGhXEbdJI-ZQ19k_o9MI0y3eZN2lp9jow55FfXMiINEdt1XR85VipRLSOkT6kSpzs2x-jbLDiz9iFVzkd81YKxMgPA7VfZeQUm4n-mOmnWMaVX30zGFU4L3oPBctYKkl4dYfqYWqRNfrgPJVi5DGFjywgxx0ASEiJHtV72paI3fDR2XwlSkyhhmY-ICjCRmsJN4fX1pdoL8a18-aQrvyu4j0Os6dVPYIoPvvY0SAZtWYKHfM15g7A3HD4cVREf9cUsprCRK93w";
@@ -133,14 +127,14 @@ public class UserControl {
         return username.toLowerCase();
     }
 
-    private String generate(String username, int usernameLength, int totalLength, int totalLength2, int firstLength, int firstLength2, ArrayList<String>firstNames) {
+    private String generate(String username, int usernameLength, int totalLength, int firstLength, int firstLength2, ArrayList<String>firstNames) {
         String finalUsername = username;
 
         if (usernameLength < totalLength) {
-            finalUsername += firstNames.get(0).charAt(firstLength); //caz cand avem lastname >=5 si avem inca litere in firstname
-        } else {//nu mai avem litere in firstname
-            if (firstNames.size() == 2) {//punem litere din firstName2
-                if (usernameLength < totalLength2) {
+            finalUsername += firstNames.get(0).charAt(firstLength);
+        } else {
+            if (firstNames.size() == 2) {
+                if (firstLength2 < firstNames.get(1).length()) {
                     finalUsername += firstNames.get(1).charAt(firstLength2);
                 } else {
                     finalUsername += firstNames.get(1).charAt(0);
@@ -165,24 +159,17 @@ public class UserControl {
         finalUsername = usernames.get(usernames.size()-1);
 
         if(lastNameLength >= 5) {
-            finalUsername = generate(finalUsername, finalUsername.length(), (5 + firstNameLength), (5 + firstNameLength + firstNameLength2),
+            finalUsername = generate(finalUsername, finalUsername.length(), (5 + firstNameLength),
                     totalUsernamesInDB, -(5 + firstNameLength) + finalUsername.length(), firstNames);
         }
 
         else{//avem lastname length < 5;
-            finalUsername = generate(finalUsername, finalUsername.length(), (lastNameLength + firstNameLength), (lastNameLength + firstNameLength),
+            finalUsername = generate(finalUsername, finalUsername.length(), (lastNameLength + firstNameLength),
                     finalUsername.length() - lastNameLength, -(lastNameLength + firstNameLength) + finalUsername.length(), firstNames);
         }
         return finalUsername;
 
     }
-
-    /**
-     * Creates a userDTO based on the {@link UserDTO}.
-     *
-     * @param userDTO the input User DTO. mandatory
-     * @return the username of the newly created user.
-     */
 
     public String createUser(final UserDTO userDTO) {
 
@@ -215,27 +202,13 @@ public class UserControl {
         if(usernamesNr > 0 && username.length() >= userEntities.get(0).getUsername().length()){
             username = generateAnotherUsername(usernamesNr, userEntities, userDTO.getLastName().length(), firstNames);
         }
-
-
-
-
         newUserEntity.setUsername(username.toLowerCase());
         userDao.createUser(newUserEntity);
-
-//        this.notificationFacade.createNotification(
-//                NotificationType.WELCOME_NEW_USER,
-//                new NotificationParamsWelcomeUser(userFullName, newUserEntity.getUsername()));
 
         return newUserEntity.getUsername();
     }
 
     public String updateUser(final UserDTO userDTO) {
-        ///userDTO=null;
-        //userdao vede em, vede daca am mailu in db
-//        if (userDao.existsEmail(userDTO.getEmail())){
-//            throw new BusinessException(MessageCatalog.USER_WITH_SAME_MAIL_EXISTS);
-//        }
-
 
         if(!validateUserInput(userDTO)){
             throw new BusinessException(MessageCatalog.USERNAME_INVALID);
@@ -255,27 +228,6 @@ public class UserControl {
     public UserDTO getUserByUsername(String username){
         UserEntity userEntity = userDao.findByUsername(username);
         return userConverter.convertEntityToUserDTO(userEntity);
-    }
-
-
-    /**
-     * Creates a unique user name based on the inputs.
-     *
-     * @param firstName the first name of the user. mandatory
-     * @param lastName  the last name of the user. mandatory
-     * @return a unique identifier for the input user.
-     */
-    //TODO Replace with logic based on the specification
-    //cei din afara nu tre sa stie cum creem, de aia i privata
-    private String createUserName(final String firstName, final String lastName) {
-        String ALPHA_NUMERIC_STRING = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        int count = 8;
-        StringBuilder builder = new StringBuilder();
-        while (count-- != 0) {
-            int character = (int) (Math.random() * ALPHA_NUMERIC_STRING.length());
-            builder.append(ALPHA_NUMERIC_STRING.charAt(character));
-        }
-        return builder.toString();
     }
 
     public List<UserDTO> getAll() {
