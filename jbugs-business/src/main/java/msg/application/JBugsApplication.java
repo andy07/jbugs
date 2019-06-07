@@ -2,6 +2,7 @@ package msg.application;
 
 import msg.bug.boundary.BugResource;
 import msg.exeptions.BusinessExceptionMapper;
+import msg.notifications.boundary.NotificationResource;
 import msg.permission.boundary.PermissionResource;
 import msg.filters.AuthorizationFilter;
 import msg.role.boundary.RoleResource;
@@ -26,12 +27,13 @@ public class JBugsApplication extends Application {
     {
         Set<Class<?>> classes= new HashSet<>();
         classes.add(BusinessExceptionMapper.class);
-//         classes.add(RunTimeExceptionMapper.class);
+        //classes.add(RunTimeExceptionMapper.class);
         classes.add(UserResource.class);
         classes.add(BugResource.class);
         classes.add(RoleResource.class);
         classes.add(PermissionResource.class);
         classes.add(AuthorizationFilter.class);
+        classes.add(NotificationResource.class);
         return  classes;
     }
 

@@ -37,6 +37,34 @@ public class BugResource {
         return Response.ok(facade.getStatusAllowed(status)).build();
     }
 
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @StarkPermissions(permissions = StarkPermissions.Permission.BUG_MANAGEMENT)
+    public Response saveBug(BugDTO dto) {
+        dto = facade.save(dto);
+        return Response.ok(dto).build();
+    }
+
+    /*
+    @POST
+    @Path("/{title}/attachments")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @StarkPermissions(permission = StarkPermissions.Permission.BUG_MANAGEMENT)
+    public Response addAttachments(@PathParam("title") String title) {
+        return Response.ok().build();
+    }
+    */
+
+    @GET
+    @Path("/status/no/{status}")
+    @Produces(MediaType.TEXT_PLAIN)
+    @StarkPermissions(permissions = StarkPermissions.Permission.BUG_MANAGEMENT)
+    public Response getNoBugsByStatus(@PathParam("status") String status) {
+        return Response.ok(facade.getNoBugsByStatus(status)).build();
+    }
+
     @PUT
     @Path("/{title}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -61,6 +89,14 @@ public class BugResource {
     @StarkPermissions(permissions = StarkPermissions.Permission.BUG_CLOSE)
     public Response getBugByTitleToExportPDF(@PathParam("title") String title) {
         return Response.ok(facade.getBugByTitle(title)).build();
+    }
+
+    @GET
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @StarkPermissions(permissions = StarkPermissions.Permission.BUG_MANAGEMENT)
+    public Response getBugById(@PathParam("id") long id) {
+        return Response.ok(facade.getBugById(id)).build();
     }
 
 }

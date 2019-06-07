@@ -5,6 +5,8 @@ import msg.bug.entity.BugDAO;
 import msg.bug.entity.BugEntity;
 import msg.bug.entity.dto.BugConverter;
 import msg.bug.entity.dto.BugDTO;
+import msg.notifications.boundary.NotificationFacade;
+import msg.user.control.UserControl;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -28,6 +30,12 @@ public class BugControl {
     @EJB
     private BugConverter converter;
 
+    @EJB
+    private NotificationFacade notificationFacade;
+    
+    @EJB
+    private UserControl userControl;
+
     public List<BugDTO> getAll() {
         return dao.getAll()
                 .stream()
@@ -39,11 +47,16 @@ public class BugControl {
         return BugStatus.getNextStatusAllowedList(status);
     }
 
+    public Long getNoBugsByStatus(String status){
+        return dao.getNoBugsByStatus(status);
+    }
+
 
     public BugDTO save(BugDTO dto) {
-        if (this.validateBugInput(dto) == true) {
+        if (this.validateBugInput(dto)) {
             BugEntity entity = converter.convertDTOToEntity(dto);
-        entity = dao.save(entity);
+            entity = dao.save(entity);
+            notificationFacade.createNewBugNotification(dto.getCreatedBy(), dto.getAssignedTo(), dto);
             return converter.convertEntityToDTO(entity);
         } else {
             return null;
@@ -53,6 +66,7 @@ public class BugControl {
     public BugDTO update(BugDTO dto) {
         BugEntity entity = converter.convertDTOToEntity(dto);
         entity = dao.update(entity);
+        notificationFacade.createUpdatedBugNotification(dto.getCreatedBy(), dto.getAssignedTo(), dto);
         return converter.convertEntityToDTO(entity);
     }
 
@@ -62,11 +76,14 @@ public class BugControl {
     }
 
     public boolean countActiveBugsForUser(String username) {
-       return dao.countActiveBugsForUser(username);
+        return dao.countActiveBugsForUser(username);
     }
 
     private boolean validateBugInput(BugDTO bugDTO) {
-
+        if (true)
+            return true;
+        if (userControl.getUserByUsername(bugDTO.getCreatedBy()) == null)
+            return false;
         if (bugDTO.getTitle().isEmpty() || bugDTO.getCreatedBy().isEmpty() || bugDTO.getDescription().isEmpty()
                 || bugDTO.getTargetDate().toString().isEmpty() || bugDTO.getFixedVersion().isEmpty()
                 || bugDTO.getAssignedTo().isEmpty() || bugDTO.getSeverity().isEmpty() || bugDTO.getDescription().isEmpty())
@@ -84,5 +101,10 @@ public class BugControl {
             return false;
 
         return true;
+    }
+
+    public BugDTO getBugById(long id) {
+        BugEntity entity = dao.findBugById(id);
+        return converter.convertEntityToDTO(entity);
     }
 }
