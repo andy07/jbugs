@@ -3,6 +3,7 @@ package msg.notifications.entity;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.List;
 
 /**
  * The DAO for the Notification Entities.
@@ -11,7 +12,8 @@ import javax.persistence.PersistenceContext;
  * @since 19.1.2
  */
 @Stateless
-public class NotificationDao {
+public class NotificationDAO {
+    
     @PersistenceContext(unitName = "jbugs-persistence")
     private EntityManager em;
 
@@ -24,4 +26,10 @@ public class NotificationDao {
         this.em.persist(notificationEntity);
     }
 
+    public List<NotificationEntity> getNotifications(String username) {
+        return em
+                .createNamedQuery(NotificationEntity.NOTIFICATIONS_FIND_BY_USERNAME, NotificationEntity.class)
+                .setParameter("username", username)
+                .getResultList();
+    }
 }

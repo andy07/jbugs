@@ -3,8 +3,6 @@
 // =================================================================================================
 package msg.user.control;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -12,10 +10,8 @@ import msg.bug.boundary.BugFacade;
 import msg.exeptions.BusinessException;
 import msg.notifications.boundary.NotificationFacade;
 import msg.permission.entity.PermissionEntity;
-import msg.permission.entity.dto.PermissionDTO;
 import msg.role.boundary.RoleFacade;
 import msg.role.entity.RoleEntity;
-import msg.role.entity.dto.RoleDTO;
 import msg.user.MessageCatalog;
 import msg.user.entity.UserDao;
 import msg.user.entity.UserEntity;
@@ -221,7 +217,7 @@ public class UserControl {
 
         newUserEntity.setUsername(username.toLowerCase());
         userDao.createUser(newUserEntity);
-
+        notificationFacade.createNewUserNotification(newUserEntity.getUsername());
 //        this.notificationFacade.createNotification(
 //                NotificationType.WELCOME_NEW_USER,
 //                new NotificationParamsWelcomeUser(userFullName, newUserEntity.getUsername()));
