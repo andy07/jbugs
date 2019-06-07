@@ -342,7 +342,7 @@ public class UserControl {
         return userPermissions;
     }
 
-    public void updateUserStatus(UserDTO inputDTO) {
+    public void  updateUserStatus(UserDTO inputDTO) {
         if(inputDTO.getUsername()== null || inputDTO.getUsername().isEmpty()){
             throw new BusinessException(MessageCatalog.INCORRECT_USER_INPUT);
         }
