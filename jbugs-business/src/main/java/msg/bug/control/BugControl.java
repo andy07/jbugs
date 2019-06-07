@@ -39,6 +39,10 @@ public class BugControl {
         return BugStatus.getNextStatusAllowedList(status);
     }
 
+    public Long getNoBugsByStatus(String status){
+        return dao.getNoBugsByStatus(status);
+    }
+
 
     public BugDTO save(BugDTO dto) {
         if (this.validateBugInput(dto) == true) {
