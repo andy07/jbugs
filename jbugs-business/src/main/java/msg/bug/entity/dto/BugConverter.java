@@ -26,6 +26,7 @@ public class BugConverter {
      */
     public BugEntity convertDTOToEntity(BugDTO dto) {
         return new BugEntity()
+                .setId(dto.getId())
                 .setTitle(dto.getTitle())
                 .setVersion(dto.getVersion())
                 .setTargetDate(dto.getTargetDate())
@@ -39,6 +40,7 @@ public class BugConverter {
 
     public BugDTO convertEntityToDTO(BugEntity entity) {
         return new BugDTO()
+                .setId(entity.getId())
                 .setTitle(entity.getTitle())
                 .setVersion(entity.getVersion())
                 .setTargetDate(entity.getTargetDate())
@@ -46,7 +48,8 @@ public class BugConverter {
                 .setFixedVersion(entity.getFixedVersion())
                 .setSeverity(entity.getSeverity())
                 .setAssignedTo(entity.getAssignedTo())
-                .setDescription(entity.getDescription());
+                .setDescription(entity.getDescription())
+                .setCreatedBy(entity.getCreatedBy());
     }
 
 }

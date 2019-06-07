@@ -1,5 +1,6 @@
 package msg.user.boundary;
 
+import msg.filters.StarkPermissions;
 import msg.user.entity.dto.UserDTO;
 
 import javax.ejb.EJB;
@@ -22,16 +23,31 @@ public class UserResource {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @StarkPermissions(permissions = {StarkPermissions.Permission.USER_MANAGEMENT})
     public Response createUser(UserDTO inputDTO){
         facade.createUser(inputDTO);
         return Response.ok().build();
     }
 
     @PUT
+    @Path("/{username}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateUser(UserDTO inputDTO){
+    @Produces(MediaType.APPLICATION_JSON)
+    @StarkPermissions(permissions = {StarkPermissions.Permission.USER_MANAGEMENT})
+    public Response updateUser(@PathParam("username") String username,UserDTO inputDTO){
         facade.updateUser(inputDTO);
         return Response.ok().build();
+    }
+
+
+    @GET
+    @Path("/{username}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @StarkPermissions(permissions = {StarkPermissions.Permission.USER_MANAGEMENT})
+    public Response getUserByUsername(@PathParam("username") String username) {
+
+        return Response.ok(facade.getUserByUsername(username)).build();
     }
 
     @POST
@@ -44,22 +60,26 @@ public class UserResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @StarkPermissions(permissions = {StarkPermissions.Permission.USER_MANAGEMENT})
     public Response getAll() {
         return Response.ok(facade.getAll()).build();
     }
 
-//    @GET
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Response getAll(){
-//        return Response
-//                .status(200)
-//                .header("Access-Control-Allow-Origin", "*")
-//                .header("Access-Control-Allow-Credentials", "true")
-//                .header("Access-Control-Allow-Headers",
-//                        "origin, content-type, accept, authorization")
-//                .header("Access-Control-Allow-Methods",
-//                        "GET, POST, PUT, DELETE, OPTIONS, HEAD")
-//                .entity(facade.getAll())
-//                .build();
-//    }
+    @Path("/usernames/all")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @StarkPermissions(permissions = {StarkPermissions.Permission.USER_MANAGEMENT, StarkPermissions.Permission.BUG_MANAGEMENT})
+    public Response getAllUsernames() {
+        return Response.ok(facade.getUserNames()).build();
+    }
+
+    @POST
+    @Path("/update-user-status")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @StarkPermissions(permissions = {StarkPermissions.Permission.USER_MANAGEMENT})
+    public Response updateUserStatus(UserDTO inputDTO){
+        facade.updateUserStatus(inputDTO);
+        return Response.ok().build();
+    }
+
 }

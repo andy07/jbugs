@@ -1,6 +1,6 @@
 package msg.role.boundary;
 
-import msg.role.entity.RoleDAO;
+import msg.filters.StarkPermissions;
 import msg.role.entity.dto.RoleDTO;
 
 import javax.ejb.EJB;
@@ -27,6 +27,7 @@ public class RoleResource {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
+    @StarkPermissions(permissions = StarkPermissions.Permission.PERMISSION_MANAGEMENT)
     public Response updateRole(RoleDTO roleDTO){
         roleFacade.updateRole(roleDTO);
         return Response.ok().build();
@@ -34,9 +35,22 @@ public class RoleResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @StarkPermissions(permissions = StarkPermissions.Permission.PERMISSION_MANAGEMENT)
     public Response getAll(){
         return Response.ok(roleFacade.getAll()).build();
     }
+
+
+    @POST
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/type")
+    @StarkPermissions(permissions = StarkPermissions.Permission.PERMISSION_MANAGEMENT)
+    public Response getRoleByType(String type){
+        return Response.ok(roleFacade.getRoleByType(type)).build();
+    }
+
+
 
 
 }

@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 /**
- * The permission entity.
+ * The permissions entity.
  *
  * @author msg systems AG;
  * @since 19.1.2
