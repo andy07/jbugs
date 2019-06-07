@@ -68,13 +68,12 @@ create table bugs
 
 create table notifications
 (
-    id      bigint auto_increment
+    id        bigint auto_increment
         primary key,
-    date    datetime     not null,
-    message varchar(255) not null,
-    type    varchar(255) not null,
-    url     varchar(255) not null,
-    user_id bigint       not null
+    date      date         not null,
+    message   varchar(255) not null,
+    type      varchar(255) not null,
+    user_name varchar(255) not null
 );
 
 create table attachments
