@@ -5,6 +5,7 @@ import msg.bug.entity.BugDAO;
 import msg.bug.entity.BugEntity;
 import msg.bug.entity.dto.BugConverter;
 import msg.bug.entity.dto.BugDTO;
+import msg.notifications.boundary.NotificationFacade;
 import msg.user.control.UserControl;
 
 import javax.ejb.EJB;
@@ -29,6 +30,9 @@ public class BugControl {
     @EJB
     private BugConverter converter;
 
+    @EJB
+    private NotificationFacade notificationFacade;
+
     public List<BugDTO> getAll() {
         return dao.getAll()
                 .stream()
@@ -49,6 +53,7 @@ public class BugControl {
         if (this.validateBugInput(dto) == true) {
             BugEntity entity = converter.convertDTOToEntity(dto);
             entity = dao.save(entity);
+            notificationFacade.createNewBugNotification(dto.getCreatedBy(), dto.getAssignedTo(), dto);
             return converter.convertEntityToDTO(entity);
         } else {
             return null;
@@ -59,6 +64,7 @@ public class BugControl {
         if (this.validateBugInput(dto) == true) {
             BugEntity entity = converter.convertDTOToEntity(dto);
             entity = dao.update(entity);
+            notificationFacade.createUpdatedBugNotification(dto.getCreatedBy(), dto.getAssignedTo(), dto);
             return converter.convertEntityToDTO(entity);
         } else {
             return null;
