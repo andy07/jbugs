@@ -36,7 +36,7 @@ public class BugResource {
     public Response getStatusAllowed(@PathParam("status") String status) {
         return Response.ok(facade.getStatusAllowed(status)).build();
     }
-    
+
     @GET
     @Path("/status/no/{status}")
     @Produces(MediaType.TEXT_PLAIN)
@@ -45,22 +45,32 @@ public class BugResource {
         return Response.ok(facade.getNoBugsByStatus(status)).build();
     }
 
-    @PUT
-    @Path("/{title}")
+    @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @StarkPermissions(permissions = StarkPermissions.Permission.BUG_MANAGEMENT)
-    public Response updateBug(@PathParam("title") String title, BugDTO dto) {
-        dto = facade.update(dto);
+    public Response saveBug(BugDTO dto) {
+        dto = facade.save(dto);
         return Response.ok(dto).build();
     }
 
-    @GET
-    @Path("/{title}")
+    /* @PUT
+     @Path("/{title}")
+     @Produces(MediaType.APPLICATION_JSON)
+     @Consumes(MediaType.APPLICATION_JSON)
+     @StarkPermissions(permissions = StarkPermissions.Permission.BUG_MANAGEMENT)
+     public Response updateBug(@PathParam("title") String title, BugDTO dto) {
+         dto = facade.update(dto);
+         return Response.ok(dto).build();
+     }*/
+    @PUT
+    @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     @StarkPermissions(permissions = StarkPermissions.Permission.BUG_MANAGEMENT)
-    public Response getBugByTitle(@PathParam("title") String title) {
-        return Response.ok(facade.getBugByTitle(title)).build();
+    public Response updateBug(@PathParam("id") long id, BugDTO dto) {
+        dto = facade.update(dto);
+        return Response.ok(dto).build();
     }
 
     @GET
@@ -71,6 +81,12 @@ public class BugResource {
         return Response.ok(facade.getBugByTitle(title)).build();
     }
 
-
+    @GET
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @StarkPermissions(permissions = StarkPermissions.Permission.BUG_MANAGEMENT)
+    public Response getBugById(@PathParam("id") long id) {
+        return Response.ok(facade.getBugById(id)).build();
+    }
 
 }

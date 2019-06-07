@@ -11,6 +11,8 @@ import java.util.Optional;
  */
 public class BugDTO {
 
+    private long id;
+
     private String title;
 
     private String version;
@@ -112,6 +114,15 @@ public class BugDTO {
 
     public BugDTO setAssignedTo(String assignedTo) {
         this.assignedTo = assignedTo;
+        return this;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public BugDTO setId(long id) {
+        this.id = id;
         return this;
     }
 
