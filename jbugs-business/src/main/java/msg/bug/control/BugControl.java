@@ -5,6 +5,7 @@ import msg.bug.entity.BugDAO;
 import msg.bug.entity.BugEntity;
 import msg.bug.entity.dto.BugConverter;
 import msg.bug.entity.dto.BugDTO;
+import msg.notifications.boundary.NotificationFacade;
 import msg.user.control.UserControl;
 
 import javax.ejb.EJB;
