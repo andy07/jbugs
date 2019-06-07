@@ -21,6 +21,7 @@ import msg.user.entity.UserDao;
 import msg.user.entity.UserEntity;
 import msg.user.entity.dto.UserConverter;
 import msg.user.entity.dto.UserDTO;
+import msg.user.token.Message;
 import org.json.simple.JSONArray;
 
 import javax.crypto.spec.SecretKeySpec;
@@ -57,37 +58,24 @@ public class UserControl {
 
     private static String SECRET_KEY = "oeRaYY7Wo24sDqKSX3IM9ASGmdGPmkTd9jo1QTy4b7P9Ze5_9hKolVX8xNrQDcNRfVEdTZNOuOyqEGhXEbdJI-ZQ19k_o9MI0y3eZN2lp9jow55FfXMiINEdt1XR85VipRLSOkT6kSpzs2x-jbLDiz9iFVzkd81YKxMgPA7VfZeQUm4n-mOmnWMaVX30zGFU4L3oPBctYKkl4dYfqYWqRNfrgPJVi5DGFjywgxx0ASEiJHtV72paI3fDR2XwlSkyhhmY-ICjCRmsJN4fX1pdoL8a18-aQrvyu4j0Os6dVPYIoPvvY0SAZtWYKHfM15g7A3HD4cVREf9cUsprCRK93w";
 
-    //Sample method to construct a JWT
-    public String createJWT(UserDTO userDTO) {
 
-        //The JWT signature algorithm we will be using to sign the token
+    private String createJWT(UserEntity userEntity) {
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
-
-        long nowMillis = System.currentTimeMillis();
-        Date now = new Date(nowMillis);
-
-        //We will sign our JWT with our ApiKey secret
         byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(SECRET_KEY);
         Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
-
-
-        //Let's set the JWT Claims
         JwtBuilder builder = Jwts.builder()
-                .setSubject(userDTO.getUsername())
-                .addClaims(convertUserRolesToMap(userDTO.getRoles()))
-                .addClaims(convertUserPerimissionToMap(userDTO.getRoles()))
+                .setSubject(userEntity.getUsername())
+                .addClaims(convertUserRolesToMap(userEntity.getRoles()))
+                .addClaims(convertUserPermissionsToMap(userEntity.getRoles()))
                 .signWith(signatureAlgorithm, signingKey);
-
-        //Builds the JWT and serializes it to a compact, URL-safe string
         return builder.compact();
     }
 
-    private Map<String, Object> convertUserPerimissionToMap(List<String> roles) {
+    private Map<String, Object> convertUserPermissionsToMap(Set<RoleEntity> roles) {
         Map<String,Object> map= new HashMap<>();
         Set<String> setOfPermission= new HashSet<>();
-        for(String role: roles){
-            RoleDTO roleDTO=roleFacade.getRoleByType(role);
-            for (PermissionDTO permission:roleDTO.getPermissions()){
+        for(RoleEntity role: roles){
+            for (PermissionEntity permission : role.getPermissions()) {
                 setOfPermission.add(permission.getType());
             }
         }
@@ -99,11 +87,11 @@ public class UserControl {
         return map;
     }
 
-    private Map<String,Object> convertUserRolesToMap(List<String> roles){
+    private Map<String,Object> convertUserRolesToMap(Set<RoleEntity> roles){
         Map<String,Object> map= new HashMap<>();
         JSONArray jsArrayOfRoles = new JSONArray();
-        for(String role: roles){
-            jsArrayOfRoles.add(role);
+        for(RoleEntity role: roles){
+            jsArrayOfRoles.add(role.getType());
         }
         map.put("roles",jsArrayOfRoles);
         return map;
@@ -165,53 +153,25 @@ public class UserControl {
     }
 
     private String generateAnotherUsername(int totalUsernamesInDB, List<UserEntity> userEntities, int lastNameLength, ArrayList<String>firstNames){
-        String finalUsername = userEntities.get(totalUsernamesInDB - 1).getUsername();
+        String finalUsername="";
         int firstNameLength2 = 0;
         int firstNameLength = firstNames.get(0).length();
-        int usernameLength = finalUsername.length();
-        if(firstNames.size() == 2){
-            firstNameLength2 = firstNames.get(1).length();
+        List<String>usernames = new ArrayList<>();
+        for(UserEntity userEntity: userEntities){
+            usernames.add(userEntity.getUsername());
         }
+        Collections.sort(usernames);
+
+        finalUsername = usernames.get(usernames.size()-1);
 
         if(lastNameLength >= 5) {
             finalUsername = generate(finalUsername, finalUsername.length(), (5 + firstNameLength), (5 + firstNameLength + firstNameLength2),
                     totalUsernamesInDB, -(5 + firstNameLength) + finalUsername.length(), firstNames);
-
-
-            /*if (usernameLength < (5 + firstNameLength)) {
-                finalUsername += firstNames.get(0).charAt(-5 + usernameLength); //caz cand avem lastname >=5 si avem inca litere in firstname
-            }
-            else {//nu mai avem litere in firstname
-                if (firstNames.size() == 2) {//punem litere din firstName2
-                    if (usernameLength < (5 + firstNameLength + firstNameLength2)) {
-                        finalUsername += firstNames.get(1).charAt(-(5 + firstNameLength) + usernameLength);
-                    } else {
-                        finalUsername += firstNames.get(1).charAt(0);
-                    }
-                } else {
-                    finalUsername += firstNames.get(0).charAt(0);
-                }
-            }*/
         }
 
         else{//avem lastname length < 5;
-
-            finalUsername = generate(finalUsername, usernameLength, (lastNameLength + firstNameLength), (lastNameLength + firstNameLength),
-                    usernameLength - lastNameLength, -(lastNameLength + firstNameLength) + usernameLength, firstNames);
-
-            /*if(usernameLength < (lastNameLength + firstNameLength)){
-                finalUsername+= firstNames.get(0).charAt(usernameLength - lastNameLength);
-            }
-            else{
-                if(firstNames.size() == 2){
-                    if(usernameLength < (lastNameLength + firstNameLength)){
-                        finalUsername+= firstNames.get(1).charAt(-(lastNameLength + firstNameLength) + usernameLength);
-                    }
-                    else{
-                        finalUsername += firstNames.get(1).charAt(0);
-                    }
-                }
-            }*/
+            finalUsername = generate(finalUsername, finalUsername.length(), (lastNameLength + firstNameLength), (lastNameLength + firstNameLength),
+                    finalUsername.length() - lastNameLength, -(lastNameLength + firstNameLength) + finalUsername.length(), firstNames);
         }
         return finalUsername;
 
@@ -236,13 +196,12 @@ public class UserControl {
         final UserEntity newUserEntity = userConverter.convertUserDTOtoEntity(userDTO);
         newUserEntity.setStatus(true);
         newUserEntity.setCounter(5);
-        if(!userDTO.getFirstName().contains(" ")){
+        if(userDTO.getFirstName().contains(" ")){
             String[] splited = userDTO.getFirstName().split("\\s+");
             firstNames.add(splited[0].toLowerCase());
             if(splited.length > 1){
                 firstNames.add(splited[1].toLowerCase());
             }
-
         }
         else{
             firstNames.add(userDTO.getFirstName());
@@ -331,52 +290,41 @@ public class UserControl {
 
     }
 
-    public String authenticateUser(UserDTO userDTO) {
-        UserEntity userEntity = userDao.findByUsername(userDTO.getUsername());
-        if (userEntity != null) {
-            Algorithm algorithm = Algorithm.HMAC256("harambe");
-            return JWT.create()
-                    .withIssuer("auth0")
-                    .withClaim("username", userEntity.getUsername())
-                    .withArrayClaim("roles", (String[]) userEntity.getRoles()
-                            .stream()
-                            .map(RoleEntity::getType).toArray(String[]::new))
-                    .sign(algorithm);
-        } else {
-            throw new BusinessException(MessageCatalog.USER_WITH_INVALID_CREDENTIALS);
-        }
+    public Message createToken(UserDTO inputDTO) {
+        Message message = new Message();
+        message.setToken(createJWT(authenticateUserByUsernameAndPassword(inputDTO)));
+        return message;
     }
 
-    public UserDTO authenticateUserByUsernameAndPassword(UserDTO userDTO) {
-        UserDTO userDTOOutput = null;
-        UserEntity userEntity = null;
-        userEntity = userDao.findByUsername(userDTO.getUsername());
+    private UserEntity authenticateUserByUsernameAndPassword(UserDTO userDTO) {
+        UserEntity userEntity = userDao.findByUsername(userDTO.getUsername());
         if (userEntity != null) {
             if (userEntity.isStatus()) {
                 if (userDTO.getPassword().equals(userEntity.getPassword())) {
                     userEntity.setCounter(5);
                     userDao.updateUser(userEntity);
-                    return  userConverter.convertEntityToUserDTO(userEntity);
-                } else {
-                    int counter = userEntity.getCounter();
-                    userEntity.setCounter(--counter);
-                    if (counter == 0) {
-                        userEntity.setStatus(false);
-                        userDao.updateUser(userEntity);
-                        throw new BusinessException(MessageCatalog.USER_DEACTIVATED);
-                    } else {
-                        userDao.updateUser(userEntity);
-                        throw new BusinessException(MessageCatalog.INCORRECT_USERNAME_OR_PASSWORD);
-                    }
+                    return  userEntity;
                 }
-
-            } else {
+                updateUserWithWrongUsernameAndPassword(userEntity);
+            } else
                 throw new BusinessException(MessageCatalog.USER_DEACTIVATED);
-
-            }
         }
         else
             throw new BusinessException(MessageCatalog.INCORRECT_USERNAME_OR_PASSWORD);
+        return userEntity;
+    }
+
+    private UserEntity updateUserWithWrongUsernameAndPassword(UserEntity userEntity) {
+        int counter = userEntity.getCounter();
+        userEntity.setCounter(--counter);
+        if (counter == 0) {
+            userEntity.setStatus(false);
+            userDao.updateUser(userEntity);
+            throw new BusinessException(MessageCatalog.USER_DEACTIVATED);
+        } else {
+            userDao.updateUser(userEntity);
+            throw new BusinessException(MessageCatalog.INCORRECT_USERNAME_OR_PASSWORD);
+        }
     }
 
 
@@ -398,10 +346,8 @@ public class UserControl {
         if(inputDTO.getUsername()== null || inputDTO.getUsername().isEmpty()){
             throw new BusinessException(MessageCatalog.INCORRECT_USER_INPUT);
         }
-        UserEntity userEntity=null;
-        if(userDao.findByUsername(inputDTO.getUsername())!=null)
-             userEntity= userDao.findByUsername(inputDTO.getUsername());
-        else
+        UserEntity userEntity=userDao.findByUsername(inputDTO.getUsername());
+        if(userEntity==null)
             throw new BusinessException(MessageCatalog.INCORRECT_USER_INPUT);
         boolean newStatus=inputDTO.getStatus();
         boolean oldStatus=userEntity.isStatus();
@@ -415,6 +361,11 @@ public class UserControl {
         }
         else
             throw new BusinessException(MessageCatalog.INCORRECT_USER_INPUT);
+    }
+
+
+    public boolean getUserStatus(String username) {
+        return userDao.findByUsername(username).isStatus();
     }
 
 

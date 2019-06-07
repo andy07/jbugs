@@ -36,12 +36,21 @@ public class BugResource {
     public Response getStatusAllowed(@PathParam("status") String status) {
         return Response.ok(facade.getStatusAllowed(status)).build();
     }
+
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.TEXT_PLAIN)
     @StarkPermissions(permissions = StarkPermissions.Permission.BUG_MANAGEMENT)
     public Response getAllStatusAllowed(String bugStatus) {
         return Response.ok(facade.getStatusAllowed(bugStatus)).build();
+    }
+
+    @GET
+    @Path("/status/no/{status}")
+    @Produces(MediaType.TEXT_PLAIN)
+    @StarkPermissions(permissions = StarkPermissions.Permission.BUG_MANAGEMENT)
+    public Response getNoBugsByStatus(@PathParam("status") String status) {
+        return Response.ok(facade.getNoBugsByStatus(status)).build();
     }
 
     @PUT
@@ -61,5 +70,15 @@ public class BugResource {
     public Response getBugByTitle(@PathParam("title") String title) {
         return Response.ok(facade.getBugByTitle(title)).build();
     }
+
+    @GET
+    @Path("/bug-pdf/{title}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @StarkPermissions(permissions = StarkPermissions.Permission.BUG_CLOSE)
+    public Response getBugByTitleToExportPDF(@PathParam("title") String title) {
+        return Response.ok(facade.getBugByTitle(title)).build();
+    }
+
+
 
 }
