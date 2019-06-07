@@ -2,12 +2,10 @@ package msg.application;
 
 import msg.bug.boundary.BugResource;
 import msg.exeptions.BusinessExceptionMapper;
-import msg.exeptions.RunTimeExceptionMapper;
-import msg.filters.AuthorizationFilter;
 import msg.notifications.boundary.NotificationResource;
 import msg.permission.boundary.PermissionResource;
+import msg.filters.AuthorizationFilter;
 import msg.role.boundary.RoleResource;
-import msg.user.boundary.AuthResource;
 import msg.user.boundary.UserResource;
 import org.glassfish.jersey.jackson.internal.jackson.jaxrs.json.JacksonJsonProvider;
 
@@ -15,8 +13,6 @@ import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 import java.util.HashSet;
 import java.util.Set;
-
-//import msg.exeptions.RunTimeExceptionMapper;
 
 /**
  * Document me.
@@ -31,9 +27,8 @@ public class JBugsApplication extends Application {
     {
         Set<Class<?>> classes= new HashSet<>();
         classes.add(BusinessExceptionMapper.class);
-         classes.add(RunTimeExceptionMapper.class);
+        //classes.add(RunTimeExceptionMapper.class);
         classes.add(UserResource.class);
-        classes.add(AuthResource.class);
         classes.add(BugResource.class);
         classes.add(RoleResource.class);
         classes.add(PermissionResource.class);

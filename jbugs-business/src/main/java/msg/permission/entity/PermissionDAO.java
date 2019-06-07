@@ -1,7 +1,5 @@
 package msg.permission.entity;
 
-import msg.permission.boundary.PermissionResource;
-
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -20,7 +18,7 @@ public class PermissionDAO {
     private EntityManager em;
 
     /**
-     * Persists a permission entity.
+     * Persists a permissions entity.
      *
      * @param p the input entity to be saved.
      * @return the persisted entity.

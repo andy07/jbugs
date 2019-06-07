@@ -85,4 +85,6 @@ public class NotificationFacade {
     public List<NotificationDTO> getNotifications(String username) {
         return notificationControl.getNotifications(username);
     }
+
+
 }

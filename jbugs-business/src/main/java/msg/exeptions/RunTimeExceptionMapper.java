@@ -11,10 +11,10 @@ import javax.ws.rs.ext.Provider;
  * @since 19.1.2
  */
 
-@Provider
-public class RunTimeExceptionMapper implements ExceptionMapper<RuntimeException> {
-    @Override
-    public Response toResponse(RuntimeException e) {
-        return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Unexpected exception occurred").build();
-    }
-}
+//@Provider
+//public class RunTimeExceptionMapper implements ExceptionMapper<RuntimeException> {
+//    @Override
+//    public Response toResponse(RuntimeException e) {
+//        return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Unexpected exception occurred").build();
+//    }
+//}

@@ -1,25 +1,10 @@
 package msg.filters;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.interfaces.Claim;
-import com.auth0.jwt.interfaces.DecodedJWT;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
-import msg.permission.entity.dto.PermissionDTO;
-import msg.role.boundary.RoleFacade;
-import msg.role.control.RoleControl;
-import msg.role.entity.dto.RoleDTO;
 import msg.user.boundary.UserFacade;
-import msg.user.control.UserControl;
-import msg.user.entity.dto.UserDTO;
-import org.json.simple.JSONArray;
-import sun.misc.InvalidJarIndexException;
 
 import javax.annotation.Priority;
-import javax.crypto.SecretKey;
 import javax.ejb.EJB;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
@@ -27,14 +12,9 @@ import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.SecurityContext;
-import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Provider;
 import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.security.Principal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -48,14 +28,19 @@ import java.util.Set;
 @Provider
 @Priority(Priorities.AUTHENTICATION)
 public class AuthorizationFilter implements ContainerRequestFilter {
+
     @Context
     ResourceInfo resourceInfo;
     @EJB
     UserFacade userFacade;
 
-    private static final String AUTHENTICATION_HEADER = "Authorization";
-    private static final String SECRET_KEY = "oeRaYY7Wo24sDqKSX3IM9ASGmdGPmkTd9jo1QTy4b7P9Ze5_9hKolVX8xNrQDcNRfVEdTZNOuOyqEGhXEbdJI-ZQ19k_o9MI0y3eZN2lp9jow55FfXMiINEdt1XR85VipRLSOkT6kSpzs2x-jbLDiz9iFVzkd81YKxMgPA7VfZeQUm4n-mOmnWMaVX30zGFU4L3oPBctYKkl4dYfqYWqRNfrgPJVi5DGFjywgxx0ASEiJHtV72paI3fDR2XwlSkyhhmY-ICjCRmsJN4fX1pdoL8a18-aQrvyu4j0Os6dVPYIoPvvY0SAZtWYKHfM15g7A3HD4cVREf9cUsprCRK93w";
-    private static final String LOGIN_PATH = "users/login";
+    private final String AUTHENTICATION_HEADER = "Authorization";
+    private final String SECRET_KEY = "oeRaYY7Wo24sDqKSX3IM9ASGmdGPmkTd9jo1QTy4b7P9Ze5_9hKolVX8xNrQDcNRfVEdTZNOuOyqEGhXEbdJI-ZQ19k_o9MI0y3eZN2lp9jow55FfXMiINEdt1XR85VipRLSOkT6kSpzs2x-jbLDiz9iFVzkd81YKxMgPA7VfZeQUm4n-mOmnWMaVX30zGFU4L3oPBctYKkl4dYfqYWqRNfrgPJVi5DGFjywgxx0ASEiJHtV72paI3fDR2XwlSkyhhmY-ICjCRmsJN4fX1pdoL8a18-aQrvyu4j0Os6dVPYIoPvvY0SAZtWYKHfM15g7A3HD4cVREf9cUsprCRK93w";
+    private final String LOGIN_PATH = "users/login";
+    private final String MESSAGE_FOR_HACKERS = "Mr.(Ms.) hacker, please go back to sleep! Stark TEAM are watching you!";
+    private final String MESSAGE_FOR_CHANGED_PERMISSIONS = "Your permissions have changed! Go back to Login page!";
+    private final String MESSAGE_FOR_DEACTIVATED_USER = "Your account has been deactivated!";
+    private final String MESSAGE_FOR_UNAUTHORIZED_ACCESS = "Go back to Login page!";
 
     @Override
     public void filter(ContainerRequestContext containerRequestContext) throws IOException {
@@ -71,23 +56,27 @@ public class AuthorizationFilter implements ContainerRequestFilter {
                         .parseClaimsJws(token).getBody();
 
             } catch (Exception e) {
-                createResponseForHackers(containerRequestContext);
+                createResponseForUnauthorizedAccess(containerRequestContext, MESSAGE_FOR_HACKERS);
             }
             final String username = body.getSubject();
             final List<String> userPermissions = (List<String>) body.get("permissions");
-            final StarkPermissions.Permission[] annotatedMethodPermissions = resourceInfo.getResourceMethod().getAnnotation(StarkPermissions.class).permission();
+            final StarkPermissions.Permission[] annotatedMethodPermissions = resourceInfo.getResourceMethod().getAnnotation(StarkPermissions.class).permissions();
+            if (!verifyIfUserIsDeactivated(username)) {
+                createResponseForUnauthorizedAccess(containerRequestContext, MESSAGE_FOR_DEACTIVATED_USER);
+            }
             if (!verifyUserRoles(username, userPermissions)) {
-                createResponseForUsers(containerRequestContext);
+                createResponseForUnauthorizedAccess(containerRequestContext, MESSAGE_FOR_CHANGED_PERMISSIONS);
             }
             if (!verifyPathPermissions(annotatedMethodPermissions, userPermissions)) {
-                createResponseForHackers(containerRequestContext);
+                createResponseForUnauthorizedAccess(containerRequestContext, MESSAGE_FOR_HACKERS);
             }
             return;
 
         } else {
-            createResponseForUsers(containerRequestContext);
+            createResponseForUnauthorizedAccess(containerRequestContext, MESSAGE_FOR_UNAUTHORIZED_ACCESS);
         }
     }
+
 
     private boolean verifyPathPermissions(StarkPermissions.Permission[] annotatedMethodPermissions, List<String> userPermissions) {
         for (StarkPermissions.Permission methodPermission : annotatedMethodPermissions) {
@@ -115,15 +104,13 @@ public class AuthorizationFilter implements ContainerRequestFilter {
     }
 
 
-    private void createResponseForHackers(ContainerRequestContext containerRequestContext) {
-        Response unauthorizedAccess = Response.status(Response.Status.UNAUTHORIZED)
-                .entity("Mr.(Ms.) hacker, please go back to sleep! Stark TEAM are watching you!").build();
-        containerRequestContext.abortWith(unauthorizedAccess);
+    private boolean verifyIfUserIsDeactivated(String username) {
+        return userFacade.getUserStatus(username);
     }
 
-    private void createResponseForUsers(ContainerRequestContext containerRequestContext) {
-        Response unauthorizedAccess = Response.status(Response.Status.UNAUTHORIZED)
-                .entity("Go back to Login page").build();
+
+    private void createResponseForUnauthorizedAccess(ContainerRequestContext containerRequestContext, String message) {
+        Response unauthorizedAccess = Response.status(Response.Status.UNAUTHORIZED).entity(message).build();
         containerRequestContext.abortWith(unauthorizedAccess);
     }
 
