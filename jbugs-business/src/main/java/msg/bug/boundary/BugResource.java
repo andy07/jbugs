@@ -1,5 +1,6 @@
 package msg.bug.boundary;
 
+import msg.attachement.entity.dto.AttachmentDTO;
 import msg.bug.entity.dto.BugDTO;
 import msg.filters.StarkPermissions;
 
@@ -8,6 +9,7 @@ import javax.ejb.Stateless;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
 
 /**
  * @author msg systems AG; Silviu-Mihnea Cucuiet.
@@ -46,15 +48,7 @@ public class BugResource {
         return Response.ok(facade.getNoBugsByStatus(status)).build();
     }
 
-    /* @PUT
-     @Path("/{title}")
-     @Produces(MediaType.APPLICATION_JSON)
-     @Consumes(MediaType.APPLICATION_JSON)
-     @StarkPermissions(permissions = StarkPermissions.Permission.BUG_MANAGEMENT)
-     public Response updateBug(@PathParam("title") String title, BugDTO dto) {
-         dto = facade.update(dto);
-         return Response.ok(dto).build();
-     }*/
+
     @PUT
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -63,6 +57,15 @@ public class BugResource {
     public Response updateBug(@PathParam("id") long id, BugDTO dto) {
         dto = facade.update(dto);
         return Response.ok(dto).build();
+    }
+
+    @POST
+    @Path("/{id}/attachments")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @StarkPermissions(permissions = StarkPermissions.Permission.BUG_MANAGEMENT)
+    public Response createAttachments(@PathParam("id") long id, List<AttachmentDTO> dtos) {
+        return Response.ok().build();
     }
 
     @POST

@@ -9,7 +9,9 @@ package msg.attachement.entity.dto;
 public class AttachmentDTO {
 
     private byte[] file;
-    private String bugTitle;
+    private String name;
+    private String type;
+    private long bugId;
 
     public AttachmentDTO() {
     }
@@ -18,8 +20,16 @@ public class AttachmentDTO {
         return file;
     }
 
-    public String getBugTitle() {
-        return bugTitle;
+    public String getName() {
+        return name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public long getBugId() {
+        return bugId;
     }
 
     public AttachmentDTO setFile(byte[] file) {
@@ -27,8 +37,18 @@ public class AttachmentDTO {
         return this;
     }
 
-    public AttachmentDTO setBugTitle(String bugTitle) {
-        this.bugTitle = bugTitle;
+    public AttachmentDTO setName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public AttachmentDTO setType(String type) {
+        this.type = type;
+        return this;
+    }
+
+    public AttachmentDTO setBugId(long bugId) {
+        this.bugId = bugId;
         return this;
     }
 }

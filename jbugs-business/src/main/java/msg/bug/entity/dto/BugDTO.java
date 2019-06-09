@@ -17,7 +17,7 @@ public class BugDTO {
 
     private String version;
 
-    private Date targetDate;
+    private String targetDate;
 
     private String status;
 
@@ -71,11 +71,11 @@ public class BugDTO {
         return this;
     }
 
-    public Date getTargetDate() {
+    public String getTargetDate() {
         return targetDate;
     }
 
-    public BugDTO setTargetDate(Date targetDate) {
+    public BugDTO setTargetDate(String targetDate) {
         this.targetDate = targetDate;
         return this;
     }

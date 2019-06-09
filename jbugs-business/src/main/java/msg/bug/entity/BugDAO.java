@@ -24,7 +24,7 @@ public class BugDAO {
 
     public BugEntity save(BugEntity entity) {
         em.persist(entity);
-        return entity;
+        return findBugByTitle(entity.getTitle());
     }
 
     public BugEntity update(BugEntity entity) {
