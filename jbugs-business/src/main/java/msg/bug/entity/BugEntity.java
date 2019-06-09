@@ -74,8 +74,6 @@ public class BugEntity {
     @Column(name = "assigned_to", nullable = false)
     private String assignedTo;
 
-    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "bug")
-    private Set<AttachmentEntity> attachments = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "bug")
     private Set<CommentEntity> comments = new HashSet<>();
@@ -124,9 +122,6 @@ public class BugEntity {
         return assignedTo;
     }
 
-    public Set<AttachmentEntity> getAttachments() {
-        return attachments;
-    }
 
     public Set<CommentEntity> getComments() {
         return comments;
@@ -183,10 +178,6 @@ public class BugEntity {
         return this;
     }
 
-    public BugEntity setAttachments(Set<AttachmentEntity> attachments) {
-        this.attachments = attachments;
-        return this;
-    }
 
     public BugEntity setComments(Set<CommentEntity> comments) {
         this.comments = comments;
@@ -208,12 +199,11 @@ public class BugEntity {
                 Objects.equals(severity, bugEntity.severity) &&
                 Objects.equals(createdBy, bugEntity.createdBy) &&
                 Objects.equals(assignedTo, bugEntity.assignedTo) &&
-                Objects.equals(attachments, bugEntity.attachments) &&
                 Objects.equals(comments, bugEntity.comments);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, description, version, targetDate, status, fixedVersion, severity, createdBy, assignedTo, attachments, comments);
+        return Objects.hash(id, title, description, version, targetDate, status, fixedVersion, severity, createdBy, assignedTo, comments);
     }
 }

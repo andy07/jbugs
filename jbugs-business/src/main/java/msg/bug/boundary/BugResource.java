@@ -1,5 +1,6 @@
 package msg.bug.boundary;
 
+import msg.attachement.entity.boundary.AttachmentFacade;
 import msg.attachement.entity.dto.AttachmentDTO;
 import msg.bug.entity.dto.BugDTO;
 import msg.filters.StarkPermissions;
@@ -23,6 +24,9 @@ import java.util.List;
 public class BugResource {
     @EJB
     public BugFacade facade;
+
+    @EJB
+    public AttachmentFacade attachmentFacade;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -65,7 +69,17 @@ public class BugResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @StarkPermissions(permissions = StarkPermissions.Permission.BUG_MANAGEMENT)
     public Response createAttachments(@PathParam("id") long id, List<AttachmentDTO> dtos) {
+        attachmentFacade.saveAll(dtos);
         return Response.ok().build();
+    }
+
+    @GET
+    @Path("/{id}/attachments")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @StarkPermissions(permissions = StarkPermissions.Permission.BUG_MANAGEMENT)
+    public Response getAttachments(@PathParam("id") long id) {
+        return Response.ok(attachmentFacade.getAllForBug(id)).build();
     }
 
     @POST

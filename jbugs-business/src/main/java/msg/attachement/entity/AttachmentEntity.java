@@ -1,6 +1,5 @@
 package msg.attachement.entity;
 
-import msg.bug.entity.BugEntity;
 
 import javax.persistence.*;
 
@@ -13,16 +12,27 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "attachments")
+@NamedQueries(
+        @NamedQuery(
+                name = AttachmentEntity.ATTACHEMENT_FIND_ALL,
+                query = "SELECT  A from AttachmentEntity A where A.bugId = :bugId")
+)
 public class AttachmentEntity {
 
+    public static final String ATTACHEMENT_FIND_ALL = "attachment.FindAllForBug";
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @ManyToOne
-    @JoinColumn(name = "bug_id", nullable = false)
-    private BugEntity bug;
+    @Column(name = "bug_id", nullable = false)
+    private long bugId;
+
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @Column(name = "type", nullable = false)
+    private String type;
 
     @Lob
     @Column(name = "file", nullable = false)
@@ -31,16 +41,20 @@ public class AttachmentEntity {
     public AttachmentEntity() {
     }
 
-    public AttachmentEntity(long id) {
-        this.id = id;
-    }
-
     public long getId() {
         return id;
     }
 
-    public BugEntity getBug() {
-        return bug;
+    public long getBugId() {
+        return bugId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getType() {
+        return type;
     }
 
     public byte[] getFile() {
@@ -52,8 +66,18 @@ public class AttachmentEntity {
         return this;
     }
 
-    public AttachmentEntity setBug(BugEntity bug) {
-        this.bug = bug;
+    public AttachmentEntity setBugId(long bugId) {
+        this.bugId = bugId;
+        return this;
+    }
+
+    public AttachmentEntity setName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public AttachmentEntity setType(String type) {
+        this.type = type;
         return this;
     }
 
