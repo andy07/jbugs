@@ -37,13 +37,13 @@ public class NotificationFacade {
     public void createUpdatedBugNotification(String createdBy, String assignedTo, BugDTO dto) {
         NotificationDTO ndto = new NotificationDTO();
         ndto
-                .setMessage("A new bug is assigned to you!")
+                .setMessage("One of your bugs has evolved! Say goodbye to weekend!")
                 .setDestination(assignedTo)
                 .setType(NotificationType.BUG_UPDATED.name());
         notificationControl.create(ndto);
 
         ndto
-                .setMessage("You assigned a new bug to " + assignedTo + "!")
+                .setMessage("You modified a bug now assigned to " + assignedTo + "!")
                 .setDestination(createdBy)
                 .setType(NotificationType.BUG_UPDATED.name());
         notificationControl.create(ndto);
@@ -73,6 +73,15 @@ public class NotificationFacade {
         notificationControl.create(ndto);
     }
 
+
+    public void createUpdatedUserNotification(String username) {
+        NotificationDTO ndto = new NotificationDTO();
+        ndto
+                .setMessage("Your user has been updated, " + username + "!\nLog out, so you may receive your new true self!")
+                .setDestination(username)
+                .setType(NotificationType.USER_UPDATED.name());
+        notificationControl.create(ndto);
+    }
     public void createDeactivatedNotification(String username) {
         NotificationDTO ndto = new NotificationDTO();
         ndto
@@ -87,4 +96,12 @@ public class NotificationFacade {
     }
 
 
+    public void createReactivatedNotification(String username) {
+        NotificationDTO ndto = new NotificationDTO();
+        ndto
+                .setMessage("UPS, wrong person!\nYou have been reactivated by the same drunk person....")
+                .setDestination(username)
+                .setType(NotificationType.USER_DEACTIVATED.name());
+        notificationControl.create(ndto);
+    }
 }

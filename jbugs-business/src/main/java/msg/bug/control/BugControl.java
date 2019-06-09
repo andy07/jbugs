@@ -50,7 +50,7 @@ public class BugControl {
 
 
     public BugDTO save(BugDTO dto) {
-        if (this.validateBugInput(dto) == true) {
+        if (this.validateBugInput(dto)) {
             BugEntity entity = converter.convertDTOToEntity(dto);
             entity = dao.save(entity);
             notificationFacade.createNewBugNotification(dto.getCreatedBy(), dto.getAssignedTo(), dto);
@@ -61,7 +61,7 @@ public class BugControl {
     }
 
     public BugDTO update(BugDTO dto) {
-        if (this.validateBugInput(dto) == true) {
+        if (this.validateBugInput(dto)) {
             BugEntity entity = converter.convertDTOToEntity(dto);
             entity = dao.update(entity);
             notificationFacade.createUpdatedBugNotification(dto.getCreatedBy(), dto.getAssignedTo(), dto);
@@ -81,8 +81,6 @@ public class BugControl {
     }
 
     private boolean validateBugInput(BugDTO bugDTO) {
-        if (true)
-            return true;
         if (bugDTO.getTitle().isEmpty() || bugDTO.getCreatedBy().isEmpty() || bugDTO.getDescription().isEmpty()
                 || bugDTO.getTargetDate().toString().isEmpty() || bugDTO.getFixedVersion().isEmpty()
                 || bugDTO.getAssignedTo().isEmpty() || bugDTO.getSeverity().isEmpty() || bugDTO.getDescription().isEmpty())

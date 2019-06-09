@@ -39,7 +39,6 @@ public class BugFacade {
     }
 
     public BugDTO update(BugDTO dto) {
-        System.out.println(dto);
         return control.update(dto);
     }
 

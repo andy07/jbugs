@@ -58,7 +58,7 @@ public class BugConverter {
                 .setId(entity.getId())
                 .setTitle(entity.getTitle())
                 .setVersion(entity.getVersion())
-                .setTargetDate("")
+                .setTargetDate(entity.getTargetDate().toString())
                 .setStatus(entity.getStatus())
                 .setFixedVersion(entity.getFixedVersion())
                 .setSeverity(entity.getSeverity())
