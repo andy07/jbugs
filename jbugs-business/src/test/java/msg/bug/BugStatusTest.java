@@ -91,13 +91,7 @@ public class BugStatusTest {
     }
 
 
-    @Test
-    public void getNextStatusAllowedListInfoNeeded() {
 
-        Set<BugStatus> bugStatusSet= BugStatus.getNextStatusAllowedList(BugStatus.INFO_NEEDED.getStatus());
-        Assert.assertNull(bugStatusSet);
-
-    }
 
     @Test
     public void getNextStatusAllowedListInfoNeededNotEquals() {
