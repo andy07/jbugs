@@ -1,5 +1,6 @@
 package msg.attachement.entity.control;
 
+import msg.attachement.entity.AttachmentEntity;
 import msg.attachement.entity.dto.AttachmentConverter;
 import msg.attachement.entity.dto.AttachmentDAO;
 import msg.attachement.entity.dto.AttachmentDTO;
@@ -33,5 +34,9 @@ public class AttachmentControl {
                 .stream()
                 .map(attachmentConverter::convertEntityToDTO)
                 .collect(Collectors.toList());
+    }
+
+    public void deleteAttachment(long id) {
+        dao.deleteAttachment(id);
     }
 }

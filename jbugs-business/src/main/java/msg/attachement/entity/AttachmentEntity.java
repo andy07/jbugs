@@ -12,14 +12,20 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "attachments")
-@NamedQueries(
+@NamedQueries({
         @NamedQuery(
                 name = AttachmentEntity.ATTACHEMENT_FIND_ALL,
-                query = "SELECT  A from AttachmentEntity A where A.bugId = :bugId")
+                query = "SELECT  A from AttachmentEntity A where A.bugId = :bugId"),
+        @NamedQuery(
+                name = AttachmentEntity.ATTACHEMENT_DELETE,
+                query = "SELECT  A from AttachmentEntity A where A.id = :id")
+        }
 )
 public class AttachmentEntity {
 
     public static final String ATTACHEMENT_FIND_ALL = "attachment.FindAllForBug";
+    public static final String ATTACHEMENT_DELETE = "attachment.Delete";
+
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -31,4 +31,8 @@ public class AttachmentFacade {
     public List<AttachmentDTO> getAllForBug(long bug_id){
         return this.attachmentControl.getAllForBug(bug_id);
     }
+
+    public void deleteAttachment(long id) {
+        attachmentControl.deleteAttachment(id);
+    }
 }

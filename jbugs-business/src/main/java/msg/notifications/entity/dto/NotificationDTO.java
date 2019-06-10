@@ -10,6 +10,7 @@ public class NotificationDTO {
     private String destination;
     private String message;
     private String type;
+    private String date;
 
     public NotificationDTO() {
     }
@@ -38,6 +39,15 @@ public class NotificationDTO {
 
     public NotificationDTO setType(String type) {
         this.type = type;
+        return this;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public NotificationDTO setDate(String date) {
+        this.date = date;
         return this;
     }
 }

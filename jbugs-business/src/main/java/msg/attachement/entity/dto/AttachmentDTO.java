@@ -8,12 +8,17 @@ package msg.attachement.entity.dto;
  */
 public class AttachmentDTO {
 
+    private long id;
     private String file;
     private String name;
     private String type;
     private long bugId;
 
     public AttachmentDTO() {
+    }
+
+    public long getId() {
+        return id;
     }
 
     public String getFile() {
@@ -49,6 +54,11 @@ public class AttachmentDTO {
 
     public AttachmentDTO setBugId(long bugId) {
         this.bugId = bugId;
+        return this;
+    }
+
+    public AttachmentDTO setId(long id) {
+        this.id = id;
         return this;
     }
 }

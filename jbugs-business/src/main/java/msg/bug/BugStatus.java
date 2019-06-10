@@ -15,6 +15,7 @@ public enum BugStatus {
 
     private static final Map<BugStatus, Set<BugStatus>> nextStatusAllowed = new HashMap<BugStatus, Set<BugStatus>>() {{
         put(NEW, new HashSet<>(Arrays.asList(IN_PROGRESS, REJECTED)));
+        put(INFO_NEEDED, new HashSet<>(Arrays.asList(IN_PROGRESS)));
         put(IN_PROGRESS, new HashSet<>(Arrays.asList(REJECTED, INFO_NEEDED, FIXED)));
         put(FIXED, new HashSet<>(Arrays.asList(IN_PROGRESS, CLOSED)));
         put(REJECTED, new HashSet<>(Arrays.asList(CLOSED)));

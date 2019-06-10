@@ -31,4 +31,10 @@ public class AttachmentDAO {
                 .getResultList();
     }
 
+    public void deleteAttachment(long id) {
+        em.createNamedQuery(AttachmentEntity.ATTACHEMENT_DELETE)
+                .setParameter("id", id)
+                .executeUpdate();
+    }
+
 }

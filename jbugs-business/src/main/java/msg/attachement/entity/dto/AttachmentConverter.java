@@ -15,6 +15,7 @@ public class AttachmentConverter {
 
     public AttachmentEntity convertDTOToEntity(AttachmentDTO dto) {
         return new AttachmentEntity()
+                .setId(dto.getId())
                 .setFile(dto.getFile().getBytes())
                 .setName(dto.getName())
                 .setType(dto.getType())
@@ -23,6 +24,7 @@ public class AttachmentConverter {
 
     public AttachmentDTO convertEntityToDTO(AttachmentEntity entity) {
         return new AttachmentDTO()
+                .setId(entity.getId())
                 .setFile(new String(entity.getFile()))
                 .setName(entity.getName())
                 .setType(entity.getType());

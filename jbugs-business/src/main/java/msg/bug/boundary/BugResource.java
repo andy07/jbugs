@@ -82,6 +82,16 @@ public class BugResource {
         return Response.ok(attachmentFacade.getAllForBug(id)).build();
     }
 
+    @DELETE
+    @Path("/attachments/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @StarkPermissions(permissions = StarkPermissions.Permission.BUG_MANAGEMENT)
+    public Response deleteAttachment(@PathParam("id") long id) {
+        attachmentFacade.deleteAttachment(id);
+        return Response.ok().build();
+    }
+
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)

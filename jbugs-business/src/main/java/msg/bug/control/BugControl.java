@@ -82,19 +82,19 @@ public class BugControl {
 
     private boolean validateBugInput(BugDTO bugDTO) {
         if (bugDTO.getTitle().isEmpty() || bugDTO.getCreatedBy().isEmpty() || bugDTO.getDescription().isEmpty()
-                || bugDTO.getTargetDate().toString().isEmpty() || bugDTO.getFixedVersion().isEmpty()
+                || bugDTO.getTargetDate().isEmpty() || bugDTO.getFixedVersion().isEmpty()
                 || bugDTO.getAssignedTo().isEmpty() || bugDTO.getSeverity().isEmpty() || bugDTO.getDescription().isEmpty())
             return false;
-        if (!bugDTO.getVersion().matches(" [0-9a-z\\.]*$"))
+        if (!bugDTO.getVersion().matches("[0-9a-z.]+"))
             return false;
-        if (!(bugDTO.getSeverity().equals("HIGH") && bugDTO.getSeverity().equals("LOW")
-                && bugDTO.getSeverity().equals("MEDIUM") && bugDTO.getSeverity().equals("CRITICAL")))
+        if (!(bugDTO.getSeverity().equals("HIGH") || bugDTO.getSeverity().equals("LOW")
+                || bugDTO.getSeverity().equals("MEDIUM") || bugDTO.getSeverity().equals("CRITICAL")))
             return false;
-        if (!(bugDTO.getStatus().equals("NEW") && bugDTO.getStatus().equals("REJECTED")
-                && bugDTO.getStatus().equals("IN_PROGRESS") && bugDTO.getStatus().equals("INFO_NEEDED"))
-                && bugDTO.getStatus().equals("FIXED") && bugDTO.getStatus().equals("CLOSED"))
+        if (!(bugDTO.getStatus().equals("NEW") || bugDTO.getStatus().equals("REJECTED")
+                || bugDTO.getStatus().equals("IN_PROGRESS") || bugDTO.getStatus().equals("INFO_NEEDED"))
+                || bugDTO.getStatus().equals("FIXED") || bugDTO.getStatus().equals("CLOSED"))
             return false;
-        if (!(bugDTO.getDescription().length() > 255))
+        if (!(bugDTO.getDescription().length() > 0))
             return false;
 
         return true;

@@ -19,7 +19,8 @@ public class NotificationConverter {
         return new NotificationDTO()
                 .setDestination(entity.getUsername())
                 .setType(entity.getNotificationType().name())
-                .setMessage(entity.getMessage());
+                .setMessage(entity.getMessage())
+                .setDate(entity.getDate().toString());
     }
 
     public NotificationEntity convertDTOToEntity(NotificationDTO dto) {
